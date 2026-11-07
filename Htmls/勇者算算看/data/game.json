@@ -1,0 +1,217 @@
+{
+  "title": "勇者算算看",
+  "hero": "騎士",
+  "levels": [
+    "level01"
+  ],
+  "runSpeed": 7,
+  "strafeSpeed": 10,
+  "maxCount": 60,
+  "maxDrawn": 30,
+  "unitScale": 0.95,
+  "heroHpMult": 3,
+  "spawnAhead": 55,
+  "defaultDifficulty": "普通",
+  "difficulties": {
+    "簡單": {
+      "shotKillMult": 0.4,
+      "desc": "10 以內加減，每題 12 秒",
+      "color": "#86efac",
+      "enemyHpMult": 0.45,
+      "enemyCountMult": 0.7,
+      "bossHpMult": 0.25,
+      "quiz": {
+        "mode": "ten",
+        "seconds": 12,
+        "add": [
+          3,
+          6
+        ],
+        "multChance": 0.25
+      }
+    },
+    "普通": {
+      "shotKillMult": 1,
+      "desc": "20 以內加減（進位、退位），每題 10 秒",
+      "color": "#fbbf24",
+      "enemyHpMult": 0.65,
+      "enemyCountMult": 0.9,
+      "bossHpMult": 0.4,
+      "quiz": {
+        "mode": "twenty",
+        "seconds": 10,
+        "add": [
+          4,
+          8
+        ],
+        "multChance": 0.3
+      }
+    },
+    "困難": {
+      "shotKillMult": 1.2,
+      "desc": "100 以內二位數加減，每題 8 秒",
+      "color": "#f87171",
+      "enemyHpMult": 1.1,
+      "enemyCountMult": 1.1,
+      "bossHpMult": 0.65,
+      "quiz": {
+        "mode": "hundred",
+        "seconds": 8,
+        "add": [
+          5,
+          10
+        ],
+        "multChance": 0.35
+      }
+    }
+  },
+  "abilities": [
+    {
+      "id": "atkUp",
+      "good": true,
+      "title": "攻擊 +1",
+      "sub": "全隊",
+      "effect": {
+        "stat": "damage",
+        "add": 1
+      }
+    },
+    {
+      "id": "rateUp",
+      "good": true,
+      "title": "攻速 ×1.5",
+      "sub": "全隊",
+      "effect": {
+        "stat": "rate",
+        "mult": 1.5
+      }
+    },
+    {
+      "id": "hpUp",
+      "good": true,
+      "title": "生命 +1",
+      "sub": "全隊",
+      "effect": {
+        "stat": "hp",
+        "add": 1
+      }
+    },
+    {
+      "id": "rangeUp",
+      "good": true,
+      "title": "射程 +3",
+      "sub": "弓箭手、魔法師",
+      "effect": {
+        "stat": "range",
+        "add": 3
+      }
+    },
+    {
+      "id": "multiShot",
+      "good": true,
+      "title": "多重箭 +1",
+      "sub": "只有弓箭手",
+      "effect": {
+        "class": "弓箭手",
+        "stat": "shots",
+        "add": 1
+      }
+    },
+    {
+      "id": "bigBlast",
+      "good": true,
+      "title": "爆炸 ×1.5",
+      "sub": "只有魔法師",
+      "effect": {
+        "class": "魔法師",
+        "stat": "blast",
+        "mult": 1.5
+      }
+    },
+    {
+      "id": "knightHp",
+      "good": true,
+      "title": "生命 +3",
+      "sub": "只有騎士",
+      "effect": {
+        "class": "騎士",
+        "stat": "hp",
+        "add": 3
+      }
+    },
+    {
+      "id": "rogueRate",
+      "good": true,
+      "title": "攻速 ×2",
+      "sub": "只有盜賊",
+      "effect": {
+        "class": "盜賊",
+        "stat": "rate",
+        "mult": 2
+      }
+    },
+    {
+      "id": "atkDown",
+      "good": false,
+      "title": "攻擊 −1",
+      "sub": "全隊",
+      "effect": {
+        "stat": "damage",
+        "add": -1
+      }
+    },
+    {
+      "id": "rateDown",
+      "good": false,
+      "title": "攻速 ×0.6",
+      "sub": "全隊",
+      "effect": {
+        "stat": "rate",
+        "mult": 0.6
+      }
+    },
+    {
+      "id": "hpDown",
+      "good": false,
+      "title": "生命 −1",
+      "sub": "全隊",
+      "effect": {
+        "stat": "hp",
+        "add": -1
+      }
+    },
+    {
+      "id": "rangeDown",
+      "good": false,
+      "title": "射程 −3",
+      "sub": "弓箭手、魔法師",
+      "effect": {
+        "stat": "range",
+        "add": -3
+      }
+    }
+  ],
+  "potions": {
+    "紅藥水": {
+      "effect": "partners",
+      "amount": 5,
+      "text": "紅藥水：夥伴 +5",
+      "color": "#f87171"
+    },
+    "黃藥水": {
+      "effect": "shield",
+      "seconds": 6,
+      "text": "黃藥水：護盾 6 秒",
+      "color": "#fde047"
+    },
+    "紫藥水": {
+      "effect": "blast",
+      "range": 30,
+      "bossRatio": 0.15,
+      "text": "紫藥水：前面的怪全倒！",
+      "color": "#c084fc"
+    }
+  },
+  "trapKillChance": 0.5,
+  "startCrowd": 5
+}

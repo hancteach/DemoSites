@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>勇者碰碰樂</title>
+<link rel="stylesheet" href="src/style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="labels"></div>
+<div id="numbers"></div>
+
+<!-- 標題 -->
+<section id="title" class="screen menu" hidden>
+  <div class="panel">
+    <h1>勇者碰碰樂</h1>
+    <p class="sub">按住角色往後拉，放開就彈出去！</p>
+    <div class="row between"><span id="titleCoins" class="coins"></span><span id="titleStars" class="coins"></span></div>
+    <div id="titleTeam" class="faces"></div>
+    <div class="buttons">
+      <button id="btnAdventure" class="main">冒險出發</button>
+      <button id="btnTeam">隊伍編成</button>
+      <button id="btnGacha">召喚角色</button>
+    </div>
+  </div>
+</section>
+
+<!-- 選關 -->
+<section id="stages" class="screen menu" hidden>
+  <div class="panel wide">
+    <div class="head"><button data-back>← 返回</button><h2>選擇關卡</h2><span id="stagesCoins" class="coins"></span></div>
+    <div id="stageList"></div>
+    <div class="row"><small>出戰隊伍</small><div id="stageTeam" class="faces small"></div></div>
+  </div>
+</section>
+
+<!-- 隊伍 -->
+<section id="team" class="screen menu" hidden>
+  <div class="panel wide">
+    <div class="head"><button data-back>← 返回</button><h2>隊伍編成 <small id="teamCount"></small></h2><span></span></div>
+    <p class="tip">點角色加入或拿出隊伍，最多 5 位。上場時照這個順序輪流彈射。<b class="type bounce">反彈</b>撞到敵人會彈開；<b class="type pierce">貫穿</b>直接穿過敵人。</p>
+    <div id="teamSlots"></div>
+    <div id="roster"></div>
+  </div>
+</section>
+
+<!-- 召喚 -->
+<section id="gacha" class="screen menu" hidden>
+  <div class="panel">
+    <div class="head"><button data-back>← 返回</button><h2>召喚角色</h2><span id="gachaCoins" class="coins"></span></div>
+    <div id="gachaResult"></div>
+    <button id="pullButton" class="main"></button>
+    <p id="gachaInfo" class="tip"></p>
+  </div>
+</section>
+
+<!-- 戰鬥 -->
+<section id="hud" class="screen" hidden>
+  <div id="topBar"><button id="quitBtn">✕</button><b id="hudStage"></b><span id="hudWave"></span><span id="hudTurn"></span><span id="hudCoins"></span></div>
+  <div id="legend" hidden></div>
+  <div id="hint">按住畫面往後拉，放開彈出去！碰到隊友會發動協力技</div>
+  <button id="specialBtn" hidden></button>
+  <div id="cards"></div>
+</section>
+
+<section id="result" class="screen" hidden>
+  <div class="panel">
+    <h2 id="resultTitle"></h2>
+    <ul id="resultStars"></ul>
+    <p id="resultText"></p>
+    <div class="buttons">
+      <button id="resultAgain" class="main">再玩一次</button>
+      <button id="resultBack">選擇關卡</button>
+    </div>
+  </div>
+</section>
+
+<div id="banner"></div>
+<div id="flash"></div>
+<div id="loading"><div><b>勇者碰碰樂</b><span id="loadingText">載入中…</span></div></div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,65 @@
+{
+  "note": "我方角色。type：bounce 反彈型（撞到敵人會彈開，在敵人之間來回撞很多下）、pierce 貫穿型（直接穿過敵人，每穿過一次打一下，跑得比較遠）。hp 生命、atk 每撞一下的傷害、power 彈出去的力道倍率（越大跑越遠）。assist 協力技：自己彈出去碰到這位隊友時，隊友發動（ring 周圍一圈、shot 射向最近的敵人、radial 往四面八方丟、line 一直線斬過去、heal 補全隊血、strike 重擊一隻）。special 必殺技：每過 charge 個回合可以用一次（power 這次彈射攻擊力變高、all 打全部敵人、heal 補全隊、radial、burnAll 全部燒起來、strike）。unlock：start 一開始就有、stage:<關卡 id> 第一次過關得到、gacha 只能用金幣召喚。召喚到已經有的角色會升級（每級生命、攻擊 +10%，最高 5 級）。",
+  "start": ["騎士", "魔法師", "弓箭手"],
+  "gachaCost": 100,
+  "maxLevel": 5,
+  "levelBonus": 0.1,
+  "list": [
+    {
+      "id": "騎士", "name": "騎士", "model": "騎士", "type": "bounce", "color": "#4da3ff",
+      "hp": 120, "atk": 22, "power": 1.0, "charge": 4, "unlock": "start",
+      "desc": "攻守平均的反彈型，適合新手。",
+      "assist": { "name": "劍氣環", "kind": "ring", "radius": 3.4, "damage": 22, "color": "#9fd4ff" },
+      "special": { "name": "突擊斬", "kind": "power", "mult": 2.5, "text": "這一次彈射攻擊力 2.5 倍" }
+    },
+    {
+      "id": "魔法師", "name": "魔法師", "model": "魔法師", "type": "bounce", "color": "#b77dff",
+      "hp": 80, "atk": 18, "power": 1.0, "charge": 5, "unlock": "start",
+      "desc": "生命低，但協力技和必殺技都很強。",
+      "assist": { "name": "火球", "kind": "shot", "count": 1, "damage": 40, "splash": 2.2, "look": "fire" },
+      "special": { "name": "隕石雨", "kind": "all", "damage": 70, "text": "所有敵人受到 70 傷害" }
+    },
+    {
+      "id": "弓箭手", "name": "弓箭手", "model": "弓箭手", "type": "pierce", "color": "#59c76b",
+      "hp": 90, "atk": 26, "power": 1.05, "charge": 4, "unlock": "start",
+      "desc": "貫穿型，一直線穿過整排敵人。",
+      "assist": { "name": "三連箭", "kind": "shot", "count": 3, "damage": 16, "look": "arrow" },
+      "special": { "name": "箭雨", "kind": "all", "damage": 30, "hits": 2, "text": "所有敵人各被射 2 次（每次 30）" }
+    },
+    {
+      "id": "盜賊", "name": "盜賊", "model": "盜賊", "type": "pierce", "color": "#ffb340",
+      "hp": 85, "atk": 22, "power": 1.25, "charge": 3, "unlock": "stage:goblin",
+      "desc": "速度最快的貫穿型，能在場上繞好幾圈。",
+      "assist": { "name": "疾風斬", "kind": "line", "damage": 30, "width": 1.6, "color": "#fff2b0" },
+      "special": { "name": "影襲", "kind": "power", "mult": 1.8, "speed": 1.3, "text": "這一次跑得更遠，攻擊力 1.8 倍" }
+    },
+    {
+      "id": "皇家騎士", "name": "皇家騎士", "model": "角色_皇家騎士", "type": "bounce", "color": "#ffd94a",
+      "hp": 170, "atk": 17, "power": 0.85, "charge": 4, "unlock": "stage:graveyard",
+      "desc": "生命最多，碰到他會幫全隊補血。",
+      "assist": { "name": "守護之光", "kind": "heal", "pct": 0.09 },
+      "special": { "name": "聖光", "kind": "heal", "pct": 0.4, "text": "全隊回復 40% 生命" }
+    },
+    {
+      "id": "忍者", "name": "忍者", "model": "角色_忍者", "type": "pierce", "color": "#7f8cff",
+      "hp": 85, "atk": 21, "power": 1.15, "charge": 4, "unlock": "gacha",
+      "desc": "協力技往八個方向丟飛鏢，敵人越多越好用。",
+      "assist": { "name": "飛鏢陣", "kind": "radial", "count": 8, "damage": 16, "look": "shuriken" },
+      "special": { "name": "飛鏢風暴", "kind": "radial", "count": 16, "damage": 34, "look": "shuriken", "text": "從自己身上往 16 個方向丟大飛鏢" }
+    },
+    {
+      "id": "日本巫女", "name": "日本巫女", "model": "人型_日本巫女", "type": "bounce", "color": "#ff6a4a",
+      "hp": 95, "atk": 19, "power": 1.0, "charge": 5, "unlock": "gacha",
+      "desc": "火焰箭讓地上著火，站在火裡的敵人每回合受傷。",
+      "assist": { "name": "火焰箭", "kind": "shot", "count": 1, "damage": 22, "look": "firearrow", "fire": { "radius": 2.2, "turns": 3, "damage": 12 } },
+      "special": { "name": "淨化之火", "kind": "burnAll", "damage": 16, "turns": 3, "text": "所有敵人燃燒 3 回合（每回合 16）" }
+    },
+    {
+      "id": "死靈盔甲武士", "name": "死靈盔甲武士", "model": "死靈盔甲武士", "type": "bounce", "color": "#9aa4b8",
+      "hp": 140, "atk": 28, "power": 0.9, "charge": 5, "unlock": "gacha",
+      "desc": "力量最大的反彈型，必殺技一刀砍向最強的敵人。",
+      "assist": { "name": "重斬", "kind": "strike", "damage": 45, "color": "#c8d0ff" },
+      "special": { "name": "斬鐵", "kind": "strike", "damage": 160, "text": "砍最強的敵人，160 傷害" }
+    }
+  ]
+}

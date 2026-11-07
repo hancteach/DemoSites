@@ -1,0 +1,51 @@
+{
+  "note": "敵人。height 模型高度（公尺）、radius 碰撞半徑、hp 生命、coins 打倒給幾枚金幣、every 每幾回合攻擊一次（頭上的數字倒數到 0 就攻擊）。attack 一種攻擊；Boss 用 attacks 依序輪流。攻擊種類：slash 打最近的角色、shot 射一個隨機角色、quake 震地（自己周圍 radius 公尺內的角色都受傷）、beam 直線光束（朝一個角色射穿整個場地，線上的角色都受傷，要躲開）、rush 衝撞（同 beam，但敵人自己衝過去再回來）、all 全體攻擊、heal 幫所有敵人補血、summon 叫小兵（minion 叫哪一種、count 幾隻）。boss: true 會顯示大血條。fly: true 用飛行動作。tint 把模型染色（同一個模型當不同敵人，例如綠龍2 染成冰藍色的冰龍）。",
+  "list": {
+    "哥布林兵": { "model": "人型_哥布林-1", "height": 1.5, "radius": 0.75, "hp": 70, "coins": 4, "every": 2, "attack": { "type": "slash", "damage": 12 } },
+    "哥布林弓兵": { "model": "人型_哥布林-2", "height": 1.5, "radius": 0.75, "hp": 55, "coins": 4, "every": 2, "attack": { "type": "shot", "damage": 11, "color": "#d8c48a" } },
+    "哥布林王": { "model": "人型_哥布林王", "height": 3.0, "radius": 1.5, "hp": 650, "coins": 30, "every": 2, "boss": true,
+      "attacks": [ { "type": "slash", "damage": 26 }, { "type": "quake", "damage": 20, "radius": 4.5 }, { "type": "summon", "minion": "哥布林兵", "count": 2 }, { "type": "rush", "damage": 24, "width": 2.2 } ] },
+
+    "小熊": { "model": "森林小熊", "height": 1.4, "radius": 0.8, "hp": 90, "coins": 4, "every": 2, "attack": { "type": "slash", "damage": 13 } },
+    "野狗": { "model": "獸型_野狗", "height": 1.1, "radius": 0.75, "hp": 60, "coins": 4, "every": 1, "attack": { "type": "slash", "damage": 8 } },
+    "山豬": { "model": "獸型_山豬", "height": 1.4, "radius": 0.95, "hp": 120, "coins": 5, "every": 3, "attack": { "type": "rush", "damage": 20, "width": 1.8 } },
+    "森林大熊": { "model": "森林大熊", "height": 3.0, "radius": 1.6, "hp": 850, "coins": 35, "every": 2, "boss": true,
+      "attacks": [ { "type": "slash", "damage": 30 }, { "type": "quake", "damage": 22, "radius": 5 }, { "type": "all", "damage": 14, "color": "#ffcf8a" }, { "type": "summon", "minion": "野狗", "count": 2 } ] },
+
+    "骷髏兵": { "model": "骷髏人", "height": 1.7, "radius": 0.75, "hp": 95, "coins": 5, "every": 2, "attack": { "type": "slash", "damage": 15 } },
+    "史萊姆": { "model": "特殊_史萊姆", "height": 1.1, "radius": 0.8, "hp": 70, "coins": 4, "every": 3, "attack": { "type": "heal", "amount": 45 } },
+    "死靈骷髏王": { "model": "死靈骷髏王", "height": 3.1, "radius": 1.5, "hp": 1050, "coins": 40, "every": 2, "boss": true,
+      "attacks": [ { "type": "beam", "damage": 30, "width": 2.2, "color": "#b6a8ff" }, { "type": "summon", "minion": "骷髏兵", "count": 2 }, { "type": "all", "damage": 16, "color": "#b6a8ff" }, { "type": "slash", "damage": 32 } ] },
+
+    "蛇妖": { "model": "特殊_蛇妖-1", "height": 1.6, "radius": 0.8, "hp": 100, "coins": 5, "every": 2, "attack": { "type": "shot", "damage": 14, "color": "#8be04e" } },
+    "毒蛇妖": { "model": "特殊_蛇妖-2", "height": 1.7, "radius": 0.85, "hp": 120, "coins": 6, "every": 3, "attack": { "type": "beam", "damage": 22, "width": 1.8, "color": "#8be04e" } },
+    "貓怪": { "model": "人型_貓怪", "height": 1.6, "radius": 0.75, "hp": 85, "coins": 5, "every": 1, "attack": { "type": "slash", "damage": 10 } },
+    "蛇妖王": { "model": "特殊_蛇妖王", "height": 3.2, "radius": 1.6, "hp": 1250, "coins": 45, "every": 2, "boss": true,
+      "attacks": [ { "type": "beam", "damage": 30, "width": 2.4, "color": "#8be04e" }, { "type": "quake", "damage": 24, "radius": 5 }, { "type": "heal", "amount": 160 }, { "type": "all", "damage": 18, "color": "#8be04e" } ] },
+
+    "半獸人": { "model": "半獸人", "height": 1.9, "radius": 0.9, "hp": 170, "coins": 6, "every": 2, "attack": { "type": "slash", "damage": 22 } },
+    "狼人": { "model": "狼人", "height": 1.9, "radius": 0.85, "hp": 120, "coins": 6, "every": 1, "attack": { "type": "slash", "damage": 12 } },
+    "綠龍": { "model": "特殊_綠龍", "height": 2.0, "radius": 1.1, "hp": 200, "coins": 8, "every": 2, "fly": true, "attack": { "type": "shot", "damage": 20, "color": "#ff8a3a", "look": "fire" } },
+    "紅火龍": { "model": "特殊_紅火龍", "height": 3.4, "radius": 1.8, "hp": 1600, "coins": 60, "every": 2, "boss": true, "fly": true,
+      "attacks": [ { "type": "beam", "damage": 34, "width": 2.6, "color": "#ff6a1a" }, { "type": "all", "damage": 20, "color": "#ff6a1a" }, { "type": "quake", "damage": 28, "radius": 5.5 }, { "type": "summon", "minion": "狼人", "count": 2 } ] },
+
+    "白咕嚕": { "model": "人型_咕嚕_白", "height": 1.5, "radius": 0.75, "hp": 130, "coins": 6, "every": 2, "attack": { "type": "shot", "damage": 18, "color": "#c8c0b0" } },
+    "綠咕嚕": { "model": "人型_咕嚕_綠", "height": 1.5, "radius": 0.75, "hp": 160, "coins": 6, "every": 2, "attack": { "type": "slash", "damage": 20 } },
+    "咕嚕王": { "model": "人型_咕嚕王", "height": 3.1, "radius": 1.5, "hp": 1700, "coins": 65, "every": 2, "boss": true,
+      "attacks": [ { "type": "quake", "damage": 31, "radius": 5 }, { "type": "summon", "minion": "綠咕嚕", "count": 2 }, { "type": "beam", "damage": 36, "width": 2.2, "color": "#c8ff8a" }, { "type": "all", "damage": 22, "color": "#c8ff8a" } ] },
+
+    "山豬半獸人": { "model": "山豬半獸人", "height": 1.9, "radius": 0.95, "hp": 220, "coins": 7, "every": 3, "attack": { "type": "rush", "damage": 29, "width": 2.0 } },
+    "冰龍": { "tint": "#8fd0ff", "model": "特殊_綠龍2", "height": 2.1, "radius": 1.1, "hp": 260, "coins": 9, "every": 2, "fly": true, "attack": { "type": "beam", "damage": 26, "width": 1.6, "color": "#7fd8ff" } },
+    "冰霜巨龍": { "tint": "#8fd0ff", "model": "特殊_綠龍2", "height": 3.4, "radius": 1.7, "hp": 1900, "coins": 70, "every": 3, "boss": true, "fly": true,
+      "attacks": [ { "type": "beam", "damage": 38, "width": 2.6, "color": "#7fd8ff" }, { "type": "all", "damage": 24, "color": "#7fd8ff" }, { "type": "quake", "damage": 34, "radius": 5.5 }, { "type": "summon", "minion": "狼人", "count": 2 } ] },
+
+    "哥布林盾兵": { "model": "人型_哥布林-3", "height": 1.6, "radius": 0.8, "hp": 260, "coins": 7, "every": 2, "attack": { "type": "slash", "damage": 19 } },
+    "哥布林巫師": { "model": "人型_哥布林-4", "height": 1.5, "radius": 0.75, "hp": 120, "coins": 7, "every": 3, "attack": { "type": "beam", "damage": 26, "width": 1.6, "color": "#c080ff" } },
+    "哥布林大王": { "tint": "#ffb090", "model": "人型_哥布林王", "height": 3.5, "radius": 1.6, "hp": 2100, "coins": 75, "every": 2, "boss": true,
+      "attacks": [ { "type": "rush", "damage": 36, "width": 2.6 }, { "type": "summon", "minion": "哥布林盾兵", "count": 2 }, { "type": "quake", "damage": 34, "radius": 5.5 }, { "type": "all", "damage": 24, "color": "#ffb060" } ] },
+
+    "黑貓": { "model": "獸型_黑貓", "height": 1.0, "radius": 0.7, "hp": 100, "coins": 6, "every": 1, "attack": { "type": "slash", "damage": 13 } },
+    "黑暗騎士": { "tint": "#a088d0", "model": "死靈盔甲武士", "height": 3.3, "radius": 1.5, "hp": 2300, "coins": 80, "every": 2, "boss": true,
+      "attacks": [ { "type": "slash", "damage": 48 }, { "type": "beam", "damage": 41, "width": 2.4, "color": "#c080ff" }, { "type": "summon", "minion": "黑貓", "count": 2 }, { "type": "all", "damage": 26, "color": "#c080ff" }, { "type": "heal", "amount": 220 } ] }
+  }
+}
