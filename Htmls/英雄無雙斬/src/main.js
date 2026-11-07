@@ -2,6 +2,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { Input } from './input.js';
+import { TouchControls } from './touch.js';
 import { Sfx } from './sfx.js';
 import { Fx } from './fx.js';
 import { Horde } from './horde.js';
@@ -38,6 +39,9 @@ class Game {
     this.arenaRadius = 58;
     this.input = new Input(this.canvas);
     this.input.onPause = () => this.togglePause();
+    this.touch = new TouchControls(this.input, { onPause: () => this.togglePause() });
+    // 暫停畫面：觸控時點一下就繼續
+    document.getElementById('pause').addEventListener('pointerdown', (e) => { if (this.touch.mode) { e.preventDefault(); this.togglePause(); } });
     this.sfx = new Sfx();
     this.fx = new Fx(this.scene);
     this.state = 'loading';
@@ -614,6 +618,7 @@ class Game {
 
     if (this.state === 'play' || this.state === 'over') this.step(real);
     else if (this.state === 'title') { this.camLook.set(0, 1, 0); this.hero.mixer?.update(real); }
+    this.touch.update(this.state, this.hero);
     this.updateCamera(real);
     this.renderer.render(this.scene, this.camera);
   }

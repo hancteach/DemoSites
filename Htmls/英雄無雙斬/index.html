@@ -27,7 +27,7 @@
 </div>
 <div id="banner"></div>
 <div id="flash"></div>
-<div id="pause" hidden><div>暫停<small>按 P 或 Esc 繼續</small></div></div>
+<div id="pause" hidden><div>暫停<small class="keyHint">按 P 或 Esc 繼續</small><small class="touchHint">點一下畫面繼續</small></div></div>
 
 <div id="overlay">
   <div class="panel">
@@ -49,7 +49,14 @@
       <span><kbd>L</kbd> 或 <kbd>E</kbd> 無雙奧義（金色量表滿了才能用）</span>
       <span><kbd>P</kbd> 暫停</span>
     </div>
-    <p class="note">試作版：只在電腦上用鍵盤玩</p>
+    <div id="touchHelp">
+      <span>左手：在左半邊按住拖曳移動</span>
+      <span>右手：按住「攻擊」連斬（橫斬 → 回斬 → 迴旋斬 → 挑斬）</span>
+      <span>「跳躍」後按攻擊＝空中連斬；空中按「突進」＝落地重擊</span>
+      <span>「突進」往前衝；「無雙」在金色量表滿了、按鈕發亮時才能用</span>
+      <span>右上角 II 暫停</span>
+    </div>
+    <p class="note">試作版：電腦用鍵盤、平板和手機用觸控（請橫著拿）</p>
   </div>
 </div>
 <script type="module" src="src/main.js"></script>

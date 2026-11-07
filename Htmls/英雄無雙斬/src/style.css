@@ -130,3 +130,72 @@ body.musou #game { filter: saturate(1.4) contrast(1.08); }
 #captainBar.boss div { height: 16px; }
 #result dd.met { color: #ffd27a; } #result dd.miss { color: #888; font-weight: 400; }
 #modeTabs button[data-mode="boss"].on { border-color: #ff6a4a; color: #ff9a7a; box-shadow: 0 0 10px #ff5a3a66; }
+
+/* ===== 觸控操作（src/touch.js）：body.touch 時才出現，做法照勇者大冒險 ===== */
+html { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+body.touch { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+body.touch #game { touch-action: none; }
+#touchHelp { display: none; flex-wrap: wrap; justify-content: center; gap: 6px 22px; margin-top: 14px; font-size: 15px; opacity: .9; }
+body.touch #touchHelp { display: flex; }
+body.touch #controls, body.touch #musouBar span kbd, .touchHint, body.touch .keyHint { display: none; }
+body.touch .touchHint { display: block; }
+/* 左下的血條移到左上，左下留給搖桿 */
+body.touch #heroBox { bottom: auto; top: 12px; left: 14px; width: min(300px, 34vw); }
+
+#touch { position: fixed; inset: 0; pointer-events: none; z-index: 5; }
+#touch[hidden] { display: none; }
+#touch button { font: inherit; color: #fff; touch-action: none; -webkit-user-select: none; user-select: none; }
+#stickZone { position: absolute; left: 0; bottom: 0; width: 50%; top: 22%; pointer-events: auto; touch-action: none; }
+#stick { position: absolute; left: calc(env(safe-area-inset-left, 0px) + 96px); top: calc(100% - 96px); width: 112px; height: 112px; margin: -56px 0 0 -56px;
+  border-radius: 50%; background: rgba(255, 255, 255, .08); border: 3px solid rgba(255, 255, 255, .28); opacity: .55; transition: opacity .15s; }
+#stick.active { opacity: 1; background: rgba(255, 255, 255, .14); border-color: rgba(255, 210, 122, .7); transition: none; }
+#stickKnob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff8e1, #ffd27a 60%, #b8862a); box-shadow: 0 3px 10px rgba(0, 0, 0, .5); }
+
+#tButtons { position: absolute; right: calc(env(safe-area-inset-right, 0px) + 18px); bottom: 18px; width: 230px; height: 220px; }
+.tBtn { position: absolute; border-radius: 50%; pointer-events: auto; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  background: rgba(20, 16, 10, .6); border: 3px solid rgba(255, 255, 255, .4); box-shadow: 0 3px 10px rgba(0, 0, 0, .45); }
+.tBtn.down { transform: scale(.92); filter: brightness(1.35); }
+.tBtn.big { right: 0; bottom: 0; width: 112px; height: 112px; background: rgba(255, 210, 122, .35); border-color: #ffd27a; }
+.tBtn.big svg { width: 56%; height: 56%; filter: drop-shadow(0 2px 2px rgba(0, 0, 0, .6)); }
+.tBtn.big b { font-size: 15px; text-shadow: 0 1px 2px #000; margin-top: -2px; }
+.tBtn.small { width: 72px; height: 72px; border-color: var(--c); line-height: 1.1; }
+.tBtn.small b { font-size: 16px; color: var(--c); text-shadow: 0 1px 2px #000; }
+.tBtn .cd { font-size: 13px; font-weight: 800; }
+.tBtn.cooling { opacity: .5; filter: grayscale(.8); }
+#tJump { right: 128px; bottom: 4px; }
+#tDash { right: 18px; bottom: 128px; }
+#tMusou { right: 112px; bottom: 102px; opacity: .45; filter: grayscale(.8); }
+#tMusou.ready { opacity: 1; filter: none; background: rgba(255, 179, 64, .45); box-shadow: 0 0 18px #ffb340; animation: glow .5s infinite alternate; }
+#tPause { position: absolute; top: 92px; right: calc(env(safe-area-inset-right, 0px) + 18px); width: 50px; height: 50px; border-radius: 12px; pointer-events: auto;
+  font-size: 20px; font-weight: 900; background: rgba(20, 16, 10, .6); border: 2px solid rgba(255, 255, 255, .4); }
+
+/* 直立拿著：提示轉橫向（遊戲中會自動暫停） */
+#rotateHint { display: none; position: fixed; inset: 0; z-index: 20; align-items: center; justify-content: center; padding: 24px; text-align: center; background: rgba(12, 10, 6, .95); }
+#rotateHint div { display: flex; flex-direction: column; gap: 12px; align-items: center; }
+#rotateHint .phone { width: 46px; height: 76px; border: 4px solid #ffd27a; border-radius: 10px; animation: tilt 1.6s ease-in-out infinite; }
+#rotateHint b { font-size: 24px; color: #ffd27a; }
+#rotateHint small { font-size: 16px; opacity: .85; }
+@keyframes tilt { 0%, 30% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }
+@media (orientation: portrait) { body.touch #rotateHint { display: flex; } }
+
+/* 手機橫放（高度約 360～430 px）：HUD、選單縮小，按鈕縮一點 */
+@media (max-height: 520px) {
+  body.touch #heroBox .label { font-size: 14px; margin-bottom: 2px; }
+  #timer { font-size: 24px; top: 8px; }
+  #koBox b { font-size: 32px; }
+  #koBox small { font-size: 12px; }
+  #combo b { font-size: 48px; }
+  #combo span { font-size: 18px; }
+  #banner { font-size: 36px; }
+  #tPause { top: 64px; width: 44px; height: 44px; }
+  #tButtons { transform: scale(.85); transform-origin: right bottom; }
+  .panel { padding: 12px 18px; max-height: 98vh; }
+  .panel h1 { font-size: 28px; margin-bottom: 2px; letter-spacing: 3px; }
+  .panel p { font-size: 14px; margin: 4px 0 8px; }
+  #touchHelp { margin-top: 8px; font-size: 13px; gap: 3px 16px; }
+  #heroSelect { grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 8px; }
+  .heroCard { padding: 4px 6px; }
+  .heroCard small, .heroCard .stat { display: none; }
+  #startButton { font-size: 18px; padding: 8px 36px; }
+}
