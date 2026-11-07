@@ -1,0 +1,132 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #111; font-family: "Microsoft JhengHei", "Noto Sans TC", sans-serif; color: #fff; user-select: none; }
+#game { display: block; width: 100vw; height: 100vh; }
+kbd { display: inline-block; min-width: 1.6em; padding: 0 .35em; margin: 0 .1em; border: 1px solid #c9b07a; border-bottom-width: 3px; border-radius: 5px; background: #2a2418; color: #ffe6a8; font-family: inherit; font-weight: 600; font-size: .85em; line-height: 1.5; text-align: center; }
+
+#hud { position: fixed; inset: 0; pointer-events: none; text-shadow: 0 2px 4px #000a; }
+#heroBox { position: absolute; left: 20px; bottom: 20px; width: min(380px, 44vw); }
+#heroBox .label { font-weight: 700; font-size: 18px; margin-bottom: 4px; }
+#hpText { margin-left: .4em; color: #b8ffb0; }
+#hpBar, #musouBar { position: relative; height: 18px; background: #0009; border: 2px solid #fff6; border-radius: 9px; overflow: hidden; }
+#hpFill { position: absolute; inset: 0; width: 100%; background: linear-gradient(#7dff8a, #28b04a); transition: width .15s; }
+#musouBar { margin-top: 6px; height: 16px; }
+#musouFill { position: absolute; inset: 0; width: 0; background: linear-gradient(#ffd27a, #e08a14); }
+#musouBar span { position: absolute; right: 8px; top: -2px; font-size: 13px; font-weight: 700; opacity: .85; }
+#musouBar span kbd { font-size: 11px; }
+#musouBar.full { border-color: #ffd27a; box-shadow: 0 0 14px #ffb340; animation: glow .5s infinite alternate; }
+@keyframes glow { to { box-shadow: 0 0 26px #ffd27a; } }
+
+#timer { position: absolute; top: 14px; left: 50%; transform: translateX(-50%); font-size: 34px; font-weight: 800; letter-spacing: 2px; }
+#timer.low { color: #ff7b6b; }
+#koBox { position: absolute; top: 12px; right: 22px; text-align: right; }
+#koBox small { display: block; font-size: 15px; opacity: .85; }
+#koBox b { font-size: 48px; line-height: 1; color: #ffe6a8; }
+#captainBar { position: absolute; top: 62px; left: 50%; transform: translateX(-50%); width: min(460px, 70vw); text-align: center; }
+#captainBar b { font-size: 16px; color: #ffb0a8; }
+#captainBar div { height: 12px; margin-top: 3px; background: #0009; border: 2px solid #ff8a7a99; border-radius: 6px; overflow: hidden; }
+#captainFill { display: block; height: 100%; width: 100%; background: linear-gradient(#ff8a6a, #c0281c); }
+#captainArrow { position: absolute; left: 50%; top: 50%; font-size: 40px; color: #ff5544; }
+#combo { position: absolute; right: 28px; top: 34%; text-align: right; }
+#combo b { display: block; font-size: 72px; line-height: 1; color: #fff; font-style: italic; -webkit-text-stroke: 2px #e08a14; }
+#combo span { font-size: 26px; font-weight: 800; color: #ffd27a; font-style: italic; }
+#combo.pop b { animation: pop .18s ease-out; }
+@keyframes pop { from { transform: scale(1.35); } to { transform: scale(1); } }
+
+#banner { position: fixed; left: 0; right: 0; top: 30%; text-align: center; font-size: 54px; font-weight: 900; letter-spacing: 4px; opacity: 0; transform: scale(.8); transition: opacity .2s, transform .2s; pointer-events: none; text-shadow: 0 3px 8px #000c; }
+#banner.show { opacity: 1; transform: scale(1); }
+#banner.gold { color: #ffd27a; -webkit-text-stroke: 1px #7a4a00; }
+#banner.red { color: #ff8a7a; }
+#flash { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(transparent 50%, #ff0000aa); opacity: 0; }
+#flash.on { animation: hurt .35s; }
+@keyframes hurt { from { opacity: 1; } to { opacity: 0; } }
+body.musou #game { filter: saturate(1.4) contrast(1.08); }
+
+#pause { position: fixed; inset: 0; display: grid; place-items: center; background: #0008; font-size: 48px; font-weight: 800; }
+#pause small { display: block; font-size: 18px; text-align: center; opacity: .8; }
+
+#overlay { position: fixed; inset: 0; display: grid; place-items: center; background: radial-gradient(#0006, #000c); }
+#overlay[hidden], #hud[hidden], #pause[hidden], #modeTabs[hidden], #challengePanel[hidden], #bossPanel[hidden], #missionHud[hidden], #koBox[hidden], #backButton[hidden] { display: none; }
+.panel { width: min(660px, 94vw); max-height: 96vh; overflow: auto; padding: 26px 30px; background: #1d1a14ee; border: 2px solid #c9b07a; border-radius: 16px; text-align: center; box-shadow: 0 10px 40px #000a; }
+.panel h1 { margin: 0 0 8px; font-size: 46px; letter-spacing: 6px; color: #ffd27a; -webkit-text-stroke: 1px #7a4a00; }
+.panel p { margin: 6px 0 14px; font-size: 18px; }
+.panel b { color: #ffd27a; }
+#startButton { font-family: inherit; font-weight: 800; font-size: 22px; padding: 10px 46px; border: 0; border-radius: 12px; background: linear-gradient(#ffcf6a, #e08a14); color: #2a1600; cursor: pointer; box-shadow: 0 4px 0 #8a5200; }
+#startButton:hover, #startButton:focus { filter: brightness(1.12); outline: 3px solid #fff8; }
+#controls { display: grid; gap: 6px; margin-top: 18px; font-size: 15px; text-align: left; justify-content: center; }
+.note { font-size: 13px !important; opacity: .6; }
+#result { display: flex; gap: 26px; align-items: center; justify-content: center; margin: 6px 0 16px; }
+#result .rank { font-size: 92px; font-weight: 900; font-style: italic; line-height: 1; }
+.rankS { color: #ffd27a; } .rankA { color: #ff9a6a; } .rankB { color: #8ac8ff; } .rankC { color: #ccc; }
+#result dl { display: grid; grid-template-columns: auto auto; gap: 4px 18px; margin: 0; font-size: 19px; text-align: left; }
+#result dt { opacity: .75; } #result dd { margin: 0; font-weight: 800; }
+
+/* 選角色 */
+#heroSelect { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin: 4px 0 14px; }
+#heroSelect[hidden] { display: none; }
+.heroCard { display: grid; gap: 2px; padding: 8px 10px; text-align: left; border: 2px solid #5a4a2a; border-radius: 10px; background: #2a2418; color: #eee; font: inherit; cursor: pointer; }
+.heroCard:hover { border-color: #c9b07a; }
+.heroCard.on { border-color: var(--c); box-shadow: 0 0 0 2px var(--c) inset, 0 0 14px var(--c); }
+.heroCard b { font-size: 18px; color: var(--c); }
+.heroCard em { font-style: normal; font-size: 13px; color: #ffd27a; }
+.heroCard small { font-size: 12px; color: #bbb; min-height: 2.6em; line-height: 1.3; }
+.heroCard .stat { display: grid; grid-template-columns: 2.6em 1fr; align-items: center; font-size: 11px; color: #aaa; }
+.heroCard .stat i { display: block; height: 6px; border-radius: 3px; background: var(--c); }
+@media (max-width: 560px) { #heroSelect { grid-template-columns: repeat(2, 1fr); } }
+
+/* 模式切換、挑戰任務 */
+#modeTabs { display: flex; justify-content: center; gap: 8px; margin: 2px 0 6px; }
+#modeTabs button { font: inherit; font-weight: 800; font-size: 17px; padding: 6px 20px; border: 2px solid #5a4a2a; border-radius: 10px; background: #2a2418; color: #ccc; cursor: pointer; }
+#modeTabs button.on { border-color: #ffd27a; color: #ffd27a; box-shadow: 0 0 10px #ffb34066; }
+#modeTabs small { font-size: 13px; color: #ffd27a; }
+#challengePanel { margin: 0 0 10px; text-align: left; }
+.missionGroup h3 { margin: 6px 0 4px; font-size: 15px; color: #ffd27a; }
+.missionGroup h3 small { margin-left: 8px; font-size: 12px; font-weight: 400; color: #bbb; }
+.missionGrid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.mission { display: grid; gap: 1px; padding: 5px 8px; border: 2px solid #5a4a2a; border-radius: 8px; background: #2a2418; color: #eee; font: inherit; font-size: 13px; text-align: left; cursor: pointer; }
+.mission:hover { border-color: #c9b07a; }
+.mission.on { border-color: #ffd27a; box-shadow: 0 0 0 1px #ffd27a inset, 0 0 10px #ffb34066; }
+.mission.locked { opacity: .35; cursor: default; }
+.mission b { color: #fff; font-size: 13px; }
+.stars { color: #ffd27a; letter-spacing: 1px; }
+#missionInfo { min-height: 3em; margin: 8px 0 0; padding: 6px 10px; border-radius: 8px; background: #0005; font-size: 15px; }
+#missionInfo small { display: inline-block; margin-top: 2px; font-size: 13px; color: #ccc; }
+.heroCard.dim { opacity: .3; cursor: default; }
+#backButton { margin-left: 10px; font-family: inherit; font-weight: 700; font-size: 18px; padding: 9px 22px; border: 2px solid #c9b07a; border-radius: 12px; background: #2a2418; color: #ffe6a8; cursor: pointer; }
+#backButton:hover, #backButton:focus { filter: brightness(1.2); outline: 3px solid #fff8; }
+#missionHud { position: absolute; top: 12px; right: 22px; min-width: 210px; padding: 8px 12px; text-align: right; background: #0006; border: 2px solid #ffd27a88; border-radius: 10px; }
+#missionHud b { display: block; font-size: 16px; color: #ffd27a; }
+#missionHud .stars { font-size: 22px; }
+#missionHud div { font-size: 15px; }
+#missionHud big { font-size: 30px; font-weight: 900; margin: 0 2px; }
+#missionHud small { display: block; font-size: 13px; opacity: .85; }
+.bigStars { font-size: 64px; color: #ffd27a; letter-spacing: 4px; text-shadow: 0 0 16px #ffb340; }
+.bigStars i { font-style: normal; color: #555; text-shadow: none; }
+.newBest { color: #7dff8a; font-size: 14px; }
+@media (max-width: 560px) { .missionGrid { grid-template-columns: repeat(2, 1fr); } }
+#overlay.challenge .panel { width: min(860px, 96vw); padding: 16px 24px; }
+#overlay.challenge .panel h1 { font-size: 34px; margin-bottom: 4px; }
+#overlay.challenge .panel p { margin: 4px 0 8px; }
+#overlay.challenge #controls, #overlay.challenge .note { display: none; }
+#overlay.challenge #heroSelect { grid-template-columns: repeat(7, 1fr); gap: 5px; }
+#overlay.challenge .heroCard { padding: 5px 6px; text-align: center; }
+#overlay.challenge .heroCard b { font-size: 14px; }
+#overlay.challenge .heroCard small, #overlay.challenge .heroCard .stat { display: none; }
+#overlay.challenge .heroCard em { font-size: 11px; }
+
+/* Boss 戰 */
+#bossPanel { margin: 0 0 10px; text-align: left; }
+#bossList { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.bossCard { display: grid; gap: 2px; padding: 10px; border: 2px solid #6a2a2a; border-radius: 10px; background: linear-gradient(#3a1a14, #241410); color: #eee; font: inherit; text-align: center; cursor: pointer; }
+.bossCard:hover { border-color: #ff8a6a; }
+.bossCard.on { border-color: #ff6a4a; box-shadow: 0 0 0 1px #ff6a4a inset, 0 0 14px #ff5a3a88; }
+.bossCard.locked { opacity: .35; cursor: default; }
+.bossCard small { font-size: 12px; color: #ffb0a0; }
+.bossCard b { font-size: 19px; color: #ffcfb0; }
+.bossCard em { font-style: normal; font-size: 12px; color: #bbb; }
+#bossInfo { min-height: 3em; margin: 8px 0 0; padding: 6px 10px; border-radius: 8px; background: #0005; font-size: 15px; }
+#bossInfo small { font-size: 13px; color: #ccc; }
+#captainBar.boss { width: min(620px, 80vw); }
+#captainBar.boss b { font-size: 20px; color: #ff9a7a; }
+#captainBar.boss div { height: 16px; }
+#result dd.met { color: #ffd27a; } #result dd.miss { color: #888; font-weight: 400; }
+#modeTabs button[data-mode="boss"].on { border-color: #ff6a4a; color: #ff9a7a; box-shadow: 0 0 10px #ff5a3a66; }

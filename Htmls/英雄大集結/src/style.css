@@ -1,0 +1,183 @@
+* { box-sizing: border-box; }
+html, body { margin: 0; height: 100%; overflow: hidden; background: #1b2233; color: #fff;
+  font-family: "Microsoft JhengHei", "PingFang TC", "Noto Sans TC", system-ui, sans-serif; user-select: none; -webkit-user-select: none; }
+canvas#game { position: fixed; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+button { font: inherit; color: inherit; cursor: pointer; border: 0; }
+[hidden] { display: none !important; }
+
+/* 選單 */
+.screen { position: fixed; inset: 0; z-index: 10; }
+.screen.menu { display: flex; align-items: center; justify-content: center; padding: 16px; background: rgba(12, 16, 30, 0.55); overflow-y: auto; }
+.panel { background: rgba(20, 26, 46, 0.94); border: 2px solid #ffd45c55; border-radius: 22px; padding: 22px; width: min(440px, 100%);
+  box-shadow: 0 12px 40px #0008; text-align: center; max-height: 100%; overflow-y: auto; }
+.panel.wide { width: min(760px, 100%); }
+h1 { margin: 4px 0 2px; font-size: clamp(38px, 9vw, 58px); letter-spacing: 4px; color: #ffd45c;
+  text-shadow: 0 4px 0 #b4561e, 0 8px 18px #000a; }
+h2 { margin: 0; font-size: 24px; }
+h2 small { font-size: 15px; color: #aab; font-weight: normal; }
+.sub { margin: 4px 0 14px; color: #cfe; }
+.tip { color: #bcd; font-size: 14px; line-height: 1.6; text-align: left; }
+.row { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+.row.between { justify-content: space-between; }
+.head { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; margin-bottom: 12px; }
+.head button { background: #ffffff1a; padding: 8px 14px; border-radius: 12px; }
+.coins { background: #0006; border-radius: 999px; padding: 5px 12px; font-weight: bold; color: #ffe27a; white-space: nowrap; }
+.buttons { display: grid; gap: 10px; margin-top: 16px; }
+.buttons button, #pullButton { padding: 14px; border-radius: 16px; font-size: 19px; font-weight: bold; background: #3a4670; box-shadow: 0 4px 0 #222b48; }
+.buttons button.main, #pullButton { background: linear-gradient(#ffcf4a, #f39a1e); color: #3a1c00; box-shadow: 0 4px 0 #b4561e; }
+button:active { transform: translateY(2px); }
+#pullButton:disabled { filter: grayscale(1); opacity: 0.6; }
+
+.faces { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; min-height: 70px; }
+.face { width: 64px; height: 64px; border-radius: 50%; background: radial-gradient(circle at 50% 35%, #fff3, #0004), var(--c, #555); border: 3px solid var(--c, #888); object-fit: cover; }
+.faces.small .face { width: 46px; height: 46px; border-width: 2px; }
+.face.big { width: 140px; height: 140px; border-width: 5px; }
+
+/* 關卡 */
+#stageList { display: grid; gap: 10px; }
+.stageCard { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; text-align: left;
+  background: linear-gradient(90deg, color-mix(in srgb, var(--g) 70%, #000) 0%, #2a3354 70%); border: 2px solid #ffffff22; }
+.stageCard .no { font-size: 26px; font-weight: bold; text-align: center; }
+.stageCard .info b { font-size: 19px; display: block; }
+.stageCard .info small { color: #dde; }
+.stageCard .stars { color: #ffd45c; font-size: 22px; letter-spacing: 2px; }
+.stageCard.locked { filter: grayscale(1); opacity: 0.5; cursor: default; }
+
+/* 戰鬥 */
+#hud { pointer-events: none; }
+#hud > * { pointer-events: auto; }
+#topBar { position: absolute; top: 0; left: 0; right: 0; display: flex; gap: 12px; align-items: center; padding: 10px 12px; padding-top: max(10px, env(safe-area-inset-top));
+  background: linear-gradient(#000a, #0000); font-size: 15px; pointer-events: none; }
+#topBar > * { pointer-events: auto; }
+#topBar b { font-size: 17px; }
+#topBar span { background: #0006; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+#quitBtn { background: #ffffff22; width: 34px; height: 34px; border-radius: 50%; font-size: 16px; }
+#hint { position: absolute; bottom: 128px; left: 50%; transform: translateX(-50%); background: #000a; padding: 6px 14px; border-radius: 999px; font-size: 14px; white-space: nowrap; pointer-events: none; animation: bob 1.4s ease-in-out infinite; }
+@keyframes bob { 50% { transform: translate(-50%, 4px); } }
+#cards { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: center; gap: 6px; padding: 8px; padding-bottom: max(8px, env(safe-area-inset-bottom)); background: linear-gradient(#0000, #000b); pointer-events: none; }
+.card { position: relative; width: min(19vw, 92px); display: grid; justify-items: center; gap: 3px; padding: 5px 4px; border-radius: 14px; background: #1a2140cc; border: 2px solid #ffffff22; transition: transform 0.15s; }
+.card .face { width: min(13vw, 58px); height: min(13vw, 58px); }
+.card.now { border-color: var(--c); transform: translateY(-8px); box-shadow: 0 0 14px var(--c); }
+.card.down { filter: grayscale(1) brightness(0.5); }
+.card .bar { width: 100%; height: 7px; background: #0008; border-radius: 4px; overflow: hidden; }
+.card .bar i { display: block; height: 100%; background: linear-gradient(90deg, #4be06a, #a6f06a); transition: width 0.25s; }
+.card .charge { font-size: 11px; color: #aab; }
+.card .charge.ready { color: #ffd45c; font-weight: bold; animation: glow 1s ease-in-out infinite; }
+@keyframes glow { 50% { text-shadow: 0 0 8px #ffd45c; } }
+/* 頭上的血條與倒數 */
+#labels, #numbers { position: fixed; inset: 0; pointer-events: none; z-index: 5; overflow: hidden; }
+.ulabel { position: absolute; left: 0; top: 0; display: flex; align-items: center; gap: 3px; }
+.ulabel .bar { width: 46px; height: 6px; background: #000a; border-radius: 3px; overflow: hidden; border: 1px solid #0008; }
+.ulabel .bar i { display: block; height: 100%; background: #4be06a; transition: width 0.2s; }
+.ulabel.enemy .bar i { background: linear-gradient(90deg, #ff4a3a, #ff9a3a); }
+.ulabel.boss .bar { width: 120px; height: 9px; }
+.ulabel .cdx { min-width: 22px; height: 22px; border-radius: 50%; background: #2a2f45; border: 2px solid #ccd; display: grid; place-items: center; font-weight: bold; font-size: 13px; }
+.ulabel .cdx.soon { background: #c42a1e; border-color: #ffd0c0; animation: glow 0.8s infinite; }
+.ulabel.burning .bar { box-shadow: 0 0 8px #ff6a1a; }
+.ulabel.down { display: none; }
+.num { position: absolute; left: 0; top: 0; font-weight: 900; font-size: 22px; color: #fff; text-shadow: 0 2px 0 #000, 0 0 6px #000; white-space: nowrap; }
+.num.crit { color: #ffd45c; font-size: 30px; }
+.num.skill { color: #9fd4ff; font-size: 20px; }
+.num.hurt { color: #ff6a6a; }
+.num.heal { color: #6dff8a; }
+.num.burn { color: #ff9a3a; font-size: 18px; }
+.num.coin { color: #ffe27a; font-size: 16px; }
+
+#banner { position: fixed; top: 32%; left: 50%; transform: translate(-50%, -50%) scale(0.6); opacity: 0; z-index: 20; pointer-events: none;
+  font-size: clamp(30px, 7vw, 54px); font-weight: 900; letter-spacing: 3px; color: #fff; text-shadow: 0 4px 0 #0009, 0 0 22px #4da3ff; transition: 0.2s; white-space: nowrap; }
+#banner.on { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+#banner.boss { color: #ff7a5a; text-shadow: 0 4px 0 #0009, 0 0 26px #ff3a1a; }
+#banner.special { color: #ffd45c; text-shadow: 0 4px 0 #0009, 0 0 26px #ff9a1a; }
+#banner.down { color: #aab; font-size: 30px; }
+#flash { position: fixed; inset: 0; pointer-events: none; opacity: 0; z-index: 15; }
+#flash.on { animation: flash 0.6s; }
+@keyframes flash { 0% { opacity: 0.45; } 100% { opacity: 0; } }
+
+#result { display: flex; align-items: center; justify-content: center; background: #0008; z-index: 30; padding: 16px; }
+#resultTitle { font-size: 40px; margin-bottom: 8px; }
+#resultTitle.win { color: #ffd45c; }
+#resultTitle.lose { color: #aab; }
+#resultStars { list-style: none; padding: 0; text-align: left; display: inline-grid; gap: 6px; font-size: 18px; color: #889; }
+#resultStars li.ok { color: #ffd45c; }
+
+#loading { position: fixed; inset: 0; display: grid; place-items: center; background: #1b2233ee; z-index: 50; }
+#loading div { display: grid; gap: 10px; text-align: center; }
+#loading b { font-size: 40px; color: #ffd45c; }
+
+@media (max-width: 520px) {
+  #topBar { gap: 6px; font-size: 13px; padding-left: 8px; padding-right: 8px; }
+  #topBar b { font-size: 14px; max-width: 5.5em; line-height: 1.2; }
+  #topBar span { padding: 2px 7px; }
+  #hint { font-size: 12px; }
+  #roster { grid-template-columns: 1fr; }
+  .panel { padding: 16px; }
+}
+
+/* 金幣圖示（不用 emoji，學校電腦的字型可能沒有） */
+i.coin { display: inline-block; width: 0.95em; height: 0.95em; margin-right: 0.25em; vertical-align: -0.12em; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #fff6b0 0 18%, #ffd23a 40%, #d99a12 100%); box-shadow: inset 0 0 0 0.09em #b97a0a; }
+
+
+/* ===== 英雄大集結 ===== */
+/* 名冊／出發準備 */
+#pickSlots { display: flex; gap: 14px; justify-content: center; margin: 4px 0 14px; }
+.slot { position: relative; width: 76px; height: 76px; border-radius: 50%; border: 2px dashed #fff4; display: grid; place-items: center; color: #889; }
+.slot .face { width: 72px; height: 72px; }
+.slot[data-tag]::after { content: attr(data-tag); position: absolute; bottom: -8px; left: 50%; transform: translateX(-50%); background: #ffd45c; color: #3a1c00; font-size: 12px; font-weight: bold; padding: 1px 8px; border-radius: 8px; white-space: nowrap; }
+#heroList { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 10px; }
+.heroCard { position: relative; display: grid; grid-template-columns: 70px 1fr auto; gap: 10px; align-items: center; text-align: left; padding: 10px; border-radius: 16px;
+  background: #2a3354; border: 2px solid #ffffff1a; cursor: pointer; }
+.heroCard.picked { border-color: var(--c); box-shadow: 0 0 0 2px var(--c) inset; }
+.heroCard.locked { opacity: 0.55; cursor: default; }
+.heroCard.locked .face { filter: brightness(0.15); }
+.heroCard .info { display: grid; gap: 2px; }
+.heroCard .info b { font-size: 18px; }
+.heroCard small { color: #ccd; font-size: 13px; }
+.heroCard .desc { color: #9ab; }
+.heroCard .upg { color: #8ae8ff; }
+.heroCard .up { padding: 8px 10px; border-radius: 12px; background: linear-gradient(#ffcf4a, #f39a1e); color: #3a1c00; font-weight: bold; box-shadow: 0 3px 0 #b4561e; white-space: nowrap; }
+.heroCard .up:disabled { filter: grayscale(1); opacity: 0.55; cursor: default; }
+.pickNo { position: absolute; top: 6px; right: 8px; background: var(--c); color: #111; font-weight: bold; border-radius: 10px; padding: 1px 8px; font-size: 13px; }
+.lv { color: #ffd45c; font-weight: bold; margin-left: 6px; }
+#goWrap { position: sticky; bottom: -22px; padding: 10px 0 4px; background: linear-gradient(#141a2e00, #141a2ef0 30%); }
+
+/* 遊戲中 */
+#progress { position: relative; flex: 1; height: 14px; background: #0007; border-radius: 7px; overflow: hidden; max-width: 340px; }
+#progress i { position: absolute; inset: 0 auto 0 0; background: linear-gradient(90deg, #4da3ff, #8ad8ff); }
+#progress em { position: absolute; inset: 0; font-style: normal; font-size: 11px; font-weight: bold; text-align: center; line-height: 14px; text-shadow: 0 1px 0 #000; }
+#bossBar { position: absolute; top: 56px; left: 50%; transform: translateX(-50%); width: min(520px, 86vw); text-align: center; pointer-events: none; }
+#bossBar b { font-size: 16px; color: #ffb09a; text-shadow: 0 2px 0 #000; }
+#bossBar div { height: 14px; background: #000a; border: 2px solid #ffd0c0; border-radius: 8px; overflow: hidden; margin-top: 3px; }
+#bossBar i { display: block; height: 100%; background: linear-gradient(90deg, #ff3a2a, #ff9a3a); transition: width 0.15s; }
+#powerTag { position: absolute; left: 12px; bottom: 128px; background: #0008; color: #8ae8ff; font-weight: bold; padding: 4px 12px; border-radius: 999px; font-size: 14px; pointer-events: none; }
+#bombBtn { position: absolute; right: 12px; bottom: 124px; width: 104px; padding: 8px 10px; border-radius: 16px; background: #2a3354dd; color: #ccd; display: grid; gap: 5px; border: 2px solid #ffffff33; }
+#bombBtn b { font-size: 15px; }
+#bombBtn span { display: block; height: 8px; background: #0008; border-radius: 4px; overflow: hidden; }
+#bombBtn span i { display: block; height: 100%; background: linear-gradient(90deg, #ffcf4a, #ff7a2a); }
+#bombBtn.ready { background: linear-gradient(#ffcf4a, #f3631e); color: #3a1c00; box-shadow: 0 4px 0 #a33f12, 0 0 18px #ffb34088; animation: glow 1s infinite; }
+#bombBtn:disabled { cursor: default; }
+.card.leader { border-color: var(--c); box-shadow: 0 0 12px var(--c); }
+.card.leader::after { content: "隊長"; position: absolute; top: -9px; background: #ffd45c; color: #3a1c00; font-size: 11px; font-weight: bold; padding: 0 6px; border-radius: 6px; }
+.ulabel.hero .bar { width: 38px; height: 5px; }
+.ulabel.cage .bar { width: 60px; height: 7px; }
+.ulabel.cage .bar i { background: linear-gradient(90deg, #c8a070, #ffe27a); }
+@media (max-width: 520px) {
+  #heroList { grid-template-columns: 1fr; }
+  #topBar #progress { max-width: none; }
+  #powerTag { bottom: 116px; font-size: 12px; }
+  #bombBtn { bottom: 112px; width: 92px; }
+}
+
+/* 難度 */
+#diffRow { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 12px; }
+.diff { display: grid; gap: 2px; padding: 8px 6px; border-radius: 14px; background: #2a3354; border: 2px solid #ffffff22; opacity: 0.75; }
+.diff b { font-size: 17px; }
+.diff small { font-size: 11px; color: #bcd; line-height: 1.3; }
+.diff.on { opacity: 1; border-color: #ffd45c; box-shadow: 0 0 10px #ffd45c66; }
+.diff.easy.on { border-color: #6dff8a; box-shadow: 0 0 10px #6dff8a66; }
+.diff.hard.on { border-color: #ff6a5a; box-shadow: 0 0 10px #ff6a5a66; }
+.dtag { font-style: normal; font-size: 11px; font-weight: bold; padding: 1px 6px; border-radius: 6px; margin-left: 6px; vertical-align: 2px; background: #ffd45c; color: #3a1c00; }
+.dtag.easy { background: #6dff8a; }
+.dtag.hard { background: #ff6a5a; color: #fff; }
+#stageList { max-height: 62vh; overflow-y: auto; }
+@media (max-width: 520px) { .diff small { display: none; } }

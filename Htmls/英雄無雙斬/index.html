@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>英雄無雙斬</title>
+<link rel="stylesheet" href="src/style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud" hidden>
+  <div id="heroBox">
+    <div class="label"><span id="heroName">騎士</span> <span id="hpText"></span></div>
+    <div id="hpBar"><i id="hpFill"></i></div>
+    <div id="musouBar"><i id="musouFill"></i><span>無雙 <kbd>L</kbd></span></div>
+  </div>
+  <div id="timer"></div>
+  <div id="koBox"><small>擊破數</small><b id="ko">0</b></div>
+  <div id="missionHud" hidden></div>
+  <div id="captainBar" hidden><b id="captainName">敵將 死靈武將</b><div><i id="captainFill"></i></div></div>
+  <div id="captainArrow" hidden>▲</div>
+  <div id="combo" hidden><b>0</b><span>Hits</span></div>
+</div>
+<div id="banner"></div>
+<div id="flash"></div>
+<div id="pause" hidden><div>暫停<small>按 P 或 Esc 繼續</small></div></div>
+
+<div id="overlay">
+  <div class="panel">
+    <h1 id="overlayTitle">英雄無雙斬</h1>
+    <div id="modeTabs" hidden><button data-mode="musou">千人斬</button><button data-mode="challenge">挑戰任務 <small id="starTotal"></small> ★</button><button data-mode="boss">Boss 戰</button></div>
+    <p id="overlayText">載入中…</p>
+    <div id="challengePanel" hidden><div id="challengeList"></div><p id="missionInfo"></p></div>
+    <div id="bossPanel" hidden><div id="bossList"></div><p id="bossInfo"></p></div>
+    <div id="result" hidden></div>
+    <div id="heroSelect" hidden></div>
+    <button id="startButton">開始</button>
+    <button id="backButton" hidden>回選單</button>
+    <div id="controls">
+      <span><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> 或方向鍵 移動</span>
+      <span><kbd>J</kbd> 或滑鼠左鍵 連斬（按住或連按）：橫斬 → 回斬 → 迴旋斬 → 挑斬（把敵人挑上天）</span>
+      <span><kbd>空白鍵</kbd> 跳躍。空中按 <kbd>J</kbd> 空中連斬三下，第四下落地重擊（空中按 <kbd>K</kbd> 直接落地重擊）</span>
+      <span>挑斬打中後馬上按 <kbd>空白鍵</kbd> 跳上去追打</span>
+      <span><kbd>K</kbd> 或 <kbd>Shift</kbd> 或滑鼠右鍵 突進斬</span>
+      <span><kbd>L</kbd> 或 <kbd>E</kbd> 無雙奧義（金色量表滿了才能用）</span>
+      <span><kbd>P</kbd> 暫停</span>
+    </div>
+    <p class="note">試作版：只在電腦上用鍵盤玩</p>
+  </div>
+</div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>

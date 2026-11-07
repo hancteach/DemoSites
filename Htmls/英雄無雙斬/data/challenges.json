@@ -1,0 +1,27 @@
+{
+  "note": "挑戰任務。metric 計什麼（見 src/challenge.js 的 METRICS）、stars 一二三顆星的門檻、time 限時秒數、hero 指定角色（不寫就自己選）、musouFull 開場無雙量表全滿、captainRush 開場就有敵將且打倒後馬上出下一隻、population 小兵數量（蓋過 game.json）。星星門檻用 tests/challenge_bot.py（MEASURE=1）量過再調。groups 的 unlock：總共拿到幾顆星才開放這一組。",
+  "groups": [
+    { "id": "basic", "name": "入門", "unlock": 0 },
+    { "id": "moves", "name": "招式", "unlock": 4 },
+    { "id": "heroes", "name": "角色專屬", "unlock": 10 }
+  ],
+  "list": [
+    { "id": "ko60", "group": "basic", "name": "初陣", "desc": "60 秒內擊破越多越好", "metric": "ko", "stars": [250, 500, 800], "time": 60 },
+    { "id": "combo60", "group": "basic", "name": "連擊入門", "desc": "連擊不要斷！看最高連擊數", "metric": "combo", "stars": [200, 500, 1000], "time": 60 },
+    { "id": "captain90", "group": "basic", "name": "討取敵將", "desc": "敵將一個接一個出現，90 秒內打倒越多越好（小心紅圈）", "metric": "captains", "stars": [1, 2, 4], "time": 90, "captainRush": true, "population": { "start": 50, "max": 90, "growPerSecond": 0.4 } },
+    { "id": "nohit60", "group": "basic", "name": "毫髮無傷", "desc": "被打到一下就結束，撐越久越好（用跳躍、突進斬閃開）", "metric": "noHit", "stars": [15, 30, 50], "time": 50, "population": { "start": 80, "max": 140, "growPerSecond": 1 } },
+
+    { "id": "air90", "group": "moves", "name": "挑空連斬", "desc": "挑斬把敵人挑起來，跳上去用空中攻擊或落地重擊擊破", "metric": "airKo", "stars": [40, 100, 170], "time": 90 },
+    { "id": "plunge60", "group": "moves", "name": "落地重擊", "desc": "一次落地重擊最多打到幾隻？（跳起來按 K）", "metric": "plungeBest", "stars": [8, 15, 25], "time": 60 },
+    { "id": "dash60", "group": "moves", "name": "突進突破", "desc": "一次突進斬最多打到幾隻？（按 K）", "metric": "dashBest", "stars": [5, 8, 12], "time": 60 },
+    { "id": "musou60", "group": "moves", "name": "無雙亂舞", "desc": "量表一開始就是滿的！一次無雙最多擊破幾隻？", "metric": "musouBest", "stars": [40, 80, 115], "time": 60, "musouFull": true },
+
+    { "id": "knight", "group": "heroes", "hero": "騎士", "name": "騎士：百人連擊", "desc": "用騎士把連擊數拉到最高（2.5 秒沒打中就斷）", "metric": "combo", "stars": [300, 1000, 2000], "time": 90 },
+    { "id": "royal", "group": "heroes", "hero": "皇家騎士", "name": "皇家騎士：王者無雙", "desc": "量表一開始是滿的，一次無雙擊破越多越好", "metric": "musouBest", "stars": [50, 90, 120], "time": 60, "musouFull": true },
+    { "id": "ninja", "group": "heroes", "hero": "忍者", "name": "忍者：暗器亂舞", "desc": "一招（苦無飛鏢亂射、飛鏢環）最多打中幾隻？", "metric": "shotBest", "stars": [6, 11, 16], "time": 60 },
+    { "id": "rogue", "group": "heroes", "hero": "盜賊", "name": "盜賊：疾風突進", "desc": "一次突進斬最多打到幾隻？盜賊衝得最遠", "metric": "dashBest", "stars": [8, 13, 18], "time": 60 },
+    { "id": "mage", "group": "heroes", "hero": "魔法師", "name": "魔法師：爆炸大師", "desc": "一招火球（大火焰彈最強）最多炸到幾隻？", "metric": "shotBest", "stars": [10, 16, 22], "time": 60 },
+    { "id": "archer", "group": "heroes", "hero": "弓箭手", "name": "弓箭手：萬箭齊發", "desc": "一招（扇形散射、空中環射）最多射中幾隻？", "metric": "shotBest", "stars": [8, 13, 18], "time": 60 },
+    { "id": "miko", "group": "heroes", "hero": "巫女", "name": "日本巫女：火之海", "desc": "讓越多敵人同時燃燒越好", "metric": "burning", "stars": [15, 30, 45], "time": 60 }
+  ]
+}

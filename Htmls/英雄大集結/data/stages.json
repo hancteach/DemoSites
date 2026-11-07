@@ -1,0 +1,1763 @@
+{
+  "note": "關卡。length 走多遠（公尺）之後 Boss 出現，speed 往前走的速度（公尺/秒）。themes 場景：[主題, 從第幾公尺開始]。events 依距離 at 出現：enemy 敵人（n 幾隻、form 隊形：row 橫排（w 寬度）、column 直排、v 字、pair 左右各一、random 隨機；x 位置）、cage 牢籠裡關著的夥伴（* 表示隨機一位已經有、但沒有上場的角色）、item 道具（potion 補血藥水、power 武器強化）。coins 第一次過關給的金幣、again 之後再過關給的。 boss 可以寫成陣列，好幾隻 Boss 一起出來（全部打倒才過關）。hpScale／damageScale 是這一關敵人血量、傷害的倍率。difficulties 是難度：hp 敵人血量、damage 敵人傷害、bulletSpeed 子彈速度、fire 攻擊頻率、coins 金幣的倍率。",
+  "list": [
+    {
+      "id": "meadow",
+      "name": "草原小徑",
+      "boss": "哥布林王",
+      "length": 230,
+      "speed": 3,
+      "coins": 120,
+      "again": 40,
+      "themes": [
+        [
+          "goblin",
+          0
+        ],
+        [
+          "forest",
+          120
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "哥布林兵",
+          "n": 3,
+          "form": "row",
+          "w": 6
+        },
+        {
+          "at": 20,
+          "enemy": "哥布林兵",
+          "n": 4,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 32,
+          "enemy": "哥布林弓兵",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 40,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 50,
+          "cage": "盜賊",
+          "x": -3
+        },
+        {
+          "at": 51,
+          "enemy": "哥布林兵",
+          "n": 3,
+          "form": "row",
+          "x": 1,
+          "w": 6
+        },
+        {
+          "at": 64,
+          "enemy": "野狗",
+          "n": 3,
+          "form": "column",
+          "x": 3.5
+        },
+        {
+          "at": 76,
+          "enemy": "哥布林兵",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 88,
+          "enemy": "哥布林弓兵",
+          "n": 3,
+          "form": "v"
+        },
+        {
+          "at": 100,
+          "item": "potion",
+          "x": 2
+        },
+        {
+          "at": 108,
+          "enemy": "山豬",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 124,
+          "enemy": "小熊",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 138,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 139,
+          "enemy": "野狗",
+          "n": 3,
+          "form": "row",
+          "x": -1,
+          "w": 6
+        },
+        {
+          "at": 152,
+          "enemy": "哥布林兵",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 160,
+          "enemy": "哥布林弓兵",
+          "n": 2,
+          "form": "pair",
+          "x": 5
+        },
+        {
+          "at": 172,
+          "enemy": "野狗",
+          "n": 4,
+          "form": "column",
+          "x": -3.5
+        },
+        {
+          "at": 184,
+          "item": "power",
+          "x": -1
+        },
+        {
+          "at": 190,
+          "enemy": "小熊",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 204,
+          "enemy": "山豬",
+          "n": 2,
+          "form": "pair",
+          "x": 2.5
+        },
+        {
+          "at": 214,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "graveyard",
+      "name": "幽暗墓園",
+      "boss": "死靈骷髏王",
+      "length": 250,
+      "speed": 3,
+      "coins": 150,
+      "again": 50,
+      "themes": [
+        [
+          "forest",
+          0
+        ],
+        [
+          "graveyard",
+          110
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "小熊",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 20,
+          "enemy": "野狗",
+          "n": 4,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 32,
+          "enemy": "哥布林弓兵",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 42,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 50,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 51,
+          "enemy": "山豬",
+          "n": 2,
+          "form": "pair",
+          "x": 2
+        },
+        {
+          "at": 66,
+          "enemy": "小熊",
+          "n": 3,
+          "form": "v"
+        },
+        {
+          "at": 80,
+          "enemy": "野狗",
+          "n": 5,
+          "form": "column",
+          "x": -3
+        },
+        {
+          "at": 94,
+          "item": "potion",
+          "x": -2
+        },
+        {
+          "at": 114,
+          "enemy": "骷髏兵",
+          "n": 4,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 126,
+          "enemy": "史萊姆",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 140,
+          "cage": "皇家騎士",
+          "x": -3
+        },
+        {
+          "at": 141,
+          "enemy": "骷髏兵",
+          "n": 3,
+          "form": "row",
+          "x": 1,
+          "w": 6
+        },
+        {
+          "at": 156,
+          "enemy": "史萊姆",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 168,
+          "enemy": "骷髏兵",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 180,
+          "item": "power",
+          "x": 2
+        },
+        {
+          "at": 188,
+          "enemy": "野狗",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 200,
+          "enemy": "骷髏兵",
+          "n": 4,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 212,
+          "enemy": "史萊姆",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 226,
+          "enemy": "骷髏兵",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 236,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "swamp",
+      "name": "毒沼遺跡",
+      "boss": "蛇妖王",
+      "length": 260,
+      "speed": 3,
+      "coins": 180,
+      "again": 60,
+      "themes": [
+        [
+          "swamp",
+          0
+        ],
+        [
+          "ruins",
+          130
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "蛇妖",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 20,
+          "enemy": "貓怪",
+          "n": 4,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 32,
+          "enemy": "史萊姆",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 42,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 52,
+          "cage": "日本巫女",
+          "x": 3
+        },
+        {
+          "at": 53,
+          "enemy": "蛇妖",
+          "n": 3,
+          "form": "row",
+          "x": -1,
+          "w": 6
+        },
+        {
+          "at": 68,
+          "enemy": "黑貓",
+          "n": 4,
+          "form": "column",
+          "x": -3
+        },
+        {
+          "at": 80,
+          "enemy": "毒蛇妖",
+          "n": 1,
+          "form": "row",
+          "x": 0
+        },
+        {
+          "at": 84,
+          "enemy": "貓怪",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 98,
+          "item": "potion",
+          "x": 2
+        },
+        {
+          "at": 106,
+          "enemy": "蛇妖",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 120,
+          "enemy": "黑貓",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 136,
+          "enemy": "毒蛇妖",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 148,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 149,
+          "enemy": "貓怪",
+          "n": 4,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 164,
+          "enemy": "黑貓",
+          "n": 5,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 176,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 184,
+          "enemy": "蛇妖",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 198,
+          "enemy": "毒蛇妖",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 212,
+          "enemy": "貓怪",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 226,
+          "enemy": "黑貓",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 240,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "fortress",
+      "name": "雪山要塞",
+      "boss": "哥布林大王",
+      "length": 270,
+      "speed": 3,
+      "coins": 210,
+      "again": 70,
+      "themes": [
+        [
+          "snow",
+          0
+        ],
+        [
+          "fortress",
+          140
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "狼人",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 20,
+          "enemy": "野狗",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 34,
+          "enemy": "冰龍",
+          "n": 1,
+          "form": "row",
+          "x": 0
+        },
+        {
+          "at": 44,
+          "item": "power",
+          "x": -2
+        },
+        {
+          "at": 54,
+          "cage": "忍者",
+          "x": -3
+        },
+        {
+          "at": 55,
+          "enemy": "狼人",
+          "n": 3,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 70,
+          "enemy": "山豬半獸人",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 84,
+          "enemy": "野狗",
+          "n": 5,
+          "form": "column",
+          "x": -3
+        },
+        {
+          "at": 96,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 110,
+          "item": "potion",
+          "x": 2
+        },
+        {
+          "at": 124,
+          "enemy": "狼人",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 144,
+          "enemy": "哥布林盾兵",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 150,
+          "enemy": "哥布林巫師",
+          "n": 2,
+          "form": "pair",
+          "x": 4.5
+        },
+        {
+          "at": 162,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 163,
+          "enemy": "哥布林兵",
+          "n": 5,
+          "form": "row",
+          "x": -1,
+          "w": 8
+        },
+        {
+          "at": 178,
+          "enemy": "山豬半獸人",
+          "n": 2,
+          "form": "pair",
+          "x": 2.5
+        },
+        {
+          "at": 190,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 196,
+          "enemy": "哥布林巫師",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 210,
+          "enemy": "哥布林盾兵",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 224,
+          "enemy": "哥布林弓兵",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 238,
+          "enemy": "山豬半獸人",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 252,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "dragon",
+      "name": "火山龍巢",
+      "boss": "紅火龍",
+      "length": 280,
+      "speed": 3,
+      "coins": 260,
+      "again": 90,
+      "themes": [
+        [
+          "volcano",
+          0
+        ],
+        [
+          "dragon",
+          150
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "半獸人",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 20,
+          "enemy": "狼人",
+          "n": 4,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 34,
+          "enemy": "綠龍",
+          "n": 1,
+          "form": "row",
+          "x": 0
+        },
+        {
+          "at": 44,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 56,
+          "cage": "死靈盔甲武士",
+          "x": 3
+        },
+        {
+          "at": 57,
+          "enemy": "半獸人",
+          "n": 3,
+          "form": "row",
+          "x": -1,
+          "w": 6
+        },
+        {
+          "at": 72,
+          "enemy": "山豬半獸人",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 86,
+          "enemy": "綠龍",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 100,
+          "item": "potion",
+          "x": -2
+        },
+        {
+          "at": 110,
+          "enemy": "狼人",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 126,
+          "enemy": "半獸人",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 140,
+          "enemy": "冰龍",
+          "n": 1,
+          "form": "row",
+          "x": -2
+        },
+        {
+          "at": 142,
+          "enemy": "綠龍",
+          "n": 1,
+          "form": "row",
+          "x": 2
+        },
+        {
+          "at": 160,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 161,
+          "enemy": "狼人",
+          "n": 4,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 176,
+          "enemy": "山豬半獸人",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 190,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 196,
+          "enemy": "綠龍",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 212,
+          "enemy": "半獸人",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 228,
+          "enemy": "狼人",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 244,
+          "enemy": "山豬半獸人",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 262,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "cave",
+      "name": "咕嚕洞窟",
+      "boss": "咕嚕王",
+      "length": 290,
+      "speed": 3.2,
+      "coins": 300,
+      "again": 100,
+      "themes": [
+        [
+          "forest",
+          0
+        ],
+        [
+          "cave",
+          110
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "綠咕嚕",
+          "n": 3,
+          "form": "row",
+          "w": 7
+        },
+        {
+          "at": 18,
+          "enemy": "白咕嚕",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 30,
+          "enemy": "史萊姆",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 40,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 50,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 51,
+          "enemy": "綠咕嚕",
+          "n": 4,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 66,
+          "enemy": "白咕嚕",
+          "n": 3,
+          "form": "v"
+        },
+        {
+          "at": 80,
+          "enemy": "骷髏兵",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 94,
+          "enemy": "綠咕嚕",
+          "n": 4,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 104,
+          "item": "potion",
+          "x": -2
+        },
+        {
+          "at": 114,
+          "enemy": "白咕嚕",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 128,
+          "enemy": "巫術哥布林",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 142,
+          "enemy": "綠咕嚕",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 156,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 157,
+          "enemy": "白咕嚕",
+          "n": 3,
+          "form": "row",
+          "x": -1,
+          "w": 7
+        },
+        {
+          "at": 172,
+          "enemy": "史萊姆",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 186,
+          "item": "power",
+          "x": 1
+        },
+        {
+          "at": 194,
+          "enemy": "綠咕嚕",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 206,
+          "enemy": "白咕嚕",
+          "n": 2,
+          "form": "pair",
+          "x": 4.5
+        },
+        {
+          "at": 218,
+          "enemy": "巫術哥布林",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 232,
+          "enemy": "綠咕嚕",
+          "n": 4,
+          "form": "column",
+          "x": -3
+        },
+        {
+          "at": 246,
+          "enemy": "白咕嚕",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 260,
+          "enemy": "骷髏兵",
+          "n": 6,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 274,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "snowvalley",
+      "name": "冰雪山谷",
+      "boss": "冰霜巨龍",
+      "length": 300,
+      "speed": 3.2,
+      "coins": 330,
+      "again": 110,
+      "themes": [
+        [
+          "fortress",
+          0
+        ],
+        [
+          "snow",
+          120
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "哥布林盾兵",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 18,
+          "enemy": "哥布林巫師",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 30,
+          "enemy": "山豬半獸人",
+          "n": 2,
+          "form": "pair",
+          "x": 2.5
+        },
+        {
+          "at": 40,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 50,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 51,
+          "enemy": "哥布林弓兵",
+          "n": 4,
+          "form": "row",
+          "x": -1,
+          "w": 8
+        },
+        {
+          "at": 66,
+          "enemy": "哥布林盾兵",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 80,
+          "enemy": "巫術哥布林",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 98,
+          "item": "potion",
+          "x": 2
+        },
+        {
+          "at": 110,
+          "enemy": "哥布林巫師",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 126,
+          "enemy": "冰狼人",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 138,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 152,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 153,
+          "enemy": "冰狼人",
+          "n": 3,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 168,
+          "enemy": "野狗",
+          "n": 6,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 180,
+          "item": "power",
+          "x": -1
+        },
+        {
+          "at": 188,
+          "enemy": "冰龍",
+          "n": 1,
+          "form": "row",
+          "x": 0
+        },
+        {
+          "at": 192,
+          "enemy": "冰狼人",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 208,
+          "enemy": "山豬半獸人",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 222,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 238,
+          "enemy": "冰狼人",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 254,
+          "enemy": "狼人",
+          "n": 4,
+          "form": "column",
+          "x": -3
+        },
+        {
+          "at": 268,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 2.5
+        },
+        {
+          "at": 284,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "mistwood",
+      "name": "迷霧森林",
+      "boss": "森林大熊",
+      "length": 310,
+      "speed": 3.3,
+      "coins": 360,
+      "again": 120,
+      "themes": [
+        [
+          "swamp",
+          0
+        ],
+        [
+          "forest",
+          140
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "蛇妖",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 18,
+          "enemy": "貓怪",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 30,
+          "enemy": "毒蛇妖",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 40,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 50,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 51,
+          "enemy": "黑貓",
+          "n": 4,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 66,
+          "enemy": "蛇妖",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 78,
+          "enemy": "毒蛇妖",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 92,
+          "enemy": "黑貓",
+          "n": 6,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 104,
+          "item": "potion",
+          "x": 2
+        },
+        {
+          "at": 114,
+          "enemy": "貓怪",
+          "n": 6,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 128,
+          "enemy": "毒蛇妖",
+          "n": 2,
+          "form": "pair",
+          "x": 4.5
+        },
+        {
+          "at": 144,
+          "enemy": "小熊",
+          "n": 4,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 158,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 159,
+          "enemy": "山豬",
+          "n": 3,
+          "form": "row",
+          "x": -1,
+          "w": 7
+        },
+        {
+          "at": 174,
+          "enemy": "小熊",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 186,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 194,
+          "enemy": "山豬",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 206,
+          "enemy": "巫術哥布林",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 220,
+          "enemy": "小熊",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 234,
+          "enemy": "山豬半獸人",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 248,
+          "enemy": "毒蛇妖",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 262,
+          "enemy": "山豬",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 276,
+          "enemy": "小熊",
+          "n": 6,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 292,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "ruins",
+      "name": "魔法遺跡",
+      "boss": "黑暗騎士",
+      "length": 320,
+      "speed": 3.3,
+      "coins": 400,
+      "again": 130,
+      "themes": [
+        [
+          "graveyard",
+          0
+        ],
+        [
+          "ruins",
+          140
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "骷髏兵",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 20,
+          "enemy": "史萊姆",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 32,
+          "enemy": "黑貓",
+          "n": 5,
+          "form": "column",
+          "x": -3
+        },
+        {
+          "at": 42,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 52,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 53,
+          "enemy": "骷髏兵",
+          "n": 4,
+          "form": "row",
+          "x": -1,
+          "w": 7
+        },
+        {
+          "at": 68,
+          "enemy": "巫術哥布林",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 82,
+          "enemy": "黑貓",
+          "n": 6,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 96,
+          "enemy": "暗影騎兵",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 108,
+          "item": "potion",
+          "x": -2
+        },
+        {
+          "at": 118,
+          "enemy": "骷髏兵",
+          "n": 6,
+          "form": "v"
+        },
+        {
+          "at": 132,
+          "enemy": "巫術哥布林",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 146,
+          "enemy": "暗影騎兵",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 160,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 161,
+          "enemy": "黑貓",
+          "n": 5,
+          "form": "row",
+          "x": 1,
+          "w": 8
+        },
+        {
+          "at": 176,
+          "enemy": "毒蛇妖",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 188,
+          "item": "power",
+          "x": 1
+        },
+        {
+          "at": 196,
+          "enemy": "暗影騎兵",
+          "n": 3,
+          "form": "v"
+        },
+        {
+          "at": 210,
+          "enemy": "巫術哥布林",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 224,
+          "enemy": "黑貓",
+          "n": 6,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 238,
+          "enemy": "暗影騎兵",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 254,
+          "enemy": "巫術哥布林",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 268,
+          "enemy": "骷髏兵",
+          "n": 6,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 282,
+          "enemy": "暗影騎兵",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 300,
+          "item": "potion",
+          "x": 0
+        }
+      ]
+    },
+    {
+      "id": "twindragon",
+      "name": "雙龍巢穴",
+      "boss": [
+        "紅火龍",
+        "冰霜巨龍"
+      ],
+      "length": 330,
+      "speed": 3.4,
+      "coins": 500,
+      "again": 160,
+      "hpScale": 0.75,
+      "themes": [
+        [
+          "volcano",
+          0
+        ],
+        [
+          "dragon",
+          150
+        ]
+      ],
+      "events": [
+        {
+          "at": 8,
+          "enemy": "半獸人",
+          "n": 4,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 20,
+          "enemy": "綠龍",
+          "n": 2,
+          "form": "pair",
+          "x": 3.5
+        },
+        {
+          "at": 34,
+          "enemy": "狼人",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 44,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 54,
+          "cage": "*",
+          "x": -3
+        },
+        {
+          "at": 55,
+          "enemy": "山豬半獸人",
+          "n": 3,
+          "form": "row",
+          "x": 1,
+          "w": 7
+        },
+        {
+          "at": 70,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 3
+        },
+        {
+          "at": 84,
+          "enemy": "冰狼人",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 98,
+          "enemy": "暗影騎兵",
+          "n": 3,
+          "form": "row",
+          "w": 8
+        },
+        {
+          "at": 110,
+          "item": "potion",
+          "x": 2
+        },
+        {
+          "at": 120,
+          "enemy": "綠龍",
+          "n": 1,
+          "form": "row",
+          "x": -2
+        },
+        {
+          "at": 122,
+          "enemy": "冰龍",
+          "n": 1,
+          "form": "row",
+          "x": 2
+        },
+        {
+          "at": 136,
+          "enemy": "半獸人",
+          "n": 5,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 150,
+          "enemy": "冰狼人",
+          "n": 4,
+          "form": "column",
+          "x": 3
+        },
+        {
+          "at": 164,
+          "cage": "*",
+          "x": 3
+        },
+        {
+          "at": 165,
+          "enemy": "狼人",
+          "n": 5,
+          "form": "row",
+          "x": -1,
+          "w": 8
+        },
+        {
+          "at": 180,
+          "enemy": "綠龍",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 192,
+          "item": "power",
+          "x": 0
+        },
+        {
+          "at": 200,
+          "enemy": "山豬半獸人",
+          "n": 4,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 214,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 2.5
+        },
+        {
+          "at": 228,
+          "enemy": "暗影騎兵",
+          "n": 4,
+          "form": "v"
+        },
+        {
+          "at": 242,
+          "enemy": "綠龍",
+          "n": 3,
+          "form": "row",
+          "w": 9
+        },
+        {
+          "at": 258,
+          "enemy": "冰狼人",
+          "n": 6,
+          "form": "row",
+          "w": 10
+        },
+        {
+          "at": 272,
+          "enemy": "半獸人",
+          "n": 5,
+          "form": "v"
+        },
+        {
+          "at": 286,
+          "enemy": "綠龍",
+          "n": 1,
+          "form": "row",
+          "x": 0
+        },
+        {
+          "at": 288,
+          "enemy": "冰龍",
+          "n": 2,
+          "form": "pair",
+          "x": 4
+        },
+        {
+          "at": 310,
+          "item": "potion",
+          "x": 0
+        },
+        {
+          "at": 318,
+          "item": "potion",
+          "x": 3
+        }
+      ]
+    }
+  ],
+  "difficulties": [
+    {
+      "id": "easy",
+      "name": "簡單",
+      "hp": 0.7,
+      "damage": 0.6,
+      "bulletSpeed": 0.85,
+      "fire": 0.8,
+      "coins": 0.7,
+      "desc": "敵人血少、打人不痛、子彈慢"
+    },
+    {
+      "id": "normal",
+      "name": "普通",
+      "hp": 1,
+      "damage": 1,
+      "bulletSpeed": 1,
+      "fire": 1,
+      "coins": 1,
+      "desc": "標準難度"
+    },
+    {
+      "id": "hard",
+      "name": "困難",
+      "hp": 1.3,
+      "damage": 1.3,
+      "bulletSpeed": 1.12,
+      "fire": 1.2,
+      "coins": 1.6,
+      "desc": "敵人血多、打人很痛、子彈快又密，金幣 1.6 倍"
+    }
+  ]
+}

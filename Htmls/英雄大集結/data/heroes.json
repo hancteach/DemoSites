@@ -1,0 +1,68 @@
+{
+  "note": "我方角色。hp 生命。weapon 自動射擊的武器：look 子彈外觀、period 幾秒射一次、damage 傷害、speed 子彈速度（公尺/秒）、range 射多遠、radius 子彈大小（打中的範圍）、count 一次幾發、spread 散開的角度（度）、gap 並排的間距、pierce 可以穿過幾個敵人、splash 爆炸範圍＋splashDamage 爆炸傷害、homing 追蹤敵人的轉向速度、weave 蛇行（amp 擺動寬度、freq 快慢）、frag 命中後散開幾顆火花（fragDamage 傷害）、scale 子彈變大、color 顏色（沒有模型的劍氣、聖光、斬擊波）。upgrade 是名冊上寫的強化效果。levels 是武器強化 Lv1～3 時改掉的數值（撿藍色水晶，全隊一起升）。aura 每 every 秒幫全隊補 heal（最大生命的比例）。start 一開始就有；其他角色要在關卡裡從牢籠救出來才會加入名冊。升級：每級生命、攻擊 +levelBonus，費用 upgradeCost[目前等級]。出發時選 pickMax 位，關卡裡救人最多到 squadMax 位。",
+  "start": ["騎士", "弓箭手", "魔法師"],
+  "pickMax": 2,
+  "squadMax": 5,
+  "maxLevel": 5,
+  "levelBonus": 0.15,
+  "upgradeCost": [0, 60, 120, 200, 300],
+  "list": [
+    {
+      "id": "騎士", "model": "騎士", "color": "#4da3ff", "hp": 130,
+      "desc": "揮出劍氣，可以穿過 2 個敵人。生命多。",
+      "upgrade": "攻擊變高、劍氣變大、Lv3 變金色",
+      "weapon": { "name": "劍氣", "look": "blade", "color": "#bfe6ff", "period": 0.55, "damage": 15, "speed": 15, "range": 14, "radius": 0.9, "pierce": 2,
+        "levels": [{}, { "damage": 21, "scale": 1.25, "color": "#9ff0ff" }, { "damage": 29, "scale": 1.55, "pierce": 3, "color": "#ffe27a" }] }
+    },
+    {
+      "id": "弓箭手", "model": "弓箭手", "color": "#59c76b", "hp": 85,
+      "desc": "射得最遠、最快的直線箭。",
+      "upgrade": "扇形散射 3 支 → 5 支",
+      "weapon": { "name": "連射箭", "look": "arrow", "period": 0.25, "damage": 8, "speed": 26, "range": 24, "radius": 0.35,
+        "levels": [{}, { "count": 3, "spread": 13 }, { "count": 5, "spread": 12 }] }
+    },
+    {
+      "id": "魔法師", "model": "魔法師", "color": "#b77dff", "hp": 75,
+      "desc": "火球打中會爆炸，旁邊的敵人一起受傷。",
+      "upgrade": "火球打到會散開火花 5 顆 → 8 顆",
+      "weapon": { "name": "火球", "look": "fire", "period": 0.75, "damage": 16, "speed": 13, "range": 19, "radius": 0.5, "splash": 2.0, "splashDamage": 10,
+        "levels": [{}, { "frag": 5, "fragDamage": 7 }, { "frag": 8, "fragDamage": 9, "splash": 2.5 }] }
+    },
+    {
+      "id": "盜賊", "model": "盜賊", "color": "#ffb340", "hp": 85,
+      "desc": "兩把苦無一直丟，近距離很強。",
+      "upgrade": "苦無 3 把 → 4 把",
+      "weapon": { "name": "連丟苦無", "look": "kunai", "period": 0.2, "damage": 4, "speed": 24, "range": 15, "radius": 0.32, "count": 2, "gap": 0.55,
+        "levels": [{}, { "count": 3, "gap": 0.5 }, { "count": 4, "gap": 0.45, "spread": 5 }] }
+    },
+    {
+      "id": "忍者", "model": "角色_忍者", "color": "#7f8cff", "hp": 85,
+      "desc": "一次丟 3 支飛鏢往前散開，打得很廣。",
+      "upgrade": "飛鏢蛇行交錯，Lv3 變 5 支",
+      "weapon": { "name": "三向飛鏢", "look": "shuriken", "period": 0.42, "damage": 8, "speed": 19, "range": 18, "radius": 0.42, "count": 3, "spread": 16,
+        "levels": [{}, { "spread": 8, "weave": { "amp": 1.1, "freq": 9 } }, { "count": 5, "spread": 10, "damage": 9, "weave": { "amp": 1.5, "freq": 9 } }] }
+    },
+    {
+      "id": "日本巫女", "model": "人型_日本巫女", "color": "#ff6a4a", "hp": 90,
+      "desc": "火焰箭會自己轉彎追敵人。",
+      "upgrade": "火焰箭平行 2 支 → 3 支",
+      "weapon": { "name": "追蹤火焰箭", "look": "firearrow", "period": 0.5, "damage": 11, "speed": 16, "range": 26, "radius": 0.42, "homing": 5,
+        "levels": [{}, { "count": 2, "gap": 0.8 }, { "count": 3, "gap": 0.75 }] }
+    },
+    {
+      "id": "皇家騎士", "model": "角色_皇家騎士", "color": "#ffd94a", "hp": 160,
+      "desc": "射出聖光，每 4 秒幫全隊補一點血。",
+      "upgrade": "攻擊變高、聖光變大、Lv3 可穿透",
+      "weapon": { "name": "聖光彈", "look": "holy", "color": "#fff3a0", "period": 0.6, "damage": 10, "speed": 17, "range": 18, "radius": 0.45,
+        "levels": [{}, { "damage": 15, "scale": 1.3 }, { "damage": 21, "scale": 1.6, "pierce": 2, "color": "#ffffff" }] },
+      "aura": { "every": 4, "heal": 0.04 }
+    },
+    {
+      "id": "死靈盔甲武士", "model": "死靈盔甲武士", "color": "#9aa4b8", "hp": 140,
+      "desc": "巨大的斬擊波穿過所有敵人，但射程短。",
+      "upgrade": "攻擊變高、斬擊波變大射更遠",
+      "weapon": { "name": "斬鐵波", "look": "dark", "color": "#c8a0ff", "period": 1.0, "damage": 28, "speed": 12, "range": 10, "radius": 1.3, "pierce": 99,
+        "levels": [{}, { "damage": 38, "scale": 1.2 }, { "damage": 50, "scale": 1.45, "range": 12, "color": "#ff80d0" }] }
+    }
+  ]
+}

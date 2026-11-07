@@ -1,0 +1,409 @@
+{
+  "name": "荒野獸徑",
+  "desc": "野狗跑很快、山豬會沿著紅線衝過來、黑貓會突然出現在旁邊",
+  "length": 560,
+  "width": 10,
+  "hpMult": 1.4,
+  "theme": {
+    "background": "#2a3a20",
+    "fog": "#2a3a20",
+    "fogNear": 40,
+    "fogFar": 90,
+    "hemiSky": "#d8e8a8",
+    "hemiGround": "#2c3418",
+    "hemiIntensity": 1,
+    "sun": "#fff0c0",
+    "sunIntensity": 1.8,
+    "grass": "#55692e",
+    "speck": [
+      70,
+      90,
+      40
+    ],
+    "curb": "#6b5a40",
+    "road": {
+      "gap": "#3a3424",
+      "stone": [
+        140,
+        128,
+        100
+      ]
+    },
+    "propEvery": 5,
+    "props": [
+      {
+        "type": "pineTree"
+      },
+      {
+        "type": "bush"
+      },
+      {
+        "type": "rock"
+      },
+      {
+        "type": "pineTree"
+      },
+      {
+        "type": "deadTree"
+      }
+    ]
+  },
+  "gates": [
+    {
+      "d": 30,
+      "kind": "crowd",
+      "doors": 3
+    },
+    {
+      "d": 70,
+      "kind": "crowd",
+      "doors": 4
+    },
+    {
+      "d": 110,
+      "kind": "ability",
+      "doors": 4
+    },
+    {
+      "d": 150,
+      "kind": "crowd",
+      "doors": 3
+    },
+    {
+      "d": 190,
+      "kind": "crowd",
+      "doors": 4
+    },
+    {
+      "d": 230,
+      "kind": "ability",
+      "doors": 3
+    },
+    {
+      "d": 270,
+      "kind": "crowd",
+      "doors": 4
+    },
+    {
+      "d": 310,
+      "kind": "crowd",
+      "doors": 4
+    },
+    {
+      "d": 350,
+      "kind": "crowd",
+      "doors": 3
+    },
+    {
+      "d": 390,
+      "kind": "ability",
+      "doors": 4
+    },
+    {
+      "d": 430,
+      "kind": "crowd",
+      "doors": 3
+    },
+    {
+      "d": 470,
+      "kind": "crowd",
+      "doors": 4
+    },
+    {
+      "d": 510,
+      "kind": "crowd",
+      "doors": 4
+    }
+  ],
+  "enemies": [
+    {
+      "d": 50,
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "d": 90,
+      "spawns": [
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "d": 130,
+      "spawns": [
+        {
+          "enemy": "獸型_山豬",
+          "count": 1
+        },
+        {
+          "enemy": "獸型_野狗",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "d": 170,
+      "spawns": [
+        {
+          "enemy": "獸型_黑貓",
+          "count": 2
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "d": 210,
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 6
+        },
+        {
+          "enemy": "獸型_山豬",
+          "count": 1
+        }
+      ]
+    },
+    {
+      "d": 250,
+      "spawns": [
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 2
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "d": 290,
+      "spawns": [
+        {
+          "enemy": "獸型_山豬",
+          "count": 2
+        },
+        {
+          "enemy": "人型_貓怪",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "d": 330,
+      "spawns": [
+        {
+          "enemy": "獸型_黑貓",
+          "count": 3
+        },
+        {
+          "enemy": "獸型_野狗",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "d": 370,
+      "spawns": [
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 3
+        },
+        {
+          "enemy": "獸型_山豬",
+          "count": 1
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "d": 410,
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 8
+        }
+      ]
+    },
+    {
+      "d": 450,
+      "spawns": [
+        {
+          "enemy": "獸型_黑貓",
+          "count": 3
+        },
+        {
+          "enemy": "獸型_山豬",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "d": 490,
+      "spawns": [
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 3
+        },
+        {
+          "enemy": "獸型_野狗",
+          "count": 5
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "d": 530,
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 6
+        }
+      ]
+    }
+  ],
+  "obstacles": [
+    {
+      "type": "coins",
+      "d": 16,
+      "x": -2.5,
+      "count": 6
+    },
+    {
+      "type": "spikes",
+      "x": -2.5,
+      "width": 5,
+      "period": 3,
+      "up": 1.2,
+      "d": 61
+    },
+    {
+      "type": "coins",
+      "x": -2.5,
+      "count": 8,
+      "d": 101
+    },
+    {
+      "type": "log",
+      "speed": 1.4,
+      "d": 141
+    },
+    {
+      "type": "potion",
+      "item": "紅藥水",
+      "x": 0,
+      "d": 181
+    },
+    {
+      "type": "spikes",
+      "x": 2.5,
+      "width": 5,
+      "period": 2.6,
+      "up": 1.1,
+      "offset": 1,
+      "d": 221
+    },
+    {
+      "type": "chest",
+      "x": -3.8,
+      "gold": [
+        25,
+        45
+      ],
+      "d": 261
+    },
+    {
+      "type": "log",
+      "speed": 1.8,
+      "offset": 1.5,
+      "d": 301
+    },
+    {
+      "type": "potion",
+      "item": "黃藥水",
+      "x": 2.5,
+      "d": 341
+    },
+    {
+      "type": "spikes",
+      "x": 0,
+      "width": 4,
+      "period": 2.4,
+      "up": 1.1,
+      "d": 381
+    },
+    {
+      "type": "potion",
+      "item": "紫藥水",
+      "x": 2.5,
+      "d": 421
+    },
+    {
+      "type": "spikes",
+      "x": -2.5,
+      "width": 5,
+      "period": 3,
+      "up": 1.2,
+      "d": 461
+    },
+    {
+      "type": "coins",
+      "x": -2.5,
+      "count": 8,
+      "d": 501
+    }
+  ],
+  "boss": [
+    "人型_咕嚕王"
+  ],
+  "bossEscort": [
+    {
+      "enemy": "獸型_野狗",
+      "count": 10
+    },
+    {
+      "enemy": "獸型_山豬",
+      "count": 2
+    },
+    {
+      "enemy": "人型_咕嚕_白",
+      "count": 8
+    },
+    {
+      "enemy": "獸型_黑貓",
+      "count": 2
+    }
+  ],
+  "stairs": [
+    1.2,
+    1.4,
+    1.6,
+    1.8,
+    2,
+    2.5,
+    3,
+    3.5,
+    4,
+    5
+  ],
+  "stars": {
+    "three": 1,
+    "two": 0.75
+  }
+}

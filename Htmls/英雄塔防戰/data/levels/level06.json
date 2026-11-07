@@ -1,0 +1,708 @@
+{
+  "name": "荒野獸徑",
+  "desc": "兩個入口，野獸跑得快",
+  "intro": "兩個入口！野狗跑很快、山豬會撞開騎士兵、黑貓會瞬移，獵人地雷可以炸野獸",
+  "hpMult": 1.1,
+  "theme": {
+    "background": "#1b2414",
+    "fog": "#1b2414",
+    "fogNear": 45,
+    "fogFar": 95,
+    "hemiSky": "#c8d79a",
+    "hemiGround": "#2c3418",
+    "hemiIntensity": 0.75,
+    "moon": "#f4e6b8",
+    "moonIntensity": 1.3,
+    "outside": "#161d10",
+    "wall": {
+      "a": "#6b5a40",
+      "b": "#57492f",
+      "gate": "#7b6748"
+    },
+    "ground": {
+      "base": "#4a5a2c",
+      "speck": [
+        1.1,
+        1.25,
+        0.6
+      ],
+      "stone": [
+        14,
+        8,
+        -10
+      ],
+      "stoneBase": 72
+    }
+  },
+  "arena": {
+    "halfWidth": 20,
+    "halfDepth": 13,
+    "gates": [
+      {
+        "side": "east",
+        "at": -6,
+        "width": 5
+      },
+      {
+        "side": "north",
+        "at": -7,
+        "width": 5
+      },
+      {
+        "side": "west",
+        "at": 8,
+        "width": 6
+      }
+    ],
+    "lowSides": [
+      "south"
+    ]
+  },
+  "paths": [
+    {
+      "width": 3.6,
+      "corner": 2.6,
+      "points": [
+        [
+          24,
+          -6
+        ],
+        [
+          10,
+          -6
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          -11,
+          2
+        ],
+        [
+          -11,
+          8
+        ],
+        [
+          -19.5,
+          8
+        ]
+      ]
+    },
+    {
+      "width": 3.6,
+      "corner": 2.6,
+      "points": [
+        [
+          -7,
+          -17
+        ],
+        [
+          -7,
+          -5
+        ],
+        [
+          -2,
+          -5
+        ],
+        [
+          -2,
+          2
+        ],
+        [
+          -11,
+          2
+        ],
+        [
+          -11,
+          8
+        ],
+        [
+          -19.5,
+          8
+        ]
+      ]
+    }
+  ],
+  "heroStart": [
+    -16,
+    11
+  ],
+  "previewAt": [
+    4,
+    2
+  ],
+  "pedestals": [
+    [
+      14,
+      -2
+    ],
+    [
+      6,
+      -2
+    ],
+    [
+      2,
+      -2.5
+    ],
+    [
+      -3,
+      -9.5
+    ],
+    [
+      -11,
+      -2
+    ],
+    [
+      -7,
+      6
+    ],
+    [
+      -15.5,
+      4
+    ],
+    [
+      4,
+      6
+    ]
+  ],
+  "lockedPedestals": [
+    3,
+    7
+  ],
+  "hazards": [
+    {
+      "type": "mine",
+      "at": [
+        10,
+        -2
+      ],
+      "radius": 2.4,
+      "fuse": 0.9,
+      "rearm": 9,
+      "damage": 2,
+      "enemyDamage": 6
+    },
+    {
+      "type": "mine",
+      "at": [
+        -7,
+        -10
+      ],
+      "radius": 2.4,
+      "fuse": 0.9,
+      "rearm": 9,
+      "damage": 2,
+      "enemyDamage": 6
+    },
+    {
+      "type": "mine",
+      "at": [
+        -11,
+        5
+      ],
+      "radius": 2.4,
+      "fuse": 0.9,
+      "rearm": 9,
+      "damage": 2,
+      "enemyDamage": 6
+    }
+  ],
+  "firstWait": 30,
+  "waves": [
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 10
+        }
+      ],
+      "interval": 1.0
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 8
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 6
+        }
+      ],
+      "interval": 0.9
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_山豬",
+          "count": 2
+        },
+        {
+          "enemy": "獸型_野狗",
+          "count": 8
+        },
+        {
+          "enemy": "森林小熊",
+          "count": 6
+        },
+        {
+          "enemy": "忍者",
+          "count": 3,
+          "from": "普通"
+        }
+      ],
+      "interval": 0.9
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_黑貓",
+          "count": 4
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 8
+        },
+        {
+          "enemy": "狼人",
+          "count": 1
+        },
+        {
+          "enemy": "人型_貓怪",
+          "count": 3
+        }
+      ],
+      "interval": 0.9
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_山豬",
+          "count": 3
+        },
+        {
+          "enemy": "獸型_黑貓",
+          "count": 4
+        },
+        {
+          "enemy": "獸型_野狗",
+          "count": 10
+        },
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 3,
+          "from": "普通"
+        }
+      ],
+      "interval": 0.9
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 4
+        },
+        {
+          "enemy": "獸型_山豬",
+          "count": 3
+        },
+        {
+          "enemy": "狼人",
+          "count": 5
+        },
+        {
+          "enemy": "獸型_黑貓",
+          "count": 4
+        },
+        {
+          "enemy": "死靈祭司",
+          "count": 2,
+          "from": "普通"
+        },
+        {
+          "enemy": "人型_貓怪",
+          "count": 3
+        }
+      ],
+      "interval": 0.9
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 14
+        },
+        {
+          "enemy": "獸型_山豬",
+          "count": 4
+        },
+        {
+          "enemy": "獸型_黑貓",
+          "count": 5
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 8
+        },
+        {
+          "enemy": "死靈盔甲武士",
+          "count": 2,
+          "from": "普通"
+        }
+      ],
+      "interval": 0.8
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "獸型_野狗",
+          "count": 12
+        },
+        {
+          "enemy": "獸型_山豬",
+          "count": 5
+        },
+        {
+          "enemy": "獸型_黑貓",
+          "count": 6
+        },
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 5
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 10
+        },
+        {
+          "enemy": "山豬半獸人",
+          "count": 2,
+          "from": "普通"
+        }
+      ],
+      "interval": 0.75
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 6
+        },
+        {
+          "enemy": "獸型_野狗",
+          "count": 4
+        }
+      ],
+      "interval": 1.1,
+      "boss": [
+        "人型_咕嚕王"
+      ]
+    }
+  ],
+  "props": [
+    {
+      "type": "torch",
+      "at": [
+        -17.4,
+        4.6
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        -17.4,
+        11.4
+      ]
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        16.3,
+        -9.4
+      ],
+      "rot": -345,
+      "scale": 1.22
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        -13.0,
+        -5.6
+      ],
+      "rot": -285,
+      "scale": 0.91
+    },
+    {
+      "type": "bush",
+      "at": [
+        -6.7,
+        11.6
+      ],
+      "rot": -180
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        -16.0,
+        0.1
+      ],
+      "rot": 0,
+      "scale": 1.05
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        2.8,
+        8.9
+      ],
+      "rot": -255,
+      "scale": 0.97
+    },
+    {
+      "type": "bush",
+      "at": [
+        -2.2,
+        11.5
+      ],
+      "rot": -195
+    },
+    {
+      "type": "bush",
+      "at": [
+        5.4,
+        11.2
+      ],
+      "rot": -75
+    },
+    {
+      "type": "bush",
+      "at": [
+        -16.7,
+        -2.2
+      ],
+      "rot": -210
+    },
+    {
+      "type": "bush",
+      "at": [
+        -0.6,
+        6.9
+      ],
+      "rot": -210
+    },
+    {
+      "type": "bush",
+      "at": [
+        -15.1,
+        -4.3
+      ],
+      "rot": -240
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        5.8,
+        -11.2
+      ],
+      "rot": -345,
+      "scale": 0.94
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        16.2,
+        9.3
+      ],
+      "rot": -15,
+      "scale": 1.04
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        17.5,
+        5.4
+      ],
+      "rot": -165,
+      "scale": 1.0
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        -11.5,
+        -7.8
+      ],
+      "rot": -240,
+      "scale": 1.18
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        -18.0,
+        -7.9
+      ],
+      "rot": 0,
+      "scale": 1.04
+    },
+    {
+      "type": "rock",
+      "at": [
+        17.3,
+        -1.1
+      ],
+      "rot": -345,
+      "scale": 0.72
+    },
+    {
+      "type": "bush",
+      "at": [
+        6.3,
+        8.7
+      ],
+      "rot": -120
+    },
+    {
+      "type": "bush",
+      "at": [
+        8.8,
+        10.9
+      ],
+      "rot": 0
+    },
+    {
+      "type": "bush",
+      "at": [
+        1.7,
+        -6.1
+      ],
+      "rot": -15
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        14.3,
+        5.2
+      ],
+      "rot": -45,
+      "scale": 0.94
+    },
+    {
+      "type": "bush",
+      "at": [
+        -16.0,
+        -9.6
+      ],
+      "rot": -90
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        4.0,
+        -6.5
+      ],
+      "rot": 0,
+      "scale": 1.15
+    },
+    {
+      "type": "bush",
+      "at": [
+        1.1,
+        -10.4
+      ],
+      "rot": -225
+    },
+    {
+      "type": "bush",
+      "at": [
+        -11.4,
+        -10.5
+      ],
+      "rot": -180
+    },
+    {
+      "type": "rock",
+      "at": [
+        -6.7,
+        -1.3
+      ],
+      "rot": -135,
+      "scale": 0.76
+    },
+    {
+      "type": "bush",
+      "at": [
+        17.3,
+        2.3
+      ],
+      "rot": -75
+    },
+    {
+      "type": "bush",
+      "at": [
+        11.9,
+        -9.2
+      ],
+      "rot": -90
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        11.4,
+        7.1
+      ],
+      "rot": 0,
+      "scale": 1.14
+    },
+    {
+      "type": "rock",
+      "at": [
+        6.1,
+        -5.3
+      ],
+      "rot": -210,
+      "scale": 0.71
+    },
+    {
+      "type": "bush",
+      "at": [
+        14.3,
+        7.4
+      ],
+      "rot": -165
+    },
+    {
+      "type": "bush",
+      "at": [
+        12.5,
+        9.0
+      ],
+      "rot": -90
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        0.1,
+        10.9
+      ],
+      "rot": -150,
+      "scale": 1.0
+    },
+    {
+      "type": "bush",
+      "at": [
+        -13.8,
+        -8.2
+      ],
+      "rot": 0
+    },
+    {
+      "type": "pineTree",
+      "at": [
+        -9.8,
+        11.3
+      ],
+      "rot": -195,
+      "scale": 1.18
+    }
+  ]
+}

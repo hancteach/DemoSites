@@ -1,0 +1,52 @@
+{
+  "note": "Boss 戰。依順序開放（打倒前一隻才開放下一隻）。hp 生命（主角打 Boss 的傷害和打敵將一樣是 2 倍）、scale 大小、radius 碰撞半徑、speed 走路速度、minions 帶哪幾種小兵（data/crowd.json 的名稱）、population 小兵數量、minionDamageScale 小兵傷害倍率（千人斬是 7，Boss 戰小兵弱一點，主要威脅是 Boss）、time 限時、par 幾秒內打倒多一顆星、hpStar 剩下生命幾成以上多一顆星、rage 生命剩幾成時狂暴（招式變快、馬上召喚）。moves 招式依序輪流，每招都有預警：slam 前方紅圈（跳不掉）、shockwave 以自己為中心的橘圈（跳起來就躲得掉）、rain 主角身邊落下好幾個紅圈、cone 前方扇形（噴火、毒氣）、charge 先畫一條線再衝過去、summon 叫小兵。windup 預警秒數、damage 傷害、range 離主角多遠以內才會用這招。",
+  "list": [
+    {
+      "id": "goblinKing", "name": "哥布林王", "title": "哥布林營地的大王", "model": "人型_哥布林王",
+      "scale": 2.3, "radius": 1.3, "hp": 360, "speed": 2.8, "time": 180, "par": 90, "hpStar": 0.5, "rage": 0.5,
+      "minionDamageScale": 4, "minions": ["哥布林兵", "強盜"], "population": { "start": 50, "max": 110, "growPerSecond": 0.6 },
+      "moves": [
+        { "type": "slam", "windup": 0.9, "damage": 20, "radius": 3, "range": 4 },
+        { "type": "charge", "windup": 1.0, "damage": 18, "width": 2.6, "length": 15, "speed": 16, "range": 16 },
+        { "type": "slam", "windup": 0.9, "damage": 20, "radius": 3, "range": 4 },
+        { "type": "summon", "windup": 0.8, "count": 2, "range": 99 },
+        { "type": "shockwave", "windup": 1.2, "damage": 16, "radius": 7, "range": 6 }
+      ]
+    },
+    {
+      "id": "skeletonKing", "name": "死靈骷髏王", "title": "月光墓園的主人", "model": "死靈骷髏王",
+      "scale": 2.4, "radius": 1.3, "hp": 460, "speed": 2.6, "time": 180, "par": 110, "hpStar": 0.5, "rage": 0.5,
+      "minionDamageScale": 4, "minions": ["骷髏兵"], "population": { "start": 60, "max": 120, "growPerSecond": 0.6 },
+      "moves": [
+        { "type": "slam", "windup": 0.9, "damage": 22, "radius": 3.2, "range": 4 },
+        { "type": "rain", "windup": 1.3, "damage": 16, "radius": 2.2, "count": 5, "spread": 5, "range": 18, "color": "#b6a8ff" },
+        { "type": "shockwave", "windup": 1.2, "damage": 18, "radius": 7.5, "range": 6 },
+        { "type": "summon", "windup": 0.8, "count": 3, "range": 99 }
+      ]
+    },
+    {
+      "id": "snakeQueen", "name": "蛇妖王", "title": "毒沼神殿的守護者", "model": "特殊_蛇妖王",
+      "scale": 2.4, "radius": 1.4, "hp": 560, "speed": 2.4, "time": 180, "par": 120, "hpStar": 0.5, "rage": 0.5,
+      "minionDamageScale": 4, "minions": ["強盜", "哥布林兵"], "population": { "start": 45, "max": 90, "growPerSecond": 0.5 },
+      "moves": [
+        { "type": "cone", "windup": 1.2, "damage": 16, "radius": 7, "arc": 60, "range": 7, "color": "#8be04e" },
+        { "type": "charge", "windup": 1.2, "damage": 16, "width": 2.4, "length": 16, "speed": 15, "range": 16 },
+        { "type": "rain", "windup": 1.4, "damage": 14, "radius": 2.2, "count": 4, "spread": 4.5, "range": 18, "color": "#8be04e" },
+        { "type": "slam", "windup": 1.0, "damage": 18, "radius": 3.2, "range": 4 },
+        { "type": "summon", "windup": 0.8, "count": 2, "range": 99 }
+      ]
+    },
+    {
+      "id": "redDragon", "name": "紅火龍", "title": "火龍山巔的霸主", "model": "特殊_紅火龍",
+      "scale": 2.3, "radius": 1.6, "hp": 700, "speed": 2.6, "time": 180, "par": 140, "hpStar": 0.5, "rage": 0.5,
+      "minionDamageScale": 4, "minions": ["哥布林兵", "骷髏兵", "強盜"], "population": { "start": 50, "max": 100, "growPerSecond": 0.5 },
+      "moves": [
+        { "type": "cone", "windup": 1.2, "damage": 18, "radius": 7.5, "arc": 55, "range": 7, "color": "#ff6a1a" },
+        { "type": "rain", "windup": 1.5, "damage": 15, "radius": 2.2, "count": 6, "spread": 6, "range": 20, "color": "#ff6a1a", "fly": true },
+        { "type": "shockwave", "windup": 1.3, "damage": 18, "radius": 8, "range": 7 },
+        { "type": "charge", "windup": 1.2, "damage": 18, "width": 2.6, "length": 18, "speed": 16, "range": 18 },
+        { "type": "summon", "windup": 0.8, "count": 3, "range": 99 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,116 @@
+{
+  "note": "敵人。height 模型高度、radius 被打中的範圍、hp 生命、coins 打倒給幾枚金幣、touch 撞到角色的傷害。move 移動方式：walk 往下走（speed 公尺/秒）、stand 站著不動（畫面捲動讓它靠近）、chase 追最近的角色、charge 先閃一下再朝角色衝過去、strafe 左右來回、hover 飛在畫面上方跟著隊伍（stay 秒後飛走）。attack 射子彈：aimed 瞄準角色（count 一次幾發、burst 連射幾次）、spread 扇形（angle 張開幾度）、ring 一圈。period 幾秒射一次、speed 子彈速度、damage 傷害、color 子彈顏色、look 用模型當子彈（e_arrow 弓箭、e_star 飛鏢、e_fire 火焰彈；沒寫就是發光圓球）。Boss 用 attacks 依序輪流、every 秒一招；另外有 rain 從上面下子彈雨、summon 叫小兵（minion、count）、rush 往下衝撞再回去。tint 把模型染色。fly 用飛行動作。",
+  "list": {
+    "哥布林兵": { "model": "人型_哥布林-1", "height": 1.5, "radius": 0.7, "hp": 30, "coins": 2, "touch": 10, "move": "walk", "speed": 1.4 },
+    "哥布林弓兵": { "model": "人型_哥布林-2", "height": 1.5, "radius": 0.7, "hp": 26, "coins": 2, "touch": 8, "move": "stand",
+      "attack": { "type": "aimed", "period": 2.4, "speed": 6.5, "damage": 8, "color": "#ffd27a", "look": "e_arrow" } },
+    "野狗": { "model": "獸型_野狗", "height": 1.1, "radius": 0.65, "hp": 20, "coins": 2, "touch": 9, "move": "charge", "speed": 8 },
+    "山豬": { "model": "獸型_山豬", "height": 1.4, "radius": 0.9, "hp": 80, "coins": 4, "touch": 16, "move": "charge", "speed": 6.5 },
+    "小熊": { "model": "森林小熊", "height": 1.4, "radius": 0.8, "hp": 60, "coins": 3, "touch": 12, "move": "walk", "speed": 1.1,
+      "attack": { "type": "spread", "count": 3, "angle": 34, "period": 3.2, "speed": 5.5, "damage": 9, "color": "#d8a86a" } },
+
+    "骷髏兵": { "model": "骷髏人", "height": 1.7, "radius": 0.7, "hp": 42, "coins": 3, "touch": 11, "move": "walk", "speed": 1.5,
+      "attack": { "type": "aimed", "period": 3.0, "speed": 6, "damage": 9, "color": "#c8c0ff" } },
+    "史萊姆": { "model": "特殊_史萊姆", "height": 1.1, "radius": 0.75, "hp": 55, "coins": 3, "touch": 10, "move": "strafe", "speed": 2,
+      "attack": { "type": "ring", "count": 6, "period": 3.6, "speed": 4.5, "damage": 8, "color": "#7ae0ff" } },
+
+    "蛇妖": { "model": "特殊_蛇妖-1", "height": 1.6, "radius": 0.75, "hp": 60, "coins": 3, "touch": 12, "move": "stand",
+      "attack": { "type": "spread", "count": 3, "angle": 30, "period": 2.6, "speed": 6, "damage": 9, "color": "#8be04e" } },
+    "毒蛇妖": { "model": "特殊_蛇妖-2", "height": 1.7, "radius": 0.8, "hp": 90, "coins": 4, "touch": 12, "move": "stand",
+      "attack": { "type": "ring", "count": 10, "period": 3.2, "speed": 4.5, "damage": 9, "color": "#8be04e" } },
+    "貓怪": { "model": "人型_貓怪", "height": 1.6, "radius": 0.7, "hp": 45, "coins": 3, "touch": 11, "move": "chase", "speed": 3 },
+    "黑貓": { "model": "獸型_黑貓", "height": 1.0, "radius": 0.6, "hp": 26, "coins": 2, "touch": 10, "move": "charge", "speed": 9 },
+
+    "哥布林盾兵": { "model": "人型_哥布林-3", "height": 1.6, "radius": 0.8, "hp": 140, "coins": 5, "touch": 14, "move": "walk", "speed": 1.0 },
+    "哥布林巫師": { "model": "人型_哥布林-4", "height": 1.5, "radius": 0.7, "hp": 60, "coins": 4, "touch": 10, "move": "strafe", "speed": 2.2,
+      "attack": { "type": "aimed", "count": 1, "burst": 3, "gap": 0.18, "period": 3.0, "speed": 7.5, "damage": 8, "color": "#c080ff" } },
+    "山豬半獸人": { "model": "山豬半獸人", "height": 1.9, "radius": 0.95, "hp": 150, "coins": 6, "touch": 20, "move": "charge", "speed": 6 },
+    "狼人": { "model": "狼人", "height": 1.9, "radius": 0.85, "hp": 90, "coins": 4, "touch": 14, "move": "chase", "speed": 3.6 },
+    "冰龍": { "tint": "#8fd0ff", "model": "特殊_綠龍2", "height": 2.0, "radius": 1.1, "hp": 240, "coins": 8, "touch": 14, "move": "hover", "fly": true, "speed": 2.5, "stay": 10,
+      "attack": { "type": "spread", "count": 5, "angle": 60, "period": 2.6, "speed": 6, "damage": 9, "color": "#7fd8ff" } },
+
+    "半獸人": { "model": "半獸人", "height": 1.9, "radius": 0.9, "hp": 140, "coins": 5, "touch": 18, "move": "walk", "speed": 1.3,
+      "attack": { "type": "spread", "count": 3, "angle": 24, "period": 3.4, "speed": 6, "damage": 10, "color": "#ffb060" } },
+    "綠龍": { "model": "特殊_綠龍", "height": 2.0, "radius": 1.1, "hp": 220, "coins": 8, "touch": 14, "move": "hover", "fly": true, "speed": 2.5, "stay": 10,
+      "attack": { "type": "aimed", "count": 1, "burst": 3, "gap": 0.2, "period": 2.4, "speed": 8, "damage": 10, "color": "#ff8a3a", "look": "e_fire" } },
+
+    "白咕嚕": { "model": "人型_咕嚕_白", "height": 1.5, "radius": 0.7, "hp": 90, "coins": 4, "touch": 12, "move": "stand",
+      "attack": { "type": "aimed", "count": 2, "angle": 14, "period": 2.4, "speed": 7, "damage": 10, "color": "#c8c0b0" } },
+    "綠咕嚕": { "model": "人型_咕嚕_綠", "height": 1.5, "radius": 0.7, "hp": 110, "coins": 4, "touch": 14, "move": "chase", "speed": 3.2 },
+    "冰狼人": { "tint": "#a8d8ff", "model": "狼人", "height": 1.9, "radius": 0.85, "hp": 120, "coins": 5, "touch": 15, "move": "charge", "speed": 8,
+      "attack": { "type": "ring", "count": 8, "period": 4, "speed": 4.5, "damage": 9, "color": "#9fe0ff" } },
+    "暗影騎兵": { "tint": "#a088d0", "model": "死靈盔甲武士", "height": 1.9, "radius": 0.85, "hp": 200, "coins": 7, "touch": 18, "move": "walk", "speed": 1.2,
+      "attack": { "type": "spread", "count": 5, "angle": 50, "period": 3, "speed": 6.5, "damage": 10, "color": "#c080ff" } },
+    "巫術哥布林": { "tint": "#c0a0ff", "model": "人型_哥布林-4", "height": 1.5, "radius": 0.7, "hp": 80, "coins": 5, "touch": 10, "move": "strafe", "speed": 2.5,
+      "attack": { "type": "ring", "count": 10, "period": 3.2, "speed": 5, "damage": 9, "color": "#c080ff" } },
+
+    "咕嚕王": { "model": "人型_咕嚕王", "height": 3.1, "radius": 1.5, "hp": 5000, "coins": 100, "touch": 26, "boss": true, "every": 1.9,
+      "attacks": [
+        { "type": "aimed", "count": 5, "angle": 40, "burst": 3, "gap": 0.25, "speed": 8, "damage": 11, "color": "#c8ff8a" },
+        { "type": "summon", "minion": "綠咕嚕", "count": 3 },
+        { "type": "ring", "count": 20, "speed": 5, "damage": 11, "color": "#c8ff8a", "repeat": 3, "gap": 0.35, "twist": 9 },
+        { "type": "rush", "speed": 11, "damage": 28 },
+        { "type": "rain", "count": 26, "speed": 8, "damage": 10, "color": "#c8c0b0", "time": 2.2 }
+      ] },
+    "冰霜巨龍": { "tint": "#8fd0ff", "model": "特殊_綠龍2", "height": 3.4, "radius": 1.7, "hp": 5800, "coins": 110, "touch": 26, "boss": true, "fly": true, "every": 1.9,
+      "attacks": [
+        { "type": "spread", "count": 13, "angle": 130, "speed": 6, "damage": 11, "color": "#7fd8ff", "repeat": 3, "gap": 0.35 },
+        { "type": "rain", "count": 30, "speed": 8, "damage": 10, "color": "#bfe8ff", "time": 2.4 },
+        { "type": "summon", "minion": "冰狼人", "count": 2 },
+        { "type": "ring", "count": 22, "speed": 4.5, "damage": 11, "color": "#7fd8ff", "repeat": 4, "gap": 0.3, "twist": 8 }
+      ] },
+    "森林大熊": { "model": "森林大熊", "height": 3.0, "radius": 1.6, "hp": 6400, "coins": 120, "touch": 30, "boss": true, "every": 1.8,
+      "attacks": [
+        { "type": "rush", "speed": 12, "damage": 30 },
+        { "type": "spread", "count": 9, "angle": 90, "speed": 7, "damage": 12, "color": "#d8a86a", "repeat": 3, "gap": 0.3 },
+        { "type": "summon", "minion": "山豬", "count": 3 },
+        { "type": "rain", "count": 32, "speed": 8.5, "damage": 11, "color": "#d8a86a", "time": 2.4 },
+        { "type": "aimed", "count": 3, "angle": 20, "burst": 5, "gap": 0.18, "speed": 9, "damage": 11, "color": "#d8a86a" }
+      ] },
+    "黑暗騎士": { "tint": "#a088d0", "model": "死靈盔甲武士", "height": 3.3, "radius": 1.5, "hp": 7200, "coins": 130, "touch": 30, "boss": true, "every": 1.7,
+      "attacks": [
+        { "type": "ring", "count": 24, "speed": 5, "damage": 12, "color": "#c080ff", "repeat": 5, "gap": 0.28, "twist": 7 },
+        { "type": "summon", "minion": "暗影騎兵", "count": 2 },
+        { "type": "spread", "count": 11, "angle": 110, "speed": 7, "damage": 12, "color": "#c080ff", "repeat": 3, "gap": 0.35 },
+        { "type": "rush", "speed": 13, "damage": 32 },
+        { "type": "rain", "count": 34, "speed": 9, "damage": 11, "color": "#c080ff", "time": 2.4 }
+      ] },
+    "哥布林王": { "model": "人型_哥布林王", "height": 3.0, "radius": 1.5, "hp": 1500, "coins": 40, "touch": 20, "boss": true, "every": 2.2,
+      "attacks": [
+        { "type": "spread", "count": 5, "angle": 70, "speed": 6, "damage": 9, "color": "#ffd27a", "look": "e_star" },
+        { "type": "summon", "minion": "哥布林兵", "count": 3 },
+        { "type": "aimed", "count": 1, "burst": 5, "gap": 0.16, "speed": 8, "damage": 8, "color": "#ffd27a", "look": "e_star" },
+        { "type": "rush", "speed": 10, "damage": 22 }
+      ] },
+    "死靈骷髏王": { "model": "死靈骷髏王", "height": 3.1, "radius": 1.5, "hp": 2200, "coins": 50, "touch": 22, "boss": true, "every": 2.2,
+      "attacks": [
+        { "type": "ring", "count": 14, "speed": 5, "damage": 10, "color": "#b6a8ff", "repeat": 2, "gap": 0.5 },
+        { "type": "summon", "minion": "骷髏兵", "count": 3 },
+        { "type": "spread", "count": 7, "angle": 90, "speed": 6, "damage": 10, "color": "#b6a8ff" },
+        { "type": "rain", "count": 18, "speed": 7, "damage": 9, "color": "#b6a8ff", "time": 2.0 }
+      ] },
+    "蛇妖王": { "model": "特殊_蛇妖王", "height": 3.2, "radius": 1.6, "hp": 2800, "coins": 60, "touch": 22, "boss": true, "every": 2.0,
+      "attacks": [
+        { "type": "spread", "count": 9, "angle": 110, "speed": 6, "damage": 10, "color": "#8be04e" },
+        { "type": "ring", "count": 16, "speed": 4.5, "damage": 10, "color": "#8be04e", "repeat": 3, "gap": 0.45, "twist": 11 },
+        { "type": "summon", "minion": "黑貓", "count": 3 },
+        { "type": "aimed", "count": 3, "angle": 20, "burst": 4, "gap": 0.2, "speed": 8, "damage": 9, "color": "#8be04e" }
+      ] },
+    "哥布林大王": { "tint": "#ffb090", "model": "人型_哥布林王", "height": 3.5, "radius": 1.6, "hp": 3400, "coins": 70, "touch": 24, "boss": true, "every": 2.0,
+      "attacks": [
+        { "type": "rush", "speed": 11, "damage": 26 },
+        { "type": "spread", "count": 9, "angle": 100, "speed": 6.5, "damage": 11, "color": "#ffb060", "repeat": 2, "gap": 0.4 },
+        { "type": "summon", "minion": "哥布林盾兵", "count": 2 },
+        { "type": "rain", "count": 22, "speed": 7.5, "damage": 10, "color": "#ffb060", "time": 2.2 },
+        { "type": "aimed", "count": 3, "angle": 24, "burst": 4, "gap": 0.18, "speed": 8.5, "damage": 10, "color": "#ffb060" }
+      ] },
+    "紅火龍": { "model": "特殊_紅火龍", "height": 3.4, "radius": 1.8, "hp": 4200, "coins": 90, "touch": 26, "boss": true, "fly": true, "every": 1.9,
+      "attacks": [
+        { "type": "spread", "count": 11, "angle": 120, "speed": 6.5, "damage": 11, "color": "#ff6a1a", "repeat": 2, "gap": 0.4 },
+        { "type": "rain", "count": 26, "speed": 8, "damage": 10, "color": "#ff6a1a", "time": 2.4 },
+        { "type": "ring", "count": 18, "speed": 5, "damage": 10, "color": "#ff9a3a", "repeat": 3, "gap": 0.4, "twist": 10 },
+        { "type": "summon", "minion": "狼人", "count": 2 },
+        { "type": "aimed", "count": 5, "angle": 36, "burst": 3, "gap": 0.22, "speed": 9, "damage": 10, "color": "#ff6a1a", "look": "e_fire" }
+      ] }
+  }
+}

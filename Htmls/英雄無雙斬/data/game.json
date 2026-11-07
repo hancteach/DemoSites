@@ -1,0 +1,802 @@
+{
+  "note": "主角與規則數值。arc 角度、range 公尺、hit 第幾秒打中、dur 這段多長、lunge 往前踏幾公尺、launch 擊飛初速、hitstop 命中停頓秒數、shake 畫面震動",
+  "hero": {
+    "model": "騎士",
+    "hp": 200,
+    "speed": 6.5,
+    "combo": [
+      {
+        "name": "橫斬",
+        "arc": 170,
+        "range": 3.4,
+        "damage": 1,
+        "knock": 5,
+        "hit": 0.17,
+        "dur": 0.36,
+        "lunge": 1.2,
+        "animSpeed": 2.2,
+        "tilt": 0.25,
+        "hitstop": 0.04
+      },
+      {
+        "name": "回斬",
+        "arc": 170,
+        "range": 3.4,
+        "damage": 1,
+        "knock": 5,
+        "hit": 0.15,
+        "dur": 0.34,
+        "lunge": 1,
+        "animSpeed": 2.6,
+        "from": 0.1,
+        "tilt": -0.35,
+        "hitstop": 0.04,
+        "clip": "Attack2"
+      },
+      {
+        "name": "迴旋斬",
+        "arc": 360,
+        "range": 3.8,
+        "damage": 1,
+        "knock": 7,
+        "hit": 0.22,
+        "dur": 0.42,
+        "lunge": 0.6,
+        "animSpeed": 1.8,
+        "spin": 1,
+        "hitstop": 0.05,
+        "clip": "Attack3"
+      },
+      {
+        "name": "挑斬",
+        "arc": 220,
+        "range": 4.2,
+        "damage": 1,
+        "knock": 2,
+        "launch": 12,
+        "hit": 0.2,
+        "dur": 0.5,
+        "lunge": 1.4,
+        "animSpeed": 1.8,
+        "from": 0.05,
+        "tilt": 1.1,
+        "hop": 0.4,
+        "hitstop": 0.08,
+        "shake": 0.4,
+        "launcher": true,
+        "clip": "Launcher"
+      }
+    ],
+    "dash": {
+      "distance": 8,
+      "time": 0.24,
+      "cooldown": 1.6,
+      "width": 1.7,
+      "damage": 1,
+      "knock": 9,
+      "finish": {
+        "arc": 200,
+        "range": 3.4,
+        "damage": 1,
+        "knock": 8,
+        "hitstop": 0.05,
+        "shake": 0.3
+      }
+    },
+    "musou": {
+      "duration": 2.2,
+      "firstPulse": 0.25,
+      "interval": 0.35,
+      "pulses": 5,
+      "pulse": {
+        "arc": 360,
+        "range": 6,
+        "damage": 2,
+        "knock": 10,
+        "launch": 7,
+        "ring": true,
+        "hitstop": 0.02,
+        "shake": 0.3,
+        "color": "#ffb340"
+      },
+      "finish": {
+        "arc": 360,
+        "range": 10,
+        "damage": 5,
+        "knock": 14,
+        "launch": 12,
+        "ring": true,
+        "hitstop": 0.12,
+        "shake": 1,
+        "color": "#ffd27a"
+      }
+    },
+    "jump": {
+      "speed": 11,
+      "gravity": 28,
+      "airControl": 0.85,
+      "hoverLift": 2,
+      "hoverGravity": 0.35,
+      "note": "跳起初速、重力；空中出招時往上浮一點、重力變小（hover），才接得住被挑起的敵人"
+    },
+    "air": [
+      {
+        "name": "空中斬",
+        "arc": 220,
+        "range": 3.4,
+        "damage": 1,
+        "knock": 2,
+        "juggle": 6,
+        "hit": 0.1,
+        "dur": 0.26,
+        "animSpeed": 2.6,
+        "tilt": 0.3,
+        "hitstop": 0.04,
+        "clip": "AirAttack"
+      },
+      {
+        "name": "空中回斬",
+        "arc": 220,
+        "range": 3.4,
+        "damage": 1,
+        "knock": 2,
+        "juggle": 6,
+        "hit": 0.1,
+        "dur": 0.26,
+        "animSpeed": 2.8,
+        "from": 0.1,
+        "tilt": -0.4,
+        "hitstop": 0.04,
+        "clip": "AirAttack2"
+      },
+      {
+        "name": "空中旋斬",
+        "arc": 360,
+        "range": 3.6,
+        "damage": 1,
+        "knock": 3,
+        "juggle": 7,
+        "hit": 0.14,
+        "dur": 0.3,
+        "animSpeed": 2.2,
+        "spin": 1,
+        "hitstop": 0.05,
+        "clip": "AirAttack3"
+      }
+    ],
+    "plunge": {
+      "name": "落地重擊",
+      "fallSpeed": 24,
+      "arc": 360,
+      "range": 4.5,
+      "damage": 2,
+      "knock": 9,
+      "launch": 8,
+      "ring": true,
+      "hitstop": 0.09,
+      "shake": 0.7,
+      "recover": 0.3
+    },
+    "airReach": 2.6,
+    "color": "#bfe8ff"
+  },
+  "musouPerHit": 0.45,
+  "timeLimit": 180,
+  "goal": 1000,
+  "population": {
+    "start": 110,
+    "max": 240,
+    "growPerSecond": 0.9
+  },
+  "enemyDamageScale": 7,
+  "healDropChance": 0.003,
+  "healAmount": 25,
+  "ranks": [
+    {
+      "rank": "S",
+      "ko": 2500
+    },
+    {
+      "rank": "A",
+      "ko": 1800
+    },
+    {
+      "rank": "B",
+      "ko": 1000
+    },
+    {
+      "rank": "C",
+      "ko": 0
+    }
+  ],
+  "heroes": [
+    {
+      "id": "騎士",
+      "name": "騎士",
+      "role": "平衡型",
+      "desc": "攻守平均，最好上手",
+      "model": "騎士",
+      "hp": 200,
+      "speed": 6.5,
+      "color": "#bfe8ff",
+      "musouColor": "#ffb340"
+    },
+    {
+      "id": "皇家騎士",
+      "name": "皇家騎士",
+      "role": "防禦型",
+      "desc": "生命最多、揮劍範圍大，出招稍慢",
+      "model": "角色_皇家騎士",
+      "hp": 240,
+      "speed": 6,
+      "tempo": 0.92,
+      "rangeScale": 1.15,
+      "arcScale": 1.1,
+      "musouScale": 1.15,
+      "color": "#ffe7a0",
+      "musouColor": "#ffd24a"
+    },
+    {
+      "id": "忍者",
+      "name": "忍者",
+      "role": "投擲型",
+      "desc": "丟苦無和飛鏢，出招快、跳得高",
+      "model": "角色_忍者",
+      "hp": 150,
+      "speed": 8.2,
+      "tempo": 1.3,
+      "rangeScale": 0.9,
+      "jumpScale": 1.15,
+      "dashCooldown": 1,
+      "color": "#8dffd0",
+      "musouColor": "#4dffc0",
+      "moves": {
+        "combo": [
+          {
+            "name": "苦無",
+            "lunge": 0,
+            "hit": 0.12,
+            "dur": 0.28,
+            "shot": {
+              "spread": 0,
+              "speed": 34,
+              "range": 13,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "kunai",
+              "count": 1
+            }
+          },
+          {
+            "name": "飛鏢連發",
+            "lunge": 0,
+            "hit": 0.12,
+            "dur": 0.3,
+            "shot": {
+              "spread": 12,
+              "speed": 28,
+              "range": 13,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "shuriken",
+              "count": 3
+            }
+          },
+          {
+            "name": "苦無飛鏢亂射",
+            "spin": 0,
+            "lunge": -1,
+            "hit": 0.14,
+            "dur": 0.38,
+            "shot": {
+              "spread": 13,
+              "speed": 32,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kinds": [
+                "kunai",
+                "shuriken"
+              ],
+              "count": 7
+            }
+          },
+          null
+        ],
+        "air": [
+          {
+            "name": "空中苦無",
+            "shot": {
+              "spread": 12,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kinds": [
+                "kunai",
+                "shuriken"
+              ],
+              "count": 2,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "空中苦無",
+            "shot": {
+              "spread": 12,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kinds": [
+                "shuriken",
+                "kunai"
+              ],
+              "count": 2,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "飛鏢環",
+            "spin": 0,
+            "shot": {
+              "spread": 36,
+              "speed": 28,
+              "range": 10,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "shuriken",
+              "count": 10,
+              "juggle": 6
+            }
+          }
+        ]
+      },
+      "rangeBar": 1.4
+    },
+    {
+      "id": "盜賊",
+      "name": "盜賊",
+      "role": "突進型",
+      "desc": "突進斬衝得更遠、冷卻很短",
+      "model": "盜賊",
+      "hp": 170,
+      "speed": 7.4,
+      "tempo": 1.15,
+      "dashCooldown": 0.8,
+      "dashDistance": 10,
+      "color": "#ffe08a",
+      "musouColor": "#ffd060"
+    },
+    {
+      "id": "魔法師",
+      "name": "魔法師",
+      "role": "範圍型",
+      "desc": "丟火球爆炸，第三段大火焰彈把敵人炸飛",
+      "model": "魔法師",
+      "hp": 160,
+      "speed": 6,
+      "tempo": 1,
+      "rangeScale": 1.35,
+      "musouScale": 1.3,
+      "color": "#c9a2ff",
+      "musouColor": "#b07dff",
+      "moves": {
+        "combo": [
+          {
+            "name": "火球",
+            "lunge": 0,
+            "hit": 0.16,
+            "dur": 0.36,
+            "shot": {
+              "kind": "fire",
+              "count": 1,
+              "spread": 0,
+              "speed": 18,
+              "range": 12,
+              "radius": 0.55,
+              "blast": 2.2,
+              "damage": 1,
+              "knock": 6,
+              "hitstop": 0.04
+            }
+          },
+          {
+            "name": "雙火球",
+            "lunge": 0,
+            "hit": 0.16,
+            "dur": 0.36,
+            "shot": {
+              "kind": "fire",
+              "count": 2,
+              "spread": 16,
+              "speed": 18,
+              "range": 12,
+              "radius": 0.55,
+              "blast": 2.2,
+              "damage": 1,
+              "knock": 6,
+              "hitstop": 0.04
+            }
+          },
+          {
+            "name": "大火焰彈",
+            "spin": 0,
+            "lunge": 0,
+            "hit": 0.2,
+            "dur": 0.48,
+            "shot": {
+              "kind": "bigfire",
+              "count": 1,
+              "spread": 0,
+              "speed": 14,
+              "range": 10,
+              "radius": 0.8,
+              "blast": 3.6,
+              "damage": 2,
+              "knock": 9,
+              "hitstop": 0.07,
+              "launch": 7
+            }
+          },
+          null
+        ],
+        "air": [
+          {
+            "name": "空中火球",
+            "shot": {
+              "kind": "fire",
+              "count": 1,
+              "spread": 0,
+              "speed": 18,
+              "range": 10,
+              "radius": 0.55,
+              "blast": 2.2,
+              "damage": 1,
+              "knock": 6,
+              "hitstop": 0.04,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "空中火球",
+            "shot": {
+              "kind": "fire",
+              "count": 1,
+              "spread": 0,
+              "speed": 18,
+              "range": 10,
+              "radius": 0.55,
+              "blast": 2.2,
+              "damage": 1,
+              "knock": 6,
+              "hitstop": 0.04,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "三連火球",
+            "spin": 0,
+            "shot": {
+              "kind": "fire",
+              "count": 3,
+              "spread": 25,
+              "speed": 18,
+              "range": 10,
+              "radius": 0.55,
+              "blast": 2.2,
+              "damage": 1,
+              "knock": 6,
+              "hitstop": 0.04,
+              "juggle": 7
+            }
+          }
+        ]
+      },
+      "rangeBar": 1.5
+    },
+    {
+      "id": "弓箭手",
+      "name": "弓箭手",
+      "role": "長距離",
+      "desc": "射箭，一箭穿透好幾隻，第三段扇形散射",
+      "model": "弓箭手",
+      "hp": 150,
+      "speed": 7,
+      "rangeScale": 1.1,
+      "color": "#b6ff7a",
+      "musouColor": "#8cff4a",
+      "moves": {
+        "combo": [
+          {
+            "name": "速射",
+            "lunge": 0,
+            "hit": 0.12,
+            "dur": 0.3,
+            "shot": {
+              "kind": "arrow",
+              "count": 1,
+              "spread": 0,
+              "speed": 32,
+              "range": 15,
+              "radius": 0.45,
+              "pierce": 4,
+              "damage": 1,
+              "knock": 3
+            }
+          },
+          {
+            "name": "三連矢",
+            "lunge": 0,
+            "hit": 0.12,
+            "dur": 0.32,
+            "shot": {
+              "kind": "arrow",
+              "count": 3,
+              "spread": 10,
+              "speed": 32,
+              "range": 15,
+              "radius": 0.45,
+              "pierce": 3,
+              "damage": 1,
+              "knock": 3
+            }
+          },
+          {
+            "name": "扇形散射",
+            "spin": 0,
+            "lunge": -1,
+            "hit": 0.16,
+            "dur": 0.4,
+            "shot": {
+              "kind": "arrow",
+              "count": 9,
+              "spread": 11,
+              "speed": 32,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3
+            }
+          },
+          null
+        ],
+        "air": [
+          {
+            "name": "空中射擊",
+            "shot": {
+              "kind": "arrow",
+              "count": 3,
+              "spread": 12,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "空中射擊",
+            "shot": {
+              "kind": "arrow",
+              "count": 3,
+              "spread": 12,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "空中環射",
+            "spin": 0,
+            "shot": {
+              "kind": "arrow",
+              "count": 12,
+              "spread": 30,
+              "speed": 30,
+              "range": 10,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "juggle": 6
+            }
+          }
+        ]
+      },
+      "rangeBar": 1.6
+    },
+    {
+      "id": "巫女",
+      "name": "日本巫女",
+      "role": "火焰弓",
+      "desc": "射火焰箭，地上著火、敵人碰到會燃燒；放無雙補 40 血",
+      "model": "人型_日本巫女",
+      "hp": 160,
+      "speed": 6.8,
+      "rangeScale": 1.15,
+      "musouHeal": 40,
+      "color": "#ff9db8",
+      "musouColor": "#ff7aa8",
+      "moves": {
+        "combo": [
+          {
+            "name": "火焰箭",
+            "lunge": 0,
+            "hit": 0.14,
+            "dur": 0.32,
+            "shot": {
+              "spread": 0,
+              "speed": 30,
+              "range": 14,
+              "radius": 0.45,
+              "pierce": 3,
+              "damage": 1,
+              "knock": 3,
+              "kind": "firearrow",
+              "burn": {
+                "time": 4,
+                "every": 1,
+                "damage": 1
+              },
+              "fire": {
+                "radius": 1.6,
+                "time": 4
+              },
+              "count": 1
+            }
+          },
+          {
+            "name": "雙火焰箭",
+            "lunge": 0,
+            "hit": 0.14,
+            "dur": 0.34,
+            "shot": {
+              "spread": 10,
+              "speed": 30,
+              "range": 14,
+              "radius": 0.45,
+              "pierce": 3,
+              "damage": 1,
+              "knock": 3,
+              "kind": "firearrow",
+              "burn": {
+                "time": 4,
+                "every": 1,
+                "damage": 1
+              },
+              "fire": {
+                "radius": 1.6,
+                "time": 4
+              },
+              "count": 2
+            }
+          },
+          {
+            "name": "火焰箭雨",
+            "spin": 0,
+            "lunge": -1,
+            "hit": 0.16,
+            "dur": 0.42,
+            "shot": {
+              "spread": 14,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "firearrow",
+              "burn": {
+                "time": 4,
+                "every": 1,
+                "damage": 1
+              },
+              "fire": {
+                "radius": 1.6,
+                "time": 4
+              },
+              "count": 5
+            }
+          },
+          null
+        ],
+        "air": [
+          {
+            "name": "空中火焰箭",
+            "shot": {
+              "spread": 12,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "firearrow",
+              "burn": {
+                "time": 4,
+                "every": 1,
+                "damage": 1
+              },
+              "fire": {
+                "radius": 1.6,
+                "time": 4
+              },
+              "count": 2,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "空中火焰箭",
+            "shot": {
+              "spread": 12,
+              "speed": 30,
+              "range": 12,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "firearrow",
+              "burn": {
+                "time": 4,
+                "every": 1,
+                "damage": 1
+              },
+              "fire": {
+                "radius": 1.6,
+                "time": 4
+              },
+              "count": 2,
+              "juggle": 6
+            }
+          },
+          {
+            "name": "火焰環射",
+            "spin": 0,
+            "shot": {
+              "spread": 45,
+              "speed": 30,
+              "range": 10,
+              "radius": 0.45,
+              "pierce": 2,
+              "damage": 1,
+              "knock": 3,
+              "kind": "firearrow",
+              "burn": {
+                "time": 4,
+                "every": 1,
+                "damage": 1
+              },
+              "fire": {
+                "radius": 1.6,
+                "time": 4
+              },
+              "count": 8,
+              "juggle": 6
+            }
+          }
+        ]
+      },
+      "rangeBar": 1.6
+    }
+  ]
+}

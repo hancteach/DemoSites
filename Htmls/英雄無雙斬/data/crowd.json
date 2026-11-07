@@ -1,0 +1,59 @@
+{
+  "note": "小兵種類：model 用 assets/crowd/ 的低面數版（node tools/make_crowd.mjs 產生）。hp 生命、speed 公尺/秒、weight 出現比例、max 同種最多幾隻。captain 敵將：every 每擊破幾隻出現一次、damage 直接扣主角生命、windup 紅圈預警秒數。armor 霸體（普通攻擊不會讓他停下）",
+  "maxOnField": 260,
+  "types": {
+    "哥布林兵": {
+      "model": "人型_哥布林-1",
+      "scale": 0.8,
+      "hp": 1,
+      "speed": 3.0,
+      "damage": 1,
+      "weight": 4,
+      "max": 120,
+      "radius": 0.4
+    },
+    "骷髏兵": {
+      "model": "骷髏人",
+      "scale": 0.92,
+      "hp": 2,
+      "speed": 2.5,
+      "damage": 1,
+      "weight": 4,
+      "max": 120,
+      "radius": 0.45
+    },
+    "強盜": {
+      "model": "人型_強盜",
+      "scale": 0.95,
+      "hp": 3,
+      "speed": 2.8,
+      "damage": 1,
+      "weight": 2,
+      "max": 60,
+      "radius": 0.45
+    },
+    "半獸人": {
+      "model": "半獸人",
+      "scale": 1.05,
+      "hp": 5,
+      "speed": 2.0,
+      "damage": 2,
+      "weight": 1,
+      "max": 30,
+      "radius": 0.55,
+      "armor": true
+    }
+  },
+  "captain": {
+    "name": "死靈武將",
+    "model": "死靈盔甲武士",
+    "scale": 1.6,
+    "hp": 120,
+    "speed": 2.6,
+    "damage": 18,
+    "windup": 0.7,
+    "attackRadius": 2.4,
+    "every": 150,
+    "radius": 0.9
+  }
+}

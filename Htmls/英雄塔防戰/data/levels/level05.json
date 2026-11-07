@@ -1,0 +1,674 @@
+{
+  "name": "哥布林營地",
+  "desc": "遠程的哥布林會丟飛鏢、火焰彈",
+  "intro": "哥布林會從遠處丟飛鏢打騎士兵，丟火焰彈讓塔暈眩！先用弓箭塔射掉它們",
+  "hpMult": 1.1,
+  "theme": {
+    "background": "#2a1a12",
+    "fog": "#2a1a12",
+    "fogNear": 45,
+    "fogFar": 95,
+    "hemiSky": "#f0b37a",
+    "hemiGround": "#3a2416",
+    "hemiIntensity": 0.65,
+    "moon": "#ffc48a",
+    "moonIntensity": 1.25,
+    "outside": "#21140d",
+    "wall": {
+      "a": "#6a4a30",
+      "b": "#553a25",
+      "gate": "#7a5638"
+    },
+    "ground": {
+      "base": "#5a4630",
+      "speck": [
+        1.25,
+        1,
+        0.75
+      ],
+      "stone": [
+        16,
+        6,
+        -4
+      ],
+      "stoneBase": 70
+    }
+  },
+  "arena": {
+    "halfWidth": 20,
+    "halfDepth": 13,
+    "gates": [
+      {
+        "side": "east",
+        "at": -7.5,
+        "width": 5
+      },
+      {
+        "side": "west",
+        "at": 6.5,
+        "width": 6
+      }
+    ],
+    "lowSides": [
+      "south"
+    ]
+  },
+  "path": {
+    "width": 3.6,
+    "corner": 2.6,
+    "points": [
+      [
+        24,
+        -7.5
+      ],
+      [
+        10,
+        -7.5
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        -6
+      ],
+      [
+        -10,
+        -6
+      ],
+      [
+        -10,
+        6.5
+      ],
+      [
+        -19.5,
+        6.5
+      ]
+    ]
+  },
+  "castle": {
+    "at": [
+      -21.6,
+      6.5
+    ]
+  },
+  "heroStart": [
+    -16,
+    9.8
+  ],
+  "previewAt": [
+    5,
+    4
+  ],
+  "pedestals": [
+    [
+      13.8,
+      -3.6
+    ],
+    [
+      14.5,
+      -11.2
+    ],
+    [
+      6.2,
+      0.2
+    ],
+    [
+      5,
+      8.2
+    ],
+    [
+      -4,
+      -2
+    ],
+    [
+      -5,
+      -10
+    ],
+    [
+      -14,
+      2.6
+    ],
+    [
+      -6,
+      10.3
+    ]
+  ],
+  "lockedPedestals": [
+    1,
+    7
+  ],
+  "hazards": [
+    {
+      "type": "spikes",
+      "at": [
+        5,
+        4
+      ],
+      "size": 1.4,
+      "period": 4.5,
+      "warn": 0.9,
+      "up": 1,
+      "offset": 0.0,
+      "damage": 1,
+      "enemyDamage": 2
+    },
+    {
+      "type": "spikes",
+      "at": [
+        -5,
+        -6
+      ],
+      "size": 1.4,
+      "period": 4.5,
+      "warn": 0.9,
+      "up": 1,
+      "offset": 1.5,
+      "damage": 1,
+      "enemyDamage": 2
+    }
+  ],
+  "firstWait": 30,
+  "waves": [
+    {
+      "spawns": [
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-1",
+          "count": 3
+        }
+      ],
+      "interval": 1.3
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "骷髏人",
+          "count": 8
+        },
+        {
+          "enemy": "人型_哥布林-1",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-2",
+          "count": 2
+        }
+      ],
+      "interval": 1.2
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-3",
+          "count": 2
+        },
+        {
+          "enemy": "人型_強盜",
+          "count": 5
+        },
+        {
+          "enemy": "忍者",
+          "count": 3,
+          "from": "普通"
+        }
+      ],
+      "interval": 1.1
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_日本巫女",
+          "count": 3
+        },
+        {
+          "enemy": "人型_哥布林-1",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 4
+        },
+        {
+          "enemy": "死靈盔甲武士",
+          "count": 2,
+          "from": "普通"
+        }
+      ],
+      "interval": 1.1
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_強盜",
+          "count": 8
+        },
+        {
+          "enemy": "人型_哥布林-2",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-3",
+          "count": 3
+        },
+        {
+          "enemy": "人型_日本巫女",
+          "count": 2,
+          "from": "普通"
+        }
+      ],
+      "interval": 1.0
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 6
+        },
+        {
+          "enemy": "人型_日本巫女",
+          "count": 3
+        },
+        {
+          "enemy": "人型_哥布林-1",
+          "count": 5
+        },
+        {
+          "enemy": "半獸人",
+          "count": 3
+        },
+        {
+          "enemy": "死靈祭司",
+          "count": 2,
+          "from": "普通"
+        }
+      ],
+      "interval": 1.0
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_強盜",
+          "count": 10
+        },
+        {
+          "enemy": "人型_哥布林-3",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 5
+        },
+        {
+          "enemy": "山豬半獸人",
+          "count": 2
+        },
+        {
+          "enemy": "忍者",
+          "count": 4,
+          "from": "普通"
+        }
+      ],
+      "interval": 0.95
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "骷髏人",
+          "count": 12
+        },
+        {
+          "enemy": "人型_哥布林-1",
+          "count": 6
+        },
+        {
+          "enemy": "人型_哥布林-2",
+          "count": 4
+        },
+        {
+          "enemy": "人型_日本巫女",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 6
+        },
+        {
+          "enemy": "人型_哥布林-3",
+          "count": 3
+        },
+        {
+          "enemy": "死靈盔甲武士",
+          "count": 3,
+          "from": "普通"
+        }
+      ],
+      "interval": 0.8
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 4
+        },
+        {
+          "enemy": "人型_哥布林-1",
+          "count": 4
+        }
+      ],
+      "interval": 1.2,
+      "boss": [
+        "人型_哥布林王"
+      ]
+    }
+  ],
+  "props": [
+    {
+      "type": "crate",
+      "at": [
+        4.5,
+        -10
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        12.6,
+        -10.2
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        7.4,
+        -4.6
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        -17.4,
+        3.2
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        -17.4,
+        9.8
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        -2.6,
+        1.8
+      ]
+    },
+    {
+      "type": "torch",
+      "at": [
+        -7.4,
+        -8.6
+      ]
+    },
+    {
+      "type": "crate",
+      "at": [
+        18.6,
+        -1
+      ],
+      "variant": 0
+    },
+    {
+      "type": "crate",
+      "at": [
+        16.4,
+        1.4
+      ],
+      "variant": 1,
+      "rot": -8
+    },
+    {
+      "type": "crate",
+      "at": [
+        18.4,
+        4
+      ],
+      "variant": 2
+    },
+    {
+      "type": "crate",
+      "at": [
+        15.8,
+        6.4
+      ],
+      "variant": 0,
+      "rot": 6
+    },
+    {
+      "type": "crate",
+      "at": [
+        12.6,
+        3
+      ],
+      "variant": 1
+    },
+    {
+      "type": "crate",
+      "at": [
+        13,
+        8.6
+      ],
+      "variant": 2,
+      "rot": -10
+    },
+    {
+      "type": "crate",
+      "at": [
+        1.6,
+        -11
+      ],
+      "variant": 0
+    },
+    {
+      "type": "crate",
+      "at": [
+        -1.6,
+        -11.4
+      ],
+      "variant": 2,
+      "rot": -7
+    },
+    {
+      "type": "crate",
+      "at": [
+        -14,
+        -10.4
+      ],
+      "variant": 1
+    },
+    {
+      "type": "crate",
+      "at": [
+        -16.6,
+        -8
+      ],
+      "variant": 0,
+      "rot": 9
+    },
+    {
+      "type": "crate",
+      "at": [
+        -14.2,
+        -5.6
+      ],
+      "variant": 2
+    },
+    {
+      "type": "crate",
+      "at": [
+        -17.6,
+        -3
+      ],
+      "variant": 1,
+      "rot": -12
+    },
+    {
+      "type": "crate",
+      "at": [
+        1,
+        10.6
+      ],
+      "variant": 1
+    },
+    {
+      "type": "crate",
+      "at": [
+        -1.8,
+        9.2
+      ],
+      "variant": 0,
+      "rot": 12
+    },
+    {
+      "type": "woodPost",
+      "at": [
+        18.4,
+        9.8
+      ],
+      "scale": 1.2
+    },
+    {
+      "type": "woodPost",
+      "at": [
+        9,
+        11
+      ],
+      "rot": -120
+    },
+    {
+      "type": "woodPost",
+      "at": [
+        -17.4,
+        -11
+      ],
+      "rot": -40,
+      "scale": 1.3
+    },
+    {
+      "type": "woodPost",
+      "at": [
+        -11,
+        11.2
+      ],
+      "rot": -200,
+      "scale": 1.1
+    },
+    {
+      "type": "woodPost",
+      "at": [
+        18.6,
+        -11.4
+      ],
+      "rot": -300
+    },
+    {
+      "type": "woodPost",
+      "at": [
+        2.8,
+        -4.2
+      ],
+      "rot": -80,
+      "scale": 0.9
+    },
+    {
+      "type": "rock",
+      "at": [
+        8.6,
+        11.6
+      ],
+      "scale": 1.2
+    },
+    {
+      "type": "rock",
+      "at": [
+        -5.2,
+        3.2
+      ],
+      "rot": -60
+    },
+    {
+      "type": "rock",
+      "at": [
+        -12.6,
+        -1.6
+      ],
+      "rot": -120,
+      "scale": 0.8
+    },
+    {
+      "type": "rock",
+      "at": [
+        16,
+        -7.6
+      ],
+      "rot": -200,
+      "scale": 0.7
+    },
+    {
+      "type": "bush",
+      "at": [
+        11,
+        10.8
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        -7.2,
+        1.2
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        6.8,
+        -11.4
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        -18,
+        -6.4
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        -3,
+        11.6
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        17.4,
+        7.8
+      ]
+    }
+  ]
+}

@@ -1,0 +1,434 @@
+{
+  "name": "毒沼神殿",
+  "desc": "新敵人：會分裂的史萊姆、留下毒池的蛇妖、吐毒的咕嚕；陷阱：地刺",
+  "theme": {
+    "background": "#0f1a16",
+    "fog": "#0f1a16",
+    "fogNear": 22,
+    "fogFar": 46,
+    "hemiSky": "#8fc0a8",
+    "hemiGround": "#16261a",
+    "hemiIntensity": 0.6,
+    "moon": "#c4f0d4",
+    "moonIntensity": 1.05,
+    "outside": "#0c1612",
+    "wall": {
+      "a": "#4a5a50",
+      "b": "#3a4a40",
+      "gate": "#566a5c"
+    },
+    "ground": {
+      "base": "#2a3a2c",
+      "speck": [
+        0.8,
+        1.2,
+        0.9
+      ],
+      "stone": [
+        0,
+        8,
+        4
+      ],
+      "stoneBase": 60,
+      "plaza": 6
+    }
+  },
+  "arena": {
+    "halfWidth": 22,
+    "halfDepth": 16,
+    "gates": [
+      {
+        "side": "north",
+        "at": 0,
+        "width": 6
+      },
+      {
+        "side": "west",
+        "at": 2,
+        "width": 6
+      },
+      {
+        "side": "east",
+        "at": 2,
+        "width": 6
+      }
+    ],
+    "lowSides": [
+      "south"
+    ]
+  },
+  "playerStart": [
+    0,
+    7
+  ],
+  "spawnPoints": [
+    {
+      "at": [
+        0,
+        -13
+      ]
+    },
+    {
+      "at": [
+        -19,
+        2
+      ]
+    },
+    {
+      "at": [
+        19,
+        2
+      ]
+    },
+    {
+      "at": [
+        -13,
+        -10
+      ]
+    },
+    {
+      "at": [
+        13,
+        -10
+      ]
+    },
+    {
+      "at": [
+        -14,
+        11
+      ]
+    },
+    {
+      "at": [
+        14,
+        11
+      ]
+    }
+  ],
+  "hazards": [
+    {
+      "type": "spikes",
+      "at": [
+        -9,
+        -6
+      ],
+      "size": 1.4,
+      "period": 4.5,
+      "warn": 0.9,
+      "up": 1,
+      "damage": 1,
+      "enemyDamage": 1
+    },
+    {
+      "type": "spikes",
+      "at": [
+        9,
+        -6
+      ],
+      "size": 1.4,
+      "period": 4.5,
+      "warn": 0.9,
+      "up": 1,
+      "offset": 2.2,
+      "damage": 1,
+      "enemyDamage": 1
+    }
+  ],
+  "waves": [
+    {
+      "spawns": [
+        {
+          "enemy": "特殊_史萊姆",
+          "count": 4
+        },
+        {
+          "enemy": "人型_咕嚕_白",
+          "count": 3
+        }
+      ],
+      "interval": 1.1,
+      "maxAlive": 5
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "特殊_史萊姆",
+          "count": 3
+        },
+        {
+          "enemy": "特殊_蛇妖-1",
+          "count": 2
+        },
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 2
+        }
+      ],
+      "interval": 1,
+      "maxAlive": 6,
+      "chest": {
+        "type": "寶箱",
+        "at": [
+          -1.2,
+          -12.6
+        ]
+      },
+      "items": [
+        {
+          "item": "紅藥水",
+          "at": 8
+        }
+      ]
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "人型_日本巫女",
+          "count": 3
+        },
+        {
+          "enemy": "特殊_史萊姆",
+          "count": 3
+        },
+        {
+          "enemy": "人型_哥布林-4",
+          "count": 2
+        },
+        {
+          "enemy": "特殊_蛇妖-2",
+          "count": 1
+        }
+      ],
+      "interval": 0.9,
+      "maxAlive": 6,
+      "items": [
+        {
+          "item": "藍藥水",
+          "at": 7
+        }
+      ]
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "特殊_蛇妖-1",
+          "count": 3
+        },
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 3
+        },
+        {
+          "enemy": "特殊_史萊姆",
+          "count": 3
+        },
+        {
+          "enemy": "獸型_黑貓",
+          "count": 2
+        }
+      ],
+      "interval": 0.9,
+      "maxAlive": 7,
+      "chest": {
+        "type": "寶箱",
+        "at": [
+          -17,
+          2
+        ]
+      },
+      "items": [
+        {
+          "item": "紅藥水",
+          "at": 12
+        }
+      ]
+    },
+    {
+      "spawns": [
+        {
+          "enemy": "特殊_蛇妖-1",
+          "count": 2
+        },
+        {
+          "enemy": "人型_日本巫女",
+          "count": 2
+        },
+        {
+          "enemy": "特殊_史萊姆",
+          "count": 4
+        },
+        {
+          "enemy": "人型_咕嚕_綠",
+          "count": 2
+        },
+        {
+          "enemy": "特殊_蛇妖-2",
+          "count": 1
+        }
+      ],
+      "interval": 0.8,
+      "maxAlive": 7,
+      "items": [
+        {
+          "item": "黃藥水",
+          "at": 10
+        },
+        {
+          "item": "紅藥水",
+          "at": 18
+        }
+      ]
+    },
+    {
+      "boss": [
+        "特殊_蛇妖王"
+      ],
+      "bossChest": "大寶箱",
+      "healPlayer": true,
+      "interval": 1,
+      "maxAlive": 6,
+      "items": [
+        {
+          "item": "紅藥水",
+          "at": 15
+        },
+        {
+          "item": "藍藥水",
+          "at": 30
+        },
+        {
+          "item": "紅藥水",
+          "at": 45
+        }
+      ]
+    }
+  ],
+  "props": [
+    {
+      "type": "pillar",
+      "at": [
+        -11,
+        -2
+      ]
+    },
+    {
+      "type": "pillar",
+      "at": [
+        11,
+        -2
+      ]
+    },
+    {
+      "type": "pillar",
+      "at": [
+        -11,
+        6
+      ]
+    },
+    {
+      "type": "pillar",
+      "at": [
+        11,
+        6
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        -18,
+        -12
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        18,
+        -12
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        -19,
+        12
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        19,
+        12.2
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        -4.5,
+        12.6
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        4.6,
+        12.4
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        -14,
+        -6
+      ]
+    },
+    {
+      "type": "glowMushroom",
+      "at": [
+        14.2,
+        -6.4
+      ]
+    },
+    {
+      "type": "statue",
+      "at": [
+        -6.5,
+        -12
+      ]
+    },
+    {
+      "type": "statue",
+      "at": [
+        6.5,
+        -12
+      ]
+    },
+    {
+      "type": "deadTree",
+      "at": [
+        -19.5,
+        -3
+      ]
+    },
+    {
+      "type": "deadTree",
+      "at": [
+        19.5,
+        -3.4
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        -15,
+        9.5
+      ]
+    },
+    {
+      "type": "bush",
+      "at": [
+        15.2,
+        9.8
+      ]
+    }
+  ]
+}

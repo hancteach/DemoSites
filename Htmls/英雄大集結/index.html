@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>英雄大集結</title>
+<link rel="stylesheet" href="src/style.css">
+<script type="importmap">
+{ "imports": { "three": "./vendor/three/three.module.js", "three/addons/": "./vendor/three/jsm/" } }
+</script>
+</head>
+<body>
+<canvas id="game"></canvas>
+<div id="labels"></div>
+<div id="numbers"></div>
+
+<!-- 標題 -->
+<section id="title" class="screen menu" hidden>
+  <div class="panel">
+    <h1>英雄大集結</h1>
+    <p class="sub">一路往前打怪，救出被抓走的夥伴！</p>
+    <div class="row between"><span id="titleCoins" class="coins"></span><span id="titleStars" class="coins"></span></div>
+    <div id="titleTeam" class="faces"></div>
+    <div class="buttons">
+      <button id="btnAdventure" class="main">冒險出發</button>
+      <button id="btnRoster">英雄名冊</button>
+    </div>
+  </div>
+</section>
+
+<!-- 選關 -->
+<section id="stages" class="screen menu" hidden>
+  <div class="panel wide">
+    <div class="head"><button data-back>← 返回</button><h2>選擇關卡</h2><span id="stagesCoins" class="coins"></span></div>
+    <div id="diffRow"></div>
+    <div id="stageList"></div>
+  </div>
+</section>
+
+<!-- 出發準備／名冊 -->
+<section id="roster" class="screen menu" hidden>
+  <div class="panel wide">
+    <div class="head"><button data-back>← 返回</button><h2 id="rosterTitle"></h2><span id="rosterCoins" class="coins"></span></div>
+    <p id="rosterTip" class="tip"></p>
+    <div id="pickSlots"></div>
+    <div id="heroList"></div>
+    <div class="buttons" id="goWrap"><button id="btnGo" class="main">出發！</button></div>
+  </div>
+</section>
+
+<!-- 遊戲中 -->
+<section id="hud" class="screen" hidden>
+  <div id="topBar">
+    <button id="quitBtn">✕</button><b id="hudStage"></b>
+    <div id="progress"><i></i><em></em></div>
+    <span id="hudCoins"></span>
+  </div>
+  <div id="bossBar" hidden><b></b><div><i></i></div></div>
+  <div id="hint">按住畫面拖動隊伍（鍵盤：方向鍵／WASD），會自動攻擊</div>
+  <div id="powerTag"></div>
+  <button id="bombBtn"><b>集結必殺</b><span><i></i></span></button>
+  <div id="cards"></div>
+</section>
+
+<section id="result" class="screen" hidden>
+  <div class="panel">
+    <h2 id="resultTitle"></h2>
+    <ul id="resultStars"></ul>
+    <p id="resultText"></p>
+    <div class="buttons">
+      <button id="resultAgain" class="main">再玩一次</button>
+      <button id="resultBack">選擇關卡</button>
+    </div>
+  </div>
+</section>
+
+<div id="banner"></div>
+<div id="flash"></div>
+<div id="loading"><div><b>英雄大集結</b><span id="loadingText">載入中…</span></div></div>
+<script type="module" src="src/main.js"></script>
+</body>
+</html>
