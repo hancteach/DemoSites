@@ -1,0 +1,10 @@
+{
+  "title": "三國大冒險",
+  "subtitle": "選一個陣營，攻下敵軍的據點，打倒敵將！",
+  "faction": "蜀",
+  "player": "關羽",
+  "levels": [
+    "level01"
+  ],
+  "rise": false
+}

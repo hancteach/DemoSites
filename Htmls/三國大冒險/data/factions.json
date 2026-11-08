@@ -1,0 +1,12 @@
+{
+  "說明": "陣營。玩家選一個陣營，只能用這個陣營的武將；其他陣營都是敵軍。雜（雜兵）不能選，永遠是敵方的小兵與守將。角色屬於哪個陣營寫在 characters.json 的 faction。",
+  "order": ["魏", "蜀", "吳", "晉", "他", "雜"],
+  "factions": {
+    "魏": { "name": "魏", "banner": "魏", "color": "#3b6fd4", "desc": "曹操率領的北方大國" },
+    "蜀": { "name": "蜀", "banner": "蜀", "color": "#3fae5a", "desc": "劉備與五虎將" },
+    "吳": { "name": "吳", "banner": "吳", "color": "#d9483a", "desc": "孫家守護的江東" },
+    "晉": { "name": "晉", "banner": "晉", "color": "#7c5cd6", "desc": "司馬家建立的新王朝" },
+    "他": { "name": "群雄", "banner": "雄", "color": "#d4a017", "desc": "呂布、董卓、袁紹等各方勢力" },
+    "雜": { "name": "雜兵", "banner": "兵", "color": "#8a8f98", "desc": "各軍的小兵與守將", "selectable": false }
+  }
+}

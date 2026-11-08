@@ -1,0 +1,557 @@
+{
+ "name": "野外會戰",
+ "desc": "攻下西營、東營、本陣三個據點，再打倒敵將",
+ "scene": "野外",
+ "enemyFactions": [
+  "魏",
+  "吳",
+  "晉",
+  "他",
+  "蜀"
+ ],
+ "arena": {
+  "halfWidth": 24,
+  "halfDepth": 18,
+  "gates": [
+   {
+    "side": "north",
+    "at": 0,
+    "width": 6
+   },
+   {
+    "side": "west",
+    "at": 6,
+    "width": 6
+   },
+   {
+    "side": "east",
+    "at": 6,
+    "width": 6
+   }
+  ],
+  "lowSides": [
+   "south"
+  ]
+ },
+ "theme": {
+  "background": "#a9c9dc",
+  "fog": "#a9c9dc",
+  "fogNear": 34,
+  "fogFar": 70,
+  "hemiSky": "#e8f2ff",
+  "hemiGround": "#5a6b3a",
+  "hemiIntensity": 1.15,
+  "moon": "#fff1d6",
+  "moonIntensity": 2.2,
+  "outside": "#4c6a2c",
+  "wall": {
+   "a": "#7a6248",
+   "b": "#66513b",
+   "gate": "#8a6d4c"
+  },
+  "ground": {
+   "base": "#5d7f35",
+   "speck": [
+    0.85,
+    1.25,
+    0.55
+   ],
+   "stone": [
+    34,
+    18,
+    -6
+   ],
+   "stoneBase": 92,
+   "paths": [
+    [
+     0,
+     18,
+     0,
+     -12,
+     3.6
+    ],
+    [
+     -24,
+     6,
+     24,
+     6,
+     3.4
+    ],
+    [
+     -16,
+     6,
+     -16,
+     -2,
+     3
+    ],
+    [
+     16,
+     6,
+     16,
+     -2,
+     3
+    ]
+   ],
+   "plaza": 0
+  }
+ },
+ "playerStart": [
+  0,
+  11
+ ],
+ "spawnPoints": [
+  {
+   "at": [
+    -10,
+    -15.5
+   ]
+  },
+  {
+   "at": [
+    10,
+    -15.5
+   ]
+  },
+  {
+   "at": [
+    -21,
+    6
+   ]
+  },
+  {
+   "at": [
+    21,
+    6
+   ]
+  },
+  {
+   "at": [
+    -12,
+    -14
+   ]
+  },
+  {
+   "at": [
+    12,
+    -14
+   ]
+  }
+ ],
+ "strongholds": [
+  {
+   "id": "west",
+   "name": "西營",
+   "at": [
+    -16,
+    -3
+   ],
+   "open": 90
+  },
+  {
+   "id": "east",
+   "name": "東營",
+   "at": [
+    16,
+    -3
+   ],
+   "open": -90
+  },
+  {
+   "id": "main",
+   "name": "本陣",
+   "at": [
+    0,
+    -11
+   ],
+   "open": 0,
+   "radius": 5
+  }
+ ],
+ "waves": [
+  {
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 6
+    }
+   ],
+   "interval": 1.1,
+   "maxAlive": 4,
+   "banner": "敵軍斥候來了！"
+  },
+  {
+   "stronghold": "west",
+   "captain": "副將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 5
+    },
+    {
+     "enemy": "槍兵",
+     "count": 2
+    }
+   ],
+   "interval": 1,
+   "maxAlive": 6,
+   "chest": {
+    "type": "寶箱",
+    "at": [
+     -8,
+     1
+    ]
+   },
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 12
+    }
+   ]
+  },
+  {
+   "stronghold": "east",
+   "captain": "副將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 4
+    },
+    {
+     "enemy": "弓兵",
+     "count": 3
+    },
+    {
+     "enemy": "槍兵",
+     "count": 2
+    }
+   ],
+   "interval": 1,
+   "maxAlive": 6,
+   "items": [
+    {
+     "item": "藍藥水",
+     "at": 8
+    }
+   ]
+  },
+  {
+   "stronghold": "main",
+   "captain": "武將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 3
+    },
+    {
+     "enemy": "槍兵",
+     "count": 3
+    },
+    {
+     "enemy": "弓兵",
+     "count": 2
+    },
+    {
+     "enemy": "策士",
+     "count": 1
+    }
+   ],
+   "interval": 0.9,
+   "maxAlive": 6,
+   "chest": {
+    "type": "寶箱",
+    "at": [
+     7,
+     2
+    ]
+   },
+   "items": [
+    {
+     "item": "黃藥水",
+     "at": 10
+    },
+    {
+     "item": "紅藥水",
+     "at": 20
+    }
+   ]
+  },
+  {
+   "boss": [
+    "敵將"
+   ],
+   "bossAt": "main",
+   "bossChest": "大寶箱",
+   "healPlayer": true,
+   "interval": 1,
+   "maxAlive": 6,
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 15
+    },
+    {
+     "item": "藍藥水",
+     "at": 30
+    },
+    {
+     "item": "紅藥水",
+     "at": 45
+    }
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "roundTree",
+   "at": [
+    -21,
+    14
+   ],
+   "scale": 1.2
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    -17,
+    15.5
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    21,
+    14.5
+   ],
+   "scale": 1.1
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    17.5,
+    15.6
+   ],
+   "scale": 0.9
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    -8,
+    15.8
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    9,
+    15.4
+   ],
+   "scale": 1.15
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    -21.5,
+    -15
+   ],
+   "scale": 1.3
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    -17.5,
+    -15.8
+   ]
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    21.5,
+    -15
+   ],
+   "scale": 1.2
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    17.5,
+    -16
+   ]
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    -7,
+    -16
+   ],
+   "scale": 1.1
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    7,
+    -16.2
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    -22,
+    0.5
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    22,
+    0.5
+   ],
+   "scale": 1.1
+  },
+  {
+   "type": "bush",
+   "at": [
+    -10,
+    11
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    10.5,
+    10.6
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -4,
+    14.5
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    4.6,
+    14
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -20,
+    11
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    20,
+    10.5
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -9,
+    -6
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    9,
+    -6.5
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    -5.5,
+    2
+   ],
+   "scale": 1.1
+  },
+  {
+   "type": "rock",
+   "at": [
+    6,
+    -1.5
+   ],
+   "rot": 60
+  },
+  {
+   "type": "rock",
+   "at": [
+    -12,
+    13
+   ],
+   "scale": 0.9
+  },
+  {
+   "type": "rock",
+   "at": [
+    13,
+    12.5
+   ],
+   "rot": 140
+  },
+  {
+   "type": "crate",
+   "at": [
+    -11,
+    1.5
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    11,
+    1.5
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    -4.5,
+    -7.5
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    4.5,
+    -7.5
+   ]
+  },
+  {
+   "type": "warDrum",
+   "at": [
+    -7.5,
+    -11
+   ]
+  },
+  {
+   "type": "warDrum",
+   "at": [
+    7.5,
+    -11
+   ]
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    -16,
+    3.5
+   ],
+   "rot": 90
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    16,
+    3.5
+   ],
+   "rot": -90
+  }
+ ]
+}
