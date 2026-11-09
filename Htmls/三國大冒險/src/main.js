@@ -378,10 +378,12 @@ class Game {
 
   factionColor(f) { return this.factions.factions[f]?.color ?? '#8a8f98'; }
 
-  // 開戰：決定敵軍陣營（關卡的 enemyFactions 裡第一個不是玩家陣營的），據點插上敵軍的旗子
+  // 開戰：決定敵軍陣營，據點插上敵軍的旗子。關卡 enemyFactions 裡不是玩家陣營、而且有武將模型的隨機挑一個
+  // （2026-11-09 各陣營都有武將後改成隨機，否則選蜀吳晉群雄的敵人永遠都是魏）；都沒有就取第一個不是玩家陣營的
   setupFactions() {
-    const prefer = this.levelData.enemyFactions ?? this.factions.order;
-    this.enemyFaction = prefer.find((f) => f !== this.factionId && f !== '雜') ?? '雜';
+    const prefer = (this.levelData.enemyFactions ?? this.factions.order).filter((f) => f !== this.factionId && f !== '雜');
+    const withGenerals = prefer.filter((f) => this.playable.some((id) => this.characters[id].faction === f));
+    this.enemyFaction = withGenerals.length ? withGenerals[Math.floor(Math.random() * withGenerals.length)] : (prefer[0] ?? '雜');
     const ef = this.factions.factions[this.enemyFaction];
     for (const id of this.level.strongholds.keys()) this.level.setStronghold(id, { color: ef.color, text: ef.banner, attacking: false });
     this.captured = [];

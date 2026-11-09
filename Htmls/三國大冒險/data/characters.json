@@ -167,7 +167,7 @@
     "faction": "蜀",
     "base": "_武將",
     "desc": "老將神射，一箭一個",
-    "hp": 5,
+    "hp": 6,
     "moveSpeed": 5.2,
     "attackSpeed": 1.08,
     "lunge": false,
@@ -203,9 +203,9 @@
     "faction": "蜀",
     "base": "_武將",
     "desc": "羽扇放出風刃，穿過整排敵人",
-    "hp": 4,
+    "hp": 6,
     "moveSpeed": 5.2,
-    "attackSpeed": 0.8,
+    "attackSpeed": 0.9,
     "lunge": false,
     "bossDamage": 2,
     "invulnerableTime": 1,
@@ -322,6 +322,689 @@
       "stun": 1.2,
       "knockback": 30,
       "color": "#60a5fa"
+    }
+  },
+  "曹操": {
+    "model": "曹操",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "倚天劍劈斬，攻守平均",
+    "hp": 9,
+    "moveSpeed": 5.6,
+    "attackSpeed": 1.5,
+    "attackRange": 2.9,
+    "attackArcDegrees": 140,
+    "skill": {
+      "type": "shockwave",
+      "name": "霸氣",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#60a5fa"
+    }
+  },
+  "夏侯淵": {
+    "model": "夏侯淵",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "九節鞭甩打，打得最遠",
+    "hp": 7,
+    "moveSpeed": 6.2,
+    "attackSpeed": 1.4,
+    "attackRange": 3.8,
+    "attackArcDegrees": 100,
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#93c5fd"
+    }
+  },
+  "張遼": {
+    "model": "張遼",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "雙手持槍突刺，往前衝穿一排",
+    "hp": 9,
+    "moveSpeed": 6.2,
+    "attackSpeed": 1.1,
+    "attackHitTime": 0.27,
+    "attack": {
+      "type": "dash",
+      "clip": "Thrust",
+      "distance": 5.5,
+      "width": 1.7,
+      "speed": 23
+    },
+    "skill": {
+      "type": "stealth",
+      "name": "奇襲",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#93c5fd"
+    }
+  },
+  "張郃": {
+    "model": "張郃",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "雙鉤爪連斬，最快",
+    "hp": 7,
+    "moveSpeed": 6.8,
+    "attackSpeed": 2.6,
+    "attackRange": 2.2,
+    "attackArcDegrees": 110,
+    "slash": "cross",
+    "skill": {
+      "type": "stealth",
+      "name": "隱身",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#a5b4fc"
+    }
+  },
+  "徐晃": {
+    "model": "徐晃",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "大斧重砸，砸暈前方一片",
+    "hp": 12,
+    "moveSpeed": 4.8,
+    "attackSpeed": 1.05,
+    "attack": {
+      "type": "smash",
+      "clip": "Attack",
+      "ahead": 1.9,
+      "radius": 2.6,
+      "stun": 1.3,
+      "color": "#fb923c"
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "怒吼",
+      "cooldown": 15,
+      "radius": 6,
+      "stun": 1.5,
+      "knockback": 24,
+      "color": "#fb923c"
+    }
+  },
+  "曹丕": {
+    "model": "曹丕",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "雙頭劍旋風斬，打一整圈",
+    "hp": 10,
+    "moveSpeed": 5.8,
+    "attackSpeed": 1.45,
+    "attackHitTime": 0.45,
+    "attack": {
+      "type": "spin",
+      "clip": "Attack3",
+      "radius": 3
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#60a5fa"
+    }
+  },
+  "曹仁": {
+    "model": "曹仁",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "盾牌連枷，最耐打",
+    "hp": 14,
+    "moveSpeed": 4.6,
+    "attackSpeed": 1.4,
+    "attackRange": 2.5,
+    "attackArcDegrees": 150,
+    "skill": {
+      "type": "shockwave",
+      "name": "鐵壁",
+      "cooldown": 15,
+      "radius": 5.5,
+      "stun": 1.6,
+      "knockback": 22,
+      "color": "#cbd5e1"
+    }
+  },
+  "許褚": {
+    "model": "許褚",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "巨鎚重砸，範圍大又會震暈",
+    "hp": 13,
+    "moveSpeed": 4.6,
+    "attackSpeed": 1,
+    "attack": {
+      "type": "smash",
+      "clip": "Attack",
+      "ahead": 1.8,
+      "radius": 2.8,
+      "stun": 1.5,
+      "color": "#f59e0b"
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "怒吼",
+      "cooldown": 15,
+      "radius": 6,
+      "stun": 1.5,
+      "knockback": 24,
+      "color": "#f59e0b"
+    }
+  },
+  "郭嘉": {
+    "model": "郭嘉",
+    "role": "player",
+    "faction": "魏",
+    "base": "_武將",
+    "desc": "羽扇放出紫焰，碰到就爆炸",
+    "hp": 6,
+    "moveSpeed": 5.4,
+    "attackSpeed": 0.95,
+    "shot": {
+      "visual": "fireball",
+      "speed": 13,
+      "range": 10,
+      "width": 0.42,
+      "spread": 15,
+      "color": "#a78bfa",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "blast": 1.7
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "cast": {
+      "color": "#a78bfa",
+      "size": 1.3
+    }
+  },
+  "孫權": {
+    "model": "孫權",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "寶劍劈斬，攻守平均",
+    "hp": 9,
+    "moveSpeed": 5.6,
+    "attackSpeed": 1.5,
+    "attackRange": 2.9,
+    "attackArcDegrees": 140,
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#f87171"
+    }
+  },
+  "孫策": {
+    "model": "孫策",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "槍與旋磐連打，又快又猛",
+    "hp": 8,
+    "moveSpeed": 6.4,
+    "attackSpeed": 2.3,
+    "attackRange": 2.5,
+    "attackArcDegrees": 120,
+    "slash": "cross",
+    "skill": {
+      "type": "shockwave",
+      "name": "霸王",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#f87171"
+    }
+  },
+  "孫堅": {
+    "model": "孫堅",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "九環刀橫掃，範圍很大",
+    "hp": 10,
+    "moveSpeed": 5.2,
+    "attackSpeed": 1.3,
+    "attackRange": 3.1,
+    "attackArcDegrees": 165,
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#fca5a5"
+    }
+  },
+  "周瑜": {
+    "model": "周瑜",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "古錠刀劈斬，靈活迅速",
+    "hp": 8,
+    "moveSpeed": 5.9,
+    "attackSpeed": 1.7,
+    "attackRange": 2.8,
+    "attackArcDegrees": 130,
+    "skill": {
+      "type": "stealth",
+      "name": "火計",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#fb923c"
+    }
+  },
+  "甘寧": {
+    "model": "甘寧",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "雙刃旋風斬，打一整圈",
+    "hp": 11,
+    "moveSpeed": 6.2,
+    "attackSpeed": 1.45,
+    "attackHitTime": 0.45,
+    "attack": {
+      "type": "spin",
+      "clip": "Attack3",
+      "radius": 3.1
+    },
+    "skill": {
+      "type": "stealth",
+      "name": "錦帆",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#fca5a5"
+    }
+  },
+  "陸遜": {
+    "model": "陸遜",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "雙劍突進，往前衝一排",
+    "hp": 7,
+    "moveSpeed": 6.5,
+    "attackSpeed": 1.4,
+    "attackHitTime": 0.27,
+    "attack": {
+      "type": "dash",
+      "clip": "Thrust",
+      "distance": 4.2,
+      "width": 1.5,
+      "speed": 22
+    },
+    "skill": {
+      "type": "stealth",
+      "name": "隱身",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#fb923c"
+    }
+  },
+  "孫尚香": {
+    "model": "孫尚香",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "丟出旋轉的乾坤圈，穿過整排",
+    "hp": 5,
+    "moveSpeed": 6.2,
+    "attackSpeed": 1.3,
+    "shot": {
+      "visual": "arrow",
+      "speed": 20,
+      "range": 10,
+      "width": 0.45,
+      "spread": 15,
+      "color": "#fde68a",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "model": "孫尚香_乾坤圈",
+      "modelScale": 0.7,
+      "spin": 900,
+      "pierce": true
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "attackHitTime": 0.34
+  },
+  "黃蓋": {
+    "model": "黃蓋",
+    "role": "player",
+    "faction": "吳",
+    "base": "_武將",
+    "desc": "丟出爆彈，炸一大片",
+    "hp": 10,
+    "moveSpeed": 4.9,
+    "attackSpeed": 0.9,
+    "shot": {
+      "visual": "fireball",
+      "speed": 12,
+      "range": 9,
+      "width": 0.5,
+      "spread": 15,
+      "color": "#ff8a3d",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "blast": 2,
+      "model": "黃蓋_爆彈",
+      "modelScale": 0.6,
+      "spin": 360
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "attackHitTime": 0.34
+  },
+  "司馬懿": {
+    "model": "司馬懿",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "放出紫色風刃，穿過整排",
+    "hp": 5,
+    "moveSpeed": 5.2,
+    "attackSpeed": 0.8,
+    "shot": {
+      "visual": "wave",
+      "speed": 14,
+      "range": 11,
+      "width": 0.8,
+      "spread": 15,
+      "color": "#c084fc",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "pierce": true
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "cast": {
+      "color": "#c084fc",
+      "size": 1.3
+    }
+  },
+  "司馬師": {
+    "model": "司馬師",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "甩出旋轉的迅雷劍",
+    "hp": 6,
+    "moveSpeed": 6,
+    "attackSpeed": 1.5,
+    "shot": {
+      "visual": "arrow",
+      "speed": 24,
+      "range": 10,
+      "width": 0.4,
+      "spread": 15,
+      "color": "#e9d5ff",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "model": "司馬師_迅雷劍",
+      "modelScale": 0.75,
+      "spin": 720
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "attackHitTime": 0.26
+  },
+  "司馬昭": {
+    "model": "司馬昭",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "雙手大刀橫掃，又遠又寬",
+    "hp": 10,
+    "moveSpeed": 5,
+    "attackSpeed": 1.3,
+    "attackRange": 3.2,
+    "attackArcDegrees": 170,
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5.5,
+      "stun": 1.2,
+      "knockback": 30,
+      "color": "#a78bfa"
+    }
+  },
+  "鄧艾": {
+    "model": "鄧艾",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "螺旋槍突刺，往前衝一排",
+    "hp": 9,
+    "moveSpeed": 6,
+    "attackSpeed": 1.1,
+    "attackHitTime": 0.27,
+    "attack": {
+      "type": "dash",
+      "clip": "Thrust",
+      "distance": 5,
+      "width": 1.6,
+      "speed": 22
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#c4b5fd"
+    }
+  },
+  "鍾會": {
+    "model": "鍾會",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "飛翔劍連斬，又快又準",
+    "hp": 7,
+    "moveSpeed": 6.4,
+    "attackSpeed": 2.2,
+    "attackRange": 2.5,
+    "attackArcDegrees": 120,
+    "slash": "cross",
+    "skill": {
+      "type": "stealth",
+      "name": "隱身",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#c4b5fd"
+    }
+  },
+  "呂布": {
+    "model": "呂布",
+    "role": "player",
+    "faction": "他",
+    "base": "_武將",
+    "desc": "方天畫戟旋風斬，最強",
+    "hp": 13,
+    "moveSpeed": 5.6,
+    "attackSpeed": 1.2,
+    "attackHitTime": 0.45,
+    "attack": {
+      "type": "spin",
+      "clip": "Attack3",
+      "radius": 3.5
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "無雙",
+      "cooldown": 15,
+      "radius": 6.5,
+      "stun": 1.5,
+      "knockback": 32,
+      "color": "#facc15"
+    }
+  },
+  "張角": {
+    "model": "張角",
+    "role": "player",
+    "faction": "他",
+    "base": "_武將",
+    "desc": "九節杖放出雷火，爆炸燃燒",
+    "hp": 6,
+    "moveSpeed": 5,
+    "attackSpeed": 0.85,
+    "shot": {
+      "visual": "fireball",
+      "speed": 13,
+      "range": 10,
+      "width": 0.45,
+      "spread": 15,
+      "color": "#fde047",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "blast": 2,
+      "burn": {
+        "interval": 3,
+        "damage": 1,
+        "duration": 6
+      }
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "cast": {
+      "color": "#fde047",
+      "size": 1.4
+    }
+  },
+  "董卓": {
+    "model": "董卓",
+    "role": "player",
+    "faction": "他",
+    "base": "_武將",
+    "desc": "重砸地面，最耐打",
+    "hp": 14,
+    "moveSpeed": 4.4,
+    "attackSpeed": 1,
+    "attack": {
+      "type": "smash",
+      "clip": "Attack",
+      "ahead": 1.6,
+      "radius": 2.4,
+      "stun": 1.4,
+      "color": "#eab308"
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "震退",
+      "cooldown": 15,
+      "radius": 5.5,
+      "stun": 1.3,
+      "knockback": 26,
+      "color": "#eab308"
+    }
+  },
+  "袁紹": {
+    "model": "袁紹",
+    "role": "player",
+    "faction": "他",
+    "base": "_武將",
+    "desc": "統帥劍劈斬，攻守平均",
+    "hp": 9,
+    "moveSpeed": 5.4,
+    "attackSpeed": 1.5,
+    "attackRange": 2.9,
+    "attackArcDegrees": 150,
+    "skill": {
+      "type": "shockwave",
+      "name": "號令",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1,
+      "knockback": 28,
+      "color": "#fde047"
+    }
+  },
+  "貂蟬": {
+    "model": "貂蟬",
+    "role": "player",
+    "faction": "他",
+    "base": "_武將",
+    "desc": "連環快斬，跑得快",
+    "hp": 6,
+    "moveSpeed": 6.8,
+    "attackSpeed": 2.4,
+    "attackRange": 2.4,
+    "attackArcDegrees": 120,
+    "slash": "cross",
+    "skill": {
+      "type": "stealth",
+      "name": "閉月",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#f9a8d4"
     }
   },
   "刀兵": {
