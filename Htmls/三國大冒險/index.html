@@ -64,15 +64,21 @@
 <div id="shop" hidden>
   <div id="shopHead">
     <h1>商店</h1>
-    <div id="shopTabs"></div>
+    <div id="shopWho"></div>
     <div id="shopWallet"><i></i><span id="shopCoins">0</span></div>
   </div>
   <div id="shopList"></div>
   <div id="shopFoot">
     <button id="shopBack">離開商店</button>
-    <small>↑↓ 選商品　←→ 換角色　Enter 購買　Esc 離開</small>
+    <small>↑↓ 選商品　←→ 換武將　Q／E 換陣營　Enter 購買　Esc 離開</small>
     <button id="shopReset">重置進度</button>
   </div>
+</div>
+
+<!-- 商店的武將選單：放在畫面下方，先選陣營再選武將（2026-11-09，37 位武將擠在上方一排太小） -->
+<div id="shopRoster" hidden>
+  <div id="shopFactions"></div>
+  <div id="shopChars"></div>
 </div>
 
 <script type="module" src="src/main.js"></script>

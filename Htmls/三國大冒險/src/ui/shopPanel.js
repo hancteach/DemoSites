@@ -26,16 +26,23 @@ export class ShopPanel {
     this.index = 0;
   }
 
-  open({ characters, selected, coins, getOffers, onBuy, onReset, onBack }) {
-    Object.assign(this, { characters, current: selected, getOffers, onBuy, onReset, onBack, index: 0 });
+  // factions：[{ id, name, color }]（三國：先選陣營再選武將，選單在畫面下方）；沒有就全部列在一起
+  open({ characters, factions = [], selected, coins, getOffers, onBuy, onReset, onBack }) {
+    Object.assign(this, { characters, factions, current: selected, getOffers, onBuy, onReset, onBack, index: 0 });
+    this.faction = characters.find((c) => c.id === selected)?.faction ?? factions[0]?.id;
     this.el.hidden = false;
+    $('shopRoster').hidden = false;
     $('shopBubble').hidden = false;
     this.setCoins(coins);
     this.keys = (e) => this.onKey(e);
     addEventListener('keydown', this.keys);
-    $('shopTabs').onclick = (e) => {
-      const tab = e.target.closest('.shopTab');
+    $('shopChars').onclick = (e) => {
+      const tab = e.target.closest('.shopChar');
       if (tab) this.switchTo(tab.dataset.id);
+    };
+    $('shopFactions').onclick = (e) => {
+      const tab = e.target.closest('.shopFaction');
+      if (tab) this.switchFaction(tab.dataset.id);
     };
     $('shopList').onclick = (e) => {
       const row = e.target.closest('.offer');
@@ -51,6 +58,7 @@ export class ShopPanel {
 
   close() {
     this.el.hidden = true;
+    $('shopRoster').hidden = true;
     $('shopBubble').hidden = true;
     clearTimeout(this.resetTimer);
     if (this.keys) removeEventListener('keydown', this.keys);
@@ -76,6 +84,17 @@ export class ShopPanel {
     this.render();
   }
 
+  // 這個陣營的武將（沒有陣營資料時是全部）
+  get roster() { return this.factions.length ? this.characters.filter((c) => c.faction === this.faction) : this.characters; }
+
+  // 換陣營：選那個陣營的第一位武將
+  switchFaction(id) {
+    if (id === this.faction) return;
+    this.faction = id;
+    const first = this.roster[0];
+    if (first) this.switchTo(first.id); else this.render();
+  }
+
   switchTo(id) {
     this.current = id;
     this.index = 0;
@@ -90,8 +109,14 @@ export class ShopPanel {
 
   onKey(e) {
     if (e.repeat) return;
-    const ids = this.characters.map((c) => c.id);
+    const ids = this.roster.map((c) => c.id);
     const tab = { ArrowLeft: -1, KeyA: -1, ArrowRight: 1, KeyD: 1 }[e.code];
+    const fstep = { KeyQ: -1, KeyE: 1 }[e.code];
+    if (fstep && this.factions.length > 1) {
+      const fs = this.factions.map((f) => f.id);
+      this.switchFaction(fs[(fs.indexOf(this.faction) + fstep + fs.length) % fs.length]);
+      return;
+    }
     const row = { ArrowUp: -1, KeyW: -1, ArrowDown: 1, KeyS: 1 }[e.code];
     if (tab) this.switchTo(ids[(ids.indexOf(this.current) + tab + ids.length) % ids.length]);
     else if (row) {
@@ -108,7 +133,12 @@ export class ShopPanel {
 
   render() {
     this.offers = this.getOffers(this.current);
-    $('shopTabs').innerHTML = this.characters.map((c) => `<button class="shopTab${c.id === this.current ? ' selected' : ''}" data-id="${c.id}" tabindex="-1"><img src="${c.portrait}" alt=""><b>${c.name ?? c.id}</b></button>`).join('');
+    const who = this.characters.find((c) => c.id === this.current), wf = this.factions.find((f) => f.id === who?.faction);
+    $('shopWho').innerHTML = who ? `<img src="${who.portrait}" alt=""><b>${who.name ?? who.id}</b>${wf ? `<small style="background:${wf.color}">${wf.name}</small>` : ''}` : '';
+    $('shopFactions').hidden = this.factions.length < 2;
+    $('shopFactions').innerHTML = this.factions.map((f) => `<button class="shopFaction${f.id === this.faction ? ' selected' : ''}" data-id="${f.id}" tabindex="-1" style="--fc:${f.color}"><span class="dot" style="background:${f.color}"></span>${f.name}</button>`).join('');
+    $('shopChars').innerHTML = this.roster.map((c) => `<button class="shopChar${c.id === this.current ? ' selected' : ''}" data-id="${c.id}" tabindex="-1"><img src="${c.portrait}" alt=""><b>${c.name ?? c.id}</b></button>`).join('');
+    $('shopChars').querySelector('.selected')?.scrollIntoView({ block: 'nearest', inline: 'nearest' });
     const rows = Math.ceil(this.offers.length / 2);
     $('shopList').style.gridTemplateRows = `repeat(${rows}, auto)`;
     $('shopList').classList.toggle('dense', rows > 3); // 商品多時改緊湊，不要捲動

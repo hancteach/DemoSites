@@ -243,7 +243,9 @@ class Game {
     this.hud.showHud(false);
     const { lines } = this.shopConfig;
     this.shopPanel.open({
-      characters: this.playable.map((id) => ({ id, name: this.characters[id].name ?? id, portrait: this.portraits[id] })),
+      characters: this.playable.map((id) => ({ id, name: this.characters[id].name ?? id, portrait: this.portraits[id], faction: this.characters[id].faction })),
+      factions: this.factions.order.filter((f) => this.playable.some((id) => this.characters[id].faction === f))
+        .map((f) => ({ id: f, name: this.factions.factions[f].name, color: this.factions.factions[f].color })),
       selected: this.characterId,
       coins: this.coins.wallet.total,
       getOffers: (id) => this.shop.offers(id),

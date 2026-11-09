@@ -108,7 +108,25 @@ kbd { background: #2b3050; border-radius: 4px; padding: 1px 6px; margin: 0 1px; 
 #shop { position: fixed; top: 12px; left: 50%; transform: translateX(-50%); width: min(1060px, calc(100vw - 24px)); max-height: 62vh;
   display: flex; flex-direction: column; gap: 12px;
   background: var(--panel); border: 2px solid rgba(242, 193, 78, .5); border-radius: 20px; padding: 14px 20px; backdrop-filter: blur(4px); }
-#shop[hidden], #shopBubble[hidden] { display: none; }
+#shop[hidden], #shopBubble[hidden], #shopRoster[hidden] { display: none; }
+/* 三國：上方只放目前選的武將＋商品；武將選單在畫面下方（陣營頁籤＋該陣營的頭像） */
+#shop { max-height: calc(100vh - 210px); }
+#shopWho { flex: 1; display: flex; align-items: center; justify-content: center; gap: 10px; min-width: 0; }
+#shopWho img { width: 52px; height: 52px; object-fit: contain; }
+#shopWho b { font-size: clamp(20px, 2.4vw, 28px); white-space: nowrap; }
+#shopWho small { font-size: 14px; padding: 2px 10px; border-radius: 999px; color: #fff; white-space: nowrap; }
+#shopRoster { position: fixed; bottom: 10px; left: 50%; transform: translateX(-50%); width: min(1060px, calc(100vw - 24px));
+  display: flex; flex-direction: column; gap: 8px; background: var(--panel); border: 2px solid rgba(242, 193, 78, .5); border-radius: 18px; padding: 10px 14px; backdrop-filter: blur(4px); }
+#shopFactions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+.shopFaction { font: inherit; color: var(--ink); padding: 4px 14px; border-radius: 10px; cursor: pointer; background: rgba(255,255,255,.06); border: 2px solid rgba(255,255,255,.18); font-weight: 700; }
+.shopFaction .dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: -1px; }
+.shopFaction.selected { border-color: var(--fc); background: color-mix(in srgb, var(--fc) 26%, transparent); }
+#shopChars { display: flex; gap: 8px; justify-content: center; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+.shopChar { flex: 0 0 auto; width: 84px; font: inherit; color: var(--ink); display: flex; flex-direction: column; align-items: center; gap: 2px; padding: 4px; border-radius: 12px; cursor: pointer;
+  background: rgba(255,255,255,.06); border: 2px solid rgba(255,255,255,.14); }
+.shopChar img { width: 56px; height: 56px; object-fit: contain; }
+.shopChar b { font-size: 15px; white-space: nowrap; }
+.shopChar.selected { border-color: var(--gold); background: rgba(242, 193, 78, .16); }
 #shopHead { display: flex; align-items: center; gap: 16px; }
 #shopHead h1 { margin: 0; font-size: clamp(26px, 3vw, 36px); color: var(--gold); white-space: nowrap; }
 #shopWallet { display: flex; align-items: center; gap: 8px; font-size: clamp(22px, 2.6vw, 30px); font-weight: 800; color: #ffe08a; white-space: nowrap; }
@@ -142,7 +160,7 @@ kbd { background: #2b3050; border-radius: 4px; padding: 1px 6px; margin: 0 1px; 
 #shopReset { font-size: 14px !important; opacity: .75; }
 #shopReset.armed { opacity: 1; color: #ff9c8f; border-color: #ff9c8f; }
 /* 老闆的對話泡泡：在老闆右邊，尖角指向他 */
-#shopBubble { position: fixed; bottom: 21vh; left: calc(50% + clamp(90px, 11vw, 170px)); max-width: min(360px, 34vw); padding: 12px 20px; border-radius: 18px;
+#shopBubble { position: fixed; bottom: 190px; left: calc(50% + clamp(90px, 11vw, 170px)); max-width: min(360px, 34vw); padding: 12px 20px; border-radius: 18px;
   font-size: clamp(17px, 2vw, 22px); font-weight: 800; color: #2a1d05; background: #fff6df; box-shadow: 0 4px 14px rgba(0, 0, 0, .45); }
 #shop.dense { gap: 8px; padding-top: 10px; padding-bottom: 10px; max-height: 66vh; }
 #shopList.dense { gap: 6px 12px; }
@@ -241,7 +259,13 @@ body.touch .ability[data-key="K"], body.touch .ability[data-key="L"] { display: 
   .levelCard { padding: 4px 6px; }
   .levelCard b { font-size: 13px; }
   .levelCard small { font-size: 11px; }
-  #shop, #shop.dense { top: 6px; max-height: calc(100vh - 12px); padding: 8px 14px; gap: 6px; }
+  #shop, #shop.dense { top: 6px; max-height: calc(100vh - 150px); padding: 8px 14px; gap: 6px; }
+  #shopRoster { bottom: 6px; padding: 6px 10px; gap: 4px; }
+  .shopChar { width: 66px; padding: 2px; }
+  .shopChar img { width: 38px; height: 38px; }
+  .shopChar b { font-size: 12px; }
+  .shopFaction { padding: 2px 10px; font-size: 13px; }
+  #shopWho img { width: 36px; height: 36px; }
   .shopTab img { width: 30px; height: 30px; }
   #shopBubble { display: none; }
   #stick { width: 96px; height: 96px; margin: -48px 0 0 -48px; left: calc(env(safe-area-inset-left, 0px) + 80px); top: calc(100% - 80px); }
