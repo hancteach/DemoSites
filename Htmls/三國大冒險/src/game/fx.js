@@ -53,6 +53,9 @@ export class Fx {
     this.scene = scene;
     this.trauma = 0;
     this.offset = new THREE.Vector3();
+    // 地面高度（攻城關卡的城牆頂）：flame、burst、floatText… 的 y 都是「離地面多高」，這裡自動加上去。
+    // 已經是實際高度的（飛在空中的箭、石頭）用 flameRaw、burstRaw
+    this.lift = () => 0;
 
     // 粒子用一個 Points 全部共用，用完的放到畫面外
     this.particles = Array.from({ length: MAX_PARTICLES }, () => ({ life: 0, max: 1, vx: 0, vy: 0, vz: 0 }));
@@ -101,7 +104,9 @@ export class Fx {
   makeFlameSprite() { return new THREE.Sprite(this.flameMaterial); }
 
   // 火星：從身上往上飄
-  flame(x, y, z, count = 4) {
+  flame(x, y, z, count = 4) { this.flameRaw(x, y + this.lift(x, z), z, count); }
+
+  flameRaw(x, y, z, count = 4) {
     for (let n = 0; n < count; n++) {
       const i = this.cursor;
       this.cursor = (i + 1) % MAX_PARTICLES;
@@ -122,7 +127,7 @@ export class Fx {
     if (!this.textTextures.has(key)) this.textTextures.set(key, makeTextTexture(text, color));
     const material = new THREE.SpriteMaterial({ map: this.textTextures.get(key), transparent: true, depthTest: false, depthWrite: false });
     const sprite = new THREE.Sprite(material);
-    sprite.position.set(x + (Math.random() - 0.5) * 0.4, y, z);
+    sprite.position.set(x + (Math.random() - 0.5) * 0.4, y + this.lift(x, z), z);
     sprite.scale.set(1.3, 0.65, 1);
     sprite.renderOrder = 20;
     this.scene.add(sprite);
@@ -136,13 +141,15 @@ export class Fx {
     const material = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 1, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
     const mesh = new THREE.Mesh(this.bladeGeometry.get(key), material);
     const ahead = reach * 0.62;
-    mesh.position.set(position.x + Math.sin(yaw) * ahead, 0.95, position.z + Math.cos(yaw) * ahead);
+    mesh.position.set(position.x + Math.sin(yaw) * ahead, 0.95 + this.lift(position.x, position.z), position.z + Math.cos(yaw) * ahead);
     mesh.rotation.y = yaw + angle;
     this.scene.add(mesh);
     this.crossCuts.push({ mesh, life: CROSS_LIFE });
   }
 
-  burst(x, y, z, count, color, speed = 3.5) {
+  burst(x, y, z, count, color, speed = 3.5) { this.burstRaw(x, y + this.lift(x, z), z, count, color, speed); }
+
+  burstRaw(x, y, z, count, color, speed = 3.5) {
     const c = new THREE.Color(color);
     for (let n = 0; n < count; n++) {
       const i = this.cursor;
@@ -185,7 +192,7 @@ export class Fx {
     const slash = this.getSlash();
     slash.mesh.geometry = this.slashGeometry.get(key);
     slash.mesh.rotation.z = -Math.PI / 2 - arcRadians / 2; // 扇形中線對齊 pivot 的 +Z（騎士正前方）
-    slash.pivot.position.set(position.x, 0.9, position.z);
+    slash.pivot.position.set(position.x, 0.9 + this.lift(position.x, position.z), position.z);
     slash.pivot.rotation.y = yaw;
     slash.pivot.visible = true;
     slash.life = SLASH_LIFE;
@@ -194,7 +201,7 @@ export class Fx {
   blastRing(x, z, radius, color) {
     const material = new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending });
     const mesh = new THREE.Mesh(this.ringGeometry, material);
-    mesh.position.set(x, 0.12, z);
+    mesh.position.set(x, 0.12 + this.lift(x, z), z);
     mesh.scale.setScalar(radius);
     this.scene.add(mesh);
     this.rings.push({ mesh, radius, life: RING_LIFE });
@@ -211,7 +218,7 @@ export class Fx {
       this.positions[i * 3] += p.vx * dt;
       this.positions[i * 3 + 1] += p.vy * dt;
       this.positions[i * 3 + 2] += p.vz * dt;
-      if (p.life <= 0 || this.positions[i * 3 + 1] < 0.02) { p.life = 0; this.positions[i * 3 + 1] = -999; }
+      if (p.life <= 0 || this.positions[i * 3 + 1] < 0.02 + this.lift(this.positions[i * 3], this.positions[i * 3 + 2])) { p.life = 0; this.positions[i * 3 + 1] = -999; }
     }
     this.points.geometry.attributes.position.needsUpdate = true;
     this.points.geometry.attributes.color.needsUpdate = true;
@@ -235,10 +242,10 @@ export class Fx {
       const progress = Math.min(1, glow.time / glow.duration);
       glow.sprite.scale.setScalar(0.25 + glow.size * progress);
       glow.sprite.material.opacity = 0.35 + 0.65 * progress;
-      this.flame(...glow.sprite.getWorldPosition(new THREE.Vector3()).toArray(), 1);
+      this.flameRaw(...glow.sprite.getWorldPosition(new THREE.Vector3()).toArray(), 1);
       if (progress < 1) return true;
       const { x, y, z } = glow.sprite.getWorldPosition(new THREE.Vector3());
-      this.burst(x, y, z, 16, glow.color, 3.5);
+      this.burstRaw(x, y, z, 16, glow.color, 3.5);
       glow.sprite.removeFromParent();
       glow.sprite.material.dispose();
       return false;

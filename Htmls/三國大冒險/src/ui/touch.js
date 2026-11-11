@@ -18,6 +18,7 @@ const html = `
 <div id="tButtons">
   <button id="tPotion" class="tBtn small" hidden><b></b><span class="cd"></span></button>
   <button id="tSkill" class="tBtn small" hidden><b></b><span class="cd"></span></button>
+  <button id="tJump" class="tBtn small" hidden><b>跳</b></button>
   <button id="tAttack" class="tBtn big" aria-label="攻擊">${SWORDS}<b>攻擊</b></button>
 </div>`;
 
@@ -46,6 +47,7 @@ export class TouchControls {
     this.hold('tAttack', () => { input.attackHeld = true; input.attackBuffer = ATTACK_HOLD; }, () => { input.attackHeld = false; });
     this.hold('tSkill', () => { input.skillPressed = true; });
     this.hold('tPotion', () => { input.potionPressed = true; });
+    this.hold('tJump', () => { input.jumpPressed = true; });
     this.hold('tPause', () => this.onPause?.());
     // iOS Safari 會忽略 user-scalable=no，兩指縮放要另外擋
     for (const type of ['gesturestart', 'gesturechange']) document.addEventListener(type, (e) => e.preventDefault());
@@ -130,6 +132,9 @@ export class TouchControls {
     }
     if (this.mode && state === 'playing' && this.portrait.matches) this.onPause?.();
   }
+
+  // 這一關可以跳才顯示跳的按鈕
+  setJump(on) { this.el.querySelector('#tJump').hidden = !on; }
 
   // list 同 Hud.setAbilities：K＝技能、L＝攜帶藥水
   setAbilities(list) {

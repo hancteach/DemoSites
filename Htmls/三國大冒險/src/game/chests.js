@@ -51,10 +51,10 @@ export class Chests {
     const closed = this.makeVisual(false, type.size);
     const root = new THREE.Group();
     root.add(closed.scene);
-    root.position.set(x, 0, z);
+    root.position.set(x, game.groundY(x, z), z);
     root.rotation.y = Math.atan2(game.player.position.x - x, game.player.position.z - z); // 正面朝玩家
     game.scene.add(root);
-    const collider = { x, z, r: type.radius };
+    const collider = { x, z, r: type.radius, top: root.position.y > 0 };
     game.level.colliders.push(collider);
     const chest = { typeId, type, root, closed, collider, hits: 0, wobble: 0, opened: false, fade: 0, expiresAfterWave, radius: type.radius, position: root.position };
     this.list.push(chest);
@@ -113,7 +113,7 @@ export class Chests {
     if (type.potion) {
       // 藥水放在寶箱另一側，玩家要繞過去拿，不會一打開就自動撿走
       const away = Math.atan2(x - game.player.position.x, z - game.player.position.z);
-      const spot = new THREE.Vector3(x + Math.sin(away) * 1.6, 0, z + Math.cos(away) * 1.6);
+      const spot = new THREE.Vector3(x + Math.sin(away) * 1.6, chest.position.y, z + Math.cos(away) * 1.6);
       game.level.constrain(spot, 0.5);
       game.items.spawn(game.items.pickRandomId(), spot.x, spot.z);
     }

@@ -79,6 +79,7 @@ export class Clones {
       const k = Math.min(1, FOLLOW_SPEED * dt);
       clone.position.x += (player.position.x + rightX * side - clone.position.x) * k;
       clone.position.z += (player.position.z + rightZ * side - clone.position.z) * k;
+      clone.position.y = player.position.y;   // 跟著上下城牆
       level.constrain(clone.position, clone.radius);
       clone.root.rotation.y = yaw;
       if (player.currentName !== 'Attack') clone.play(player.currentName, { speed: player.current?.timeScale ?? 1 });

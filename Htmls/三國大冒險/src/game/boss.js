@@ -29,7 +29,8 @@ const SKILLS = {
       for (const { x, z } of boss.targets) {
         fx.blastRing(x, z, skill.radius, SLAM_COLOR);
         fx.burst(x, 0.3, z, 22, SLAM_COLOR, 5);
-        if (Math.hypot(player.position.x - x, player.position.z - z) <= skill.radius + player.radius) player.takeDamage(skill.damage);
+        const level = Math.abs(player.position.y - boss.game.groundY(x, z)) < 1.2;   // 圈在城牆頂、玩家在牆下就打不到
+        if (level && Math.hypot(player.position.x - x, player.position.z - z) <= skill.radius + player.radius) player.takeDamage(skill.damage);
       }
       fx.shake(0.5);
       sfx.blast();
@@ -77,7 +78,7 @@ const SKILLS = {
       boss.play('Attack', { once: true, fade: 0.06 });
       for (let i = 0; i < skill.count; i++) {
         const angle = Math.random() * Math.PI * 2, far = i === 0 ? 0 : skill.scatter * (0.4 + Math.random() * 0.6);
-        const spot = new THREE.Vector3(player.position.x + Math.cos(angle) * far, 0, player.position.z + Math.sin(angle) * far);
+        const spot = new THREE.Vector3(player.position.x + Math.cos(angle) * far, player.position.y, player.position.z + Math.sin(angle) * far);
         boss.game.level.constrain(spot, 0.5);
         boss.game.enemyShots.lob(boss, spot, skill.shot, i * (skill.gap ?? 0.25));
       }
@@ -101,7 +102,7 @@ const SKILLS = {
       const { fx, level } = boss.game;
       for (let i = 0; i < skill.count; i++) {
         const angle = (i / skill.count) * Math.PI * 2;
-        const spot = new THREE.Vector3(boss.position.x + Math.cos(angle) * SUMMON_SPREAD, 0, boss.position.z + Math.sin(angle) * SUMMON_SPREAD);
+        const spot = new THREE.Vector3(boss.position.x + Math.cos(angle) * SUMMON_SPREAD, boss.position.y, boss.position.z + Math.sin(angle) * SUMMON_SPREAD);
         level.constrain(spot, 0.6);
         boss.game.spawnEnemy(skill.enemy, spot.x, spot.z);
         fx.burst(spot.x, 0.3, spot.z, 14, 0xb48cff, 3);
@@ -219,7 +220,7 @@ export class Boss extends Enemy {
     this.position.z += this.chargeZ * step;
     this.charged += step;
     const dist = Math.hypot(player.position.x - this.position.x, player.position.z - this.position.z);
-    if (!this.chargeHit && dist <= this.radius + player.radius + CHARGE_HIT_MARGIN) {
+    if (!this.chargeHit && dist <= this.radius + player.radius + CHARGE_HIT_MARGIN && this.sameLevel(player)) {
       this.chargeHit = true;
       player.takeDamage(skill.damage);
     }

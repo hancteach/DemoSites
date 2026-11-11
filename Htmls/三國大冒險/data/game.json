@@ -4,7 +4,9 @@
   "faction": "蜀",
   "player": "關羽",
   "levels": [
-    "level01"
+    "level01",
+    "level02",
+    "level03"
   ],
   "rise": false
 }

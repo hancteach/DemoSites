@@ -15,6 +15,7 @@ export class Hud {
   }
 
   setWave(number, total, remaining) { $('waveInfo').textContent = `第 ${number} / ${total} 波　剩下 ${remaining} 隻`; }
+  setWaveText(text) { $('waveInfo').textContent = text; }
   setScore(score) { $('score').textContent = `分數 ${score}`; }
 
   setCoins(total) {
@@ -92,94 +93,189 @@ export class Hud {
     this.overlay.hidden = true;
   }
 
-  // 角色清單。characters：[{ id, portrait, hp, moveSpeed, desc }]；換選時呼叫 onPick(id)
-  showCharacterList({ factions = [], selectedFaction, onPickFaction, characters, selected, levels, selectedLevel, onPick, onPickLevel, onConfirm, onBack, onShop }) {
-    this.showOverlay({
-      title: '選擇陣營與武將',
-      text: document.body.classList.contains('touch') ? '點一下選陣營、武將和關卡，再按「出發」。' : 'Q／E 換陣營，←→ 選武將，↑↓ 選關卡，按 Enter 出發。',
-      button: '出發',
-      onClick: onConfirm,
-      second: '返回',
-      onSecond: onBack,
-      third: '商店',
-      onThird: onShop,
-    });
-    // 陣營頁籤：選了一個陣營，其他陣營都是敵軍。還沒有武將模型的陣營看得到但選不了
-    const fbox = $('factionList');
-    const fopen = factions.filter((f) => f.count).map((f) => f.id);
-    const sel = factions.find((f) => f.id === selectedFaction);
-    fbox.innerHTML = factions.map((f) => `<button class="faction${f.id === selectedFaction ? ' selected' : ''}${f.count ? '' : ' empty'}" data-id="${f.id}" tabindex="-1" style="--fc:${f.color}">
-      <b><span class="dot" style="background:${f.color}"></span>${f.name}</b><small>${f.count ? `${f.count} 位武將` : '武將準備中'}</small></button>`).join('')
-      + (sel ? `<div class="factionNote">${sel.desc}。其他陣營都是敵軍。</div>` : '');
-    fbox.hidden = !factions.length;
-    const pickFaction = (id) => { if (id !== selectedFaction && fopen.includes(id)) onPickFaction?.(id); };
-    fbox.onclick = (e) => { const b = e.target.closest('.faction'); if (b) pickFaction(b.dataset.id); };
-    const list = $('characterList');
-    const ids = characters.map((c) => c.id);
+  // 選將畫面（2026-11-11 改版）：左邊陣營印章（「全」＝全部）、中間橫向卡片（滑鼠拖曳有慣性、手指滑動、滾輪、←→）、
+  // 下面是選中武將的資料、關卡與按鈕。
+  // factions：[{ id, name, seal, color, count }]；characters：[{ id, name, faction, art, hp, moveSpeed, desc, style }]
+  // filter：一開始顯示哪個陣營（'全' 或陣營 id）；onPick(id)：選了武將（可能換陣營）；onFilter(id)：換了陣營頁籤
+  showCharacterList({ factions = [], filter = '全', onFilter, characters, selected, levels, selectedLevel, onPick, onPickLevel, onConfirm, onBack, onShop }) {
+    this.closeCharacterList();
+    this.overlay.hidden = true;
+    const root = $('generalSelect');
+    root.hidden = false;
+    document.body.classList.add('selectingGeneral');
+    const touch = document.body.classList.contains('touch');
+    $('gsHint').textContent = touch ? '左右滑動挑武將，點一下選擇，再按「出發」'
+      : '拖曳或滾輪瀏覽　Q／E 換陣營　←→ 選武將　↑↓ 選關卡　Enter 出發';
+    const facs = factions.filter((f) => f.count);
+    const tabs = [{ id: '全', name: '全部', seal: '全', color: '#c9a04e', count: characters.length }, ...facs];
+    const byId = Object.fromEntries(characters.map((c) => [c.id, c]));
+    const facOf = Object.fromEntries(factions.map((f) => [f.id, f]));
     let current = selected;
-    list.innerHTML = characters.map((c) => `<button class="char" data-id="${c.id}" tabindex="-1">
-      <img src="${c.portrait}" alt=""><b>${c.name ?? c.id}</b><small>${c.desc}</small><small>❤️ ${c.hp}　速度 ${c.moveSpeed}</small></button>`).join('');
-    const mark = () => {
-      for (const el of list.children) el.classList.toggle('selected', el.dataset.id === current);
+    let view = tabs.some((t) => t.id === filter) ? filter : '全';
+    let shown = [];
+    const track = $('gsTrack');
+
+    const renderTabs = () => {
+      $('gsFactions').innerHTML = tabs.map((t) => `<button class="gsSeal${t.id === view ? ' on' : ''}" data-id="${t.id}" tabindex="-1" style="--fc:${t.color}" title="${t.name}（${t.count}）">
+        <span>${t.seal}</span>${t.name !== t.seal ? `<small>${t.name}</small>` : ''}</button>`).join('');
     };
-    const pick = (id) => {
+    const card = (c) => {
+      const f = facOf[c.faction] ?? {};
+      return `<button class="gsCard${c.id === current ? ' on' : ''}" data-id="${c.id}" tabindex="-1" style="--fc:${f.color ?? '#888'}">
+        <span class="gsArt"><img src="${c.art}" alt="" draggable="false"></span>
+        <span class="gsTag">${f.seal ?? ''}</span>
+        <span class="gsStyle">${c.style}</span>
+        <b class="gsName">${c.name}</b>
+        <span class="gsStats">❤️ ${c.hp}　🏃 ${c.moveSpeed}</span>
+      </button>`;
+    };
+    const centerOn = (id, smooth = true) => {
+      const el = [...track.children].find((x) => x.dataset.id === id);
+      if (!el) return;
+      const target = el.offsetLeft + el.offsetWidth / 2 - track.clientWidth / 2;
+      track.scrollTo({ left: target, behavior: smooth ? 'smooth' : 'auto' });
+    };
+    const renderTrack = () => {
+      shown = characters.filter((c) => view === '全' || c.faction === view);
+      track.innerHTML = shown.map(card).join('');
+      track.scrollLeft = 0;
+      requestAnimationFrame(() => centerOn(current, false));
+    };
+    const renderInfo = () => {
+      const c = byId[current];
+      if (!c) { $('gsInfo').innerHTML = ''; return; }
+      const f = facOf[c.faction] ?? {};
+      $('gsInfo').innerHTML = `<div class="gsInfoHead"><b>${c.name}</b><span class="gsFac" style="--fc:${f.color}">${f.name ?? ''}</span>
+        <span class="gsStyle">${c.style}</span></div><p>${c.desc}</p><span class="gsStats">❤️ 生命 ${c.hp}　🏃 速度 ${c.moveSpeed}</span>`;
+    };
+    const mark = () => {
+      for (const el of track.children) el.classList.toggle('on', el.dataset.id === current);
+      renderInfo();
+    };
+    const pick = (id, smooth = true) => {
+      if (!byId[id]) return;
+      centerOn(id, smooth);
       if (id === current) return;
       current = id;
       mark();
       onPick(id);
     };
-    list.onclick = (e) => {
-      const card = e.target.closest('.char');
-      if (card) pick(card.dataset.id);
+    const setView = (id) => {
+      if (id === view || !tabs.some((t) => t.id === id)) return;
+      view = id;
+      onFilter?.(id);
+      renderTabs();
+      // 換到別的陣營時選中那個陣營的第一位；「全部」維持目前的武將
+      if (view !== '全' && byId[current]?.faction !== view) {
+        const first = characters.find((c) => c.faction === view);
+        if (first) { current = first.id; onPick(first.id); }
+      }
+      renderTrack();
+      mark();
     };
-    // 關卡列：鎖住的看得到但選不了
-    const levelBox = $('levelList');
+
+    // 拖曳：滑鼠按住拖、放開有慣性；拖超過 6 像素就不算點選。手指用瀏覽器原生的橫向捲動
+    const drag = { on: false, moved: 0, x: 0, left: 0, raf: 0, hist: [] };
+    const stopGlide = () => { cancelAnimationFrame(drag.raf); drag.raf = 0; };
+    track.onpointerdown = (e) => {
+      if (e.pointerType !== 'mouse' || e.button !== 0) return;
+      stopGlide();
+      Object.assign(drag, { on: true, moved: 0, x: e.clientX, left: track.scrollLeft, hist: [[performance.now(), track.scrollLeft]] });
+    };
+    this.gsMove = (e) => {
+      if (!drag.on) return;
+      const dx = e.clientX - drag.x;
+      track.scrollLeft = drag.left - dx;
+      drag.hist.push([performance.now(), track.scrollLeft]);
+      if (drag.hist.length > 12) drag.hist.shift();
+      drag.moved = Math.max(drag.moved, Math.abs(dx));
+      if (drag.moved > 6) track.classList.add('dragging');   // 真的在拖才關掉卡片的點擊（只是點一下不能關）
+    };
+    this.gsUp = () => {
+      if (!drag.on) return;
+      drag.on = false;
+      track.classList.remove('dragging');
+      // 放開時的速度：最後一次移動在 120 毫秒內才算「甩出去」（停住再放開就不滑），
+      // 速度用最後一次移動之前 150 毫秒內的位置算
+      const now = performance.now();
+      const last = drag.hist[drag.hist.length - 1];
+      let v = 0;
+      if (last && now - last[0] < 120) {
+        const first = drag.hist.find(([t]) => last[0] - t < 150) ?? last;
+        if (last[0] > first[0]) v = ((last[1] - first[1]) / (last[0] - first[0])) * 16;   // 每格（約 16 毫秒）移動的像素
+      }
+      const glide = () => {
+        if (Math.abs(v) < 0.4) { drag.raf = 0; return; }
+        track.scrollLeft += v;
+        v *= 0.93;
+        drag.raf = requestAnimationFrame(glide);
+      };
+      if (drag.moved > 6 && Math.abs(v) > 1.5) drag.raf = requestAnimationFrame(glide);
+    };
+    addEventListener('pointermove', this.gsMove);
+    addEventListener('pointerup', this.gsUp);
+    track.onclick = (e) => {
+      if (drag.moved > 6) { drag.moved = 0; return; }   // 拖曳結束時的 click 不算選擇
+      const el = e.target.closest('.gsCard');
+      if (el) pick(el.dataset.id);
+    };
+    track.onwheel = (e) => {
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) { e.preventDefault(); stopGlide(); track.scrollLeft += e.deltaY; }
+    };
+    $('gsFactions').onclick = (e) => { const b = e.target.closest('.gsSeal'); if (b) setView(b.dataset.id); };
+
+    // 關卡：鎖住的看得到但選不了
+    const levelBox = $('gsLevels');
     const open = levels.filter((l) => !l.locked).map((l) => l.id);
     let currentLevel = selectedLevel;
-    levelBox.innerHTML = levels.map((l, i) => `<button class="levelCard${l.locked ? ' locked' : ''}" data-id="${l.id}" tabindex="-1">
-      <b>${l.locked ? '🔒 ' : l.cleared ? '⭐ ' : ''}第 ${i + 1} 關　${l.name}</b><small>${l.locked ? '打過前一關才開放' : l.desc}</small></button>`).join('');
-    const markLevel = () => {
-      for (const el of levelBox.children) el.classList.toggle('selected', el.dataset.id === currentLevel);
-    };
+    levelBox.innerHTML = levels.map((l, i) => `<button class="gsLevel${l.locked ? ' locked' : ''}" data-id="${l.id}" tabindex="-1" title="${l.locked ? '打過前一關才開放' : l.desc}">
+      <b>${l.locked ? '🔒 ' : l.cleared ? '⭐ ' : ''}第 ${i + 1} 關</b><small>${l.name}</small></button>`).join('');
+    const markLevel = () => { for (const el of levelBox.children) el.classList.toggle('on', el.dataset.id === currentLevel); };
     const pickLevel = (id) => {
       if (id === currentLevel || !open.includes(id)) return;
       currentLevel = id;
       markLevel();
       onPickLevel(id);
     };
-    levelBox.onclick = (e) => {
-      const card = e.target.closest('.levelCard');
-      if (card) pickLevel(card.dataset.id);
-    };
+    levelBox.onclick = (e) => { const b = e.target.closest('.gsLevel'); if (b) pickLevel(b.dataset.id); };
     markLevel();
-    levelBox.hidden = false;
+
+    $('gsBack').onclick = onBack;
+    $('gsShop').onclick = onShop;
+    $('gsGo').onclick = onConfirm;
     this.selectKeys = (e) => {
-      if (e.repeat) return;
       const step = { ArrowLeft: -1, KeyA: -1, ArrowRight: 1, KeyD: 1 }[e.code];
+      if (e.repeat && !step) return;
       const levelStep = { ArrowUp: -1, KeyW: -1, ArrowDown: 1, KeyS: 1 }[e.code];
-      const factionStep = { KeyQ: -1, KeyE: 1 }[e.code];
-      if (factionStep && fopen.length > 1) { pickFaction(fopen[(fopen.indexOf(selectedFaction) + factionStep + fopen.length) % fopen.length]); return; }
-      if (step) pick(ids[(ids.indexOf(current) + step + ids.length) % ids.length]);
-      else if (levelStep) pickLevel(open[(open.indexOf(currentLevel) + levelStep + open.length) % open.length]);
-      else if (e.code === 'Escape') onBack();
-      else if ((e.code === 'Enter' || e.code === 'Space') && ![$('overlaySecond'), $('overlayThird')].includes(document.activeElement)) {
+      const tabStep = { KeyQ: -1, KeyE: 1 }[e.code];
+      if (tabStep) { const ids = tabs.map((t) => t.id); setView(ids[(ids.indexOf(view) + tabStep + ids.length) % ids.length]); return; }
+      if (step) {
         e.preventDefault();
-        onConfirm();
+        const ids = shown.map((c) => c.id);
+        const i = ids.indexOf(current);
+        pick(ids[i < 0 ? 0 : (i + step + ids.length) % ids.length]);
+      } else if (levelStep && open.length) { e.preventDefault(); pickLevel(open[(open.indexOf(currentLevel) + levelStep + open.length) % open.length]); }
+      else if (e.code === 'Escape') onBack();
+      else if (e.code === 'Enter' || e.code === 'Space') {
+        e.preventDefault();
+        if (document.activeElement === $('gsShop')) onShop(); else onConfirm();
       }
     };
     addEventListener('keydown', this.selectKeys);
-    list.hidden = false;
-    list.parentElement.classList.add('selecting');
+    renderTabs();
+    renderTrack();
     mark();
+    $('gsGo').focus({ preventScroll: true });
   }
 
   closeCharacterList() {
-    const list = $('characterList');
-    list.hidden = true;
-    $('levelList').hidden = true;
-    $('factionList').hidden = true;
-    list.parentElement.classList.remove('selecting');
+    const root = $('generalSelect');
+    if (root) root.hidden = true;
+    document.body.classList.remove('selectingGeneral');
     if (this.selectKeys) removeEventListener('keydown', this.selectKeys);
-    this.selectKeys = null;
+    if (this.gsMove) removeEventListener('pointermove', this.gsMove);
+    if (this.gsUp) removeEventListener('pointerup', this.gsUp);
+    this.selectKeys = this.gsMove = this.gsUp = null;
   }
+
 }

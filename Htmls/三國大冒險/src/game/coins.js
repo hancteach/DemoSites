@@ -84,11 +84,12 @@ export class Coins {
     if (this.onField.length >= config.maxOnField) this.collect(this.onField.shift()); // 太多時最舊的直接入袋，不讓玩家吃虧
     const object = this.prefab(typeId).clone();
     const angle = Math.random() * Math.PI * 2;
-    object.position.set(x, 0.8, z);
+    const base = game.groundY(x, z);   // 城牆頂掉的金幣留在牆頂
+    object.position.set(x, base + 0.8, z);
     object.rotation.y = angle;
     game.scene.add(object);
     this.onField.push({
-      typeId, object, life: config.lifetime, attracted: false, landed: false,
+      typeId, object, base, life: config.lifetime, attracted: false, landed: false,
       vx: Math.cos(angle) * SCATTER_SPEED * Math.random(),
       vz: Math.sin(angle) * SCATTER_SPEED * Math.random(),
       vy: POP_SPEED,
@@ -124,7 +125,7 @@ export class Coins {
   moveToward(coin, dt) {
     const { position } = coin.object;
     const target = this.game.player.position;
-    const dx = target.x - position.x, dz = target.z - position.z, dy = 1 - position.y;
+    const dx = target.x - position.x, dz = target.z - position.z, dy = target.y + 1 - position.y;
     const dist = Math.hypot(dx, dy, dz) || 1;
     const step = Math.min(dist, ATTRACT_SPEED * dt);
     position.x += (dx / dist) * step;
@@ -139,8 +140,8 @@ export class Coins {
     position.z += coin.vz * dt;
     position.y += coin.vy * dt;
     coin.vy -= GRAVITY * dt;
-    if (position.y <= HOVER_HEIGHT) {
-      position.y = HOVER_HEIGHT;
+    if (position.y <= coin.base + HOVER_HEIGHT) {
+      position.y = coin.base + HOVER_HEIGHT;
       coin.landed = true;
       this.game.level.constrain(position, 0.4);
     }
@@ -155,7 +156,7 @@ export class Coins {
       coin.life -= dt;
       object.rotation.y += SPIN_SPEED * dt;
       const dist = Math.hypot(object.position.x - player.position.x, object.position.z - player.position.z);
-      if (coin.landed && dist <= pickupRadius + player.radius) coin.attracted = true;
+      if (coin.landed && dist <= pickupRadius + player.radius && Math.abs(player.position.y - coin.base) < 1.4) coin.attracted = true;
       if (coin.attracted) {
         object.visible = true;
         if (!this.moveToward(coin, dt)) return true;
@@ -164,7 +165,7 @@ export class Coins {
         return false;
       }
       if (!coin.landed) this.fall(coin, dt);
-      else object.position.y = HOVER_HEIGHT + Math.sin(time * 3 + coin.phase) * 0.06;
+      else object.position.y = coin.base + HOVER_HEIGHT + Math.sin(time * 3 + coin.phase) * 0.06;
       object.visible = coin.life > BLINK_TIME || Math.floor(coin.life * 7) % 2 === 0;
       if (coin.life > 0) return true;
       game.scene.remove(object);

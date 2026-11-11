@@ -31,6 +31,25 @@
 <div id="banner"></div>
 <div id="flash"></div>
 
+<!-- 選將畫面（2026-11-11）：左邊陣營、中間可拖曳滑動的武將卡片、下面是選中武將的資料與關卡 -->
+<div id="generalSelect" hidden>
+  <header class="gsHead">
+    <button id="gsBack" class="gsBack" tabindex="-1" aria-label="返回">‹</button>
+    <h1>選擇武將</h1>
+    <p id="gsHint"></p>
+  </header>
+  <nav id="gsFactions"></nav>
+  <div id="gsTrack"></div>
+  <footer class="gsFoot">
+    <div id="gsInfo"></div>
+    <div id="gsLevels"></div>
+    <div class="gsButtons">
+      <button id="gsShop" tabindex="-1">商店</button>
+      <button id="gsGo">出發</button>
+    </div>
+  </footer>
+</div>
+
 <div id="overlay">
   <div class="panel">
     <h1 id="overlayTitle">三國大冒險</h1>
@@ -49,6 +68,7 @@
       <span><kbd>空白鍵</kbd> 或滑鼠左鍵 攻擊</span>
       <span><kbd>K</kbd> 或滑鼠右鍵 特殊技能</span>
       <span><kbd>L</kbd> 喝攜帶的藥水</span>
+      <span><kbd>I</kbd> 或 <kbd>Shift</kbd> 跳（大亂鬥）</span>
       <span><kbd>P</kbd> 暫停</span>
     </div>
     <div id="touchHelp">

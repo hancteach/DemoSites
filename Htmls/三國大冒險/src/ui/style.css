@@ -218,6 +218,8 @@ body.touch .ability[data-key="K"], body.touch .ability[data-key="L"] { display: 
 .tBtn.active { box-shadow: 0 0 16px var(--c); }
 #tSkill { right: 122px; bottom: 6px; }
 #tPotion { right: 22px; bottom: 122px; }
+#tJump { right: 118px; bottom: 96px; --c: #7dd3fc; background: rgba(125, 211, 252, .22); }
+#tJump b { font-size: 22px; }
 #tPause { position: absolute; top: 92px; right: calc(env(safe-area-inset-right, 0px) + 18px); width: 50px; height: 50px; border-radius: 12px; pointer-events: auto;
   font-size: 24px; background: rgba(16, 20, 38, .6); border: 2px solid rgba(255, 255, 255, .4); }
 
@@ -276,5 +278,104 @@ body.touch .ability[data-key="K"], body.touch .ability[data-key="L"] { display: 
   .tBtn.small b { font-size: 13px; }
   #tSkill { right: 104px; bottom: 4px; }
   #tPotion { right: 18px; bottom: 104px; }
+  #tJump { right: 100px; bottom: 82px; }
   #tPause { top: 68px; right: calc(env(safe-area-inset-right, 0px) + 12px); width: 42px; height: 42px; font-size: 20px; }
+}
+
+/* ===== 選將畫面（2026-11-11）：陣營印章＋可拖曳滑動的武將卡片 ===== */
+#generalSelect { position: fixed; inset: 0; z-index: 20; display: grid; grid-template-columns: 104px 1fr; grid-template-rows: auto minmax(0, 1fr) auto;
+  background: radial-gradient(ellipse at 60% 40%, rgba(70, 46, 22, .88), rgba(14, 10, 8, .96) 70%), #0e0a08; user-select: none; }
+#generalSelect[hidden] { display: none; }
+.gsHead { grid-column: 1 / -1; display: flex; align-items: center; gap: 14px; padding: 12px 18px 6px;
+  border-bottom: 1px solid rgba(201, 160, 78, .35); background: linear-gradient(90deg, rgba(0, 0, 0, .5), transparent 70%); }
+.gsHead h1 { margin: 0; font-size: 30px; letter-spacing: 6px; color: #f6e2b0; text-shadow: 0 2px 6px #000; }
+.gsHead p { margin: 0 0 0 auto; font-size: 14px; opacity: .75; }
+.gsBack { font: inherit; font-size: 34px; line-height: 1; width: 48px; height: 44px; border-radius: 10px; cursor: pointer;
+  color: #f2c14e; background: rgba(0, 0, 0, .35); border: 1px solid rgba(201, 160, 78, .5); }
+.gsBack:hover { background: rgba(242, 193, 78, .18); }
+
+#gsFactions { grid-row: 2; display: flex; flex-direction: column; align-items: center; gap: 10px; padding: 14px 0; overflow-y: auto; scrollbar-width: none; }
+.gsSeal { font: inherit; color: var(--ink); background: none; border: 0; padding: 0; cursor: pointer; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.gsSeal span { width: 62px; height: 62px; border-radius: 50%; display: grid; place-items: center; font-size: 28px; font-weight: 900;
+  color: #cfc6b4; background: radial-gradient(circle at 40% 35%, #3a3430, #1b1714); border: 3px double rgba(201, 160, 78, .55);
+  box-shadow: inset 0 0 10px #000; transition: transform .15s, box-shadow .15s; }
+.gsSeal small { font-size: 12px; opacity: .75; }
+.gsSeal:hover span { transform: scale(1.06); }
+.gsSeal.on span { color: #fff; background: radial-gradient(circle at 40% 35%, var(--fc), #1b1714 95%); border-color: #f6e2b0;
+  box-shadow: 0 0 0 2px rgba(246, 226, 176, .5), 0 0 18px var(--fc); transform: scale(1.1); }
+.gsSeal.on small { opacity: 1; color: #f6e2b0; font-weight: 700; }
+
+#gsTrack { grid-row: 2; display: flex; align-items: center; gap: 18px; padding: 22px 26px 14px; overflow-x: auto; overflow-y: hidden;
+  cursor: grab; scrollbar-width: thin; scrollbar-color: rgba(201, 160, 78, .6) transparent; overscroll-behavior-x: contain; }
+#gsTrack.dragging { cursor: grabbing; }
+#gsTrack.dragging .gsCard { pointer-events: none; }
+.gsCard { flex: none; position: relative; height: min(100%, 440px); aspect-ratio: 0.68; padding: 0; overflow: hidden; cursor: pointer;
+  font: inherit; color: var(--ink); border-radius: 14px; border: 2px solid rgba(201, 160, 78, .45); background: #1a130c;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .55); transition: transform .18s, box-shadow .18s, border-color .18s; }
+.gsCard::before { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 30%, var(--fc), transparent 72%); opacity: .55; }
+.gsCard::after { content: ""; position: absolute; inset: 6px; border-radius: 9px; border: 1px solid rgba(246, 226, 176, .22); pointer-events: none; }
+.gsArt { position: absolute; left: 0; right: 0; top: 0; bottom: 22%; }
+.gsArt img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 0; display: block; -webkit-user-drag: none; }
+.gsArt::after { content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 40%; background: linear-gradient(transparent, #1a130c); }
+.gsTag { position: absolute; z-index: 1; top: 10px; left: 10px; width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center;
+  font-size: 18px; font-weight: 900; color: #fff; background: var(--fc); border: 2px solid #f6e2b0; box-shadow: 0 2px 6px #000; }
+.gsCard .gsStyle { position: absolute; z-index: 1; top: 12px; right: 10px; }
+.gsStyle { font-size: 12px; padding: 2px 8px; border-radius: 999px; background: rgba(0, 0, 0, .55); border: 1px solid rgba(246, 226, 176, .45); color: #f6e2b0; white-space: nowrap; }
+.gsName { position: absolute; z-index: 1; left: 0; right: 0; bottom: 28px; text-align: center; font-size: 24px; letter-spacing: 2px; color: #fff3cf; text-shadow: 0 2px 6px #000; }
+.gsCard .gsStats { position: absolute; z-index: 1; left: 0; right: 0; bottom: 8px; text-align: center; font-size: 13px; opacity: .9; }
+.gsCard:hover { transform: translateY(-3px); border-color: rgba(246, 226, 176, .8); }
+.gsCard.on { border-color: #f2c14e; transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 0 0 3px rgba(242, 193, 78, .55), 0 0 28px rgba(242, 193, 78, .55), 0 12px 24px rgba(0, 0, 0, .6); }
+
+.gsFoot { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 1fr) auto auto; align-items: center; gap: 18px; padding: 10px 18px 14px;
+  border-top: 1px solid rgba(201, 160, 78, .35); background: linear-gradient(0deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .2)); }
+#gsInfo { min-width: 0; }
+.gsInfoHead { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+#gsInfo b { font-size: 24px; color: #fff3cf; }
+.gsFac { font-size: 13px; padding: 2px 10px; border-radius: 6px; background: var(--fc); color: #fff; font-weight: 700; }
+#gsInfo p { margin: 4px 0 2px; font-size: 15px; opacity: .9; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#gsInfo .gsStats { font-size: 14px; opacity: .85; }
+#gsLevels { display: flex; gap: 8px; }
+.gsLevel { font: inherit; color: var(--ink); text-align: left; padding: 6px 12px; border-radius: 10px; cursor: pointer; background: rgba(0, 0, 0, .35);
+  border: 2px solid rgba(201, 160, 78, .35); display: flex; flex-direction: column; }
+.gsLevel b { font-size: 14px; }
+.gsLevel small { font-size: 12px; opacity: .8; }
+.gsLevel.on { border-color: #f2c14e; background: rgba(242, 193, 78, .15); }
+.gsLevel.locked { opacity: .45; cursor: not-allowed; }
+.gsButtons { display: flex; gap: 10px; }
+#gsShop, #gsGo { font: inherit; font-weight: 800; border-radius: 12px; cursor: pointer; }
+#gsShop { font-size: 18px; padding: 10px 22px; color: #f2c14e; background: rgba(0, 0, 0, .35); border: 2px solid rgba(242, 193, 78, .7); }
+#gsGo { font-size: 22px; padding: 10px 40px; color: #2a1a05; border: 0; background: linear-gradient(180deg, #ffd978, #e0a531); box-shadow: 0 4px 0 #8a5a12, 0 6px 14px rgba(0, 0, 0, .5); }
+#gsShop:hover, #gsGo:hover { filter: brightness(1.12); }
+#gsGo:active { transform: translateY(2px); box-shadow: 0 2px 0 #8a5a12; }
+
+@media (max-width: 900px) {
+  .gsFoot { grid-template-columns: minmax(0, 1fr) auto; }
+  #gsLevels { grid-column: 1 / -1; grid-row: 2; }
+  .gsHead p { display: none; }
+}
+/* 手機橫放：矮畫面，全部縮小 */
+@media (max-height: 520px) {
+  #generalSelect { grid-template-columns: 66px 1fr; }
+  .gsHead { padding: 6px 12px 4px; }
+  .gsHead h1 { font-size: 20px; letter-spacing: 3px; }
+  .gsHead p { display: none; }
+  .gsBack { width: 38px; height: 32px; font-size: 26px; }
+  #gsFactions { gap: 4px; padding: 6px 0; justify-content: center; }
+  .gsSeal.on span { transform: scale(1.05); }
+  .gsSeal span { width: 38px; height: 38px; font-size: 18px; border-width: 2px; }
+  .gsSeal small { display: none; }
+  #gsTrack { gap: 12px; padding: 12px 14px 8px; }
+  .gsName { font-size: 18px; bottom: 22px; }
+  .gsCard .gsStats { font-size: 11px; bottom: 5px; }
+  .gsTag { width: 26px; height: 26px; font-size: 14px; top: 7px; left: 7px; }
+  .gsStyle { font-size: 10px; padding: 1px 6px; }
+  .gsFoot { grid-template-columns: minmax(0, 1fr) auto auto; gap: 10px; padding: 6px 12px 8px; }
+  #gsLevels { grid-column: auto; grid-row: auto; }
+  #gsInfo b { font-size: 18px; }
+  #gsInfo p { display: none; }
+  .gsLevel { padding: 4px 8px; }
+  .gsLevel small { display: none; }
+  #gsShop { font-size: 15px; padding: 6px 14px; }
+  #gsGo { font-size: 18px; padding: 6px 26px; }
 }

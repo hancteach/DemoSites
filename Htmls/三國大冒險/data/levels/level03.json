@@ -1,0 +1,86 @@
+{
+  "name": "武將大亂鬥",
+  "desc": "一個人對上敵軍陣營的全部武將，每回合上場 1～3 位；打到沒血或打下沙場都算贏。可以跳！",
+  "scene": "沙場",
+  "open": true,
+  "jump": true,
+  "enemyFactions": [
+    "魏",
+    "吳",
+    "晉",
+    "他",
+    "蜀"
+  ],
+  "arena": {
+    "halfWidth": 22,
+    "halfDepth": 20
+  },
+  "theme": {
+    "background": "#bcd4e6",
+    "fog": "#bcd4e6",
+    "fogNear": 36,
+    "fogFar": 80,
+    "hemiSky": "#e8f2ff",
+    "hemiGround": "#5a6b3a",
+    "hemiIntensity": 1.15,
+    "moon": "#fff1d6",
+    "moonIntensity": 2.2,
+    "outside": "#6d7f45",
+    "wall": {
+      "a": "#7a6248",
+      "b": "#66513b",
+      "gate": "#8a6d4c"
+    },
+    "ground": {
+      "base": "#7d8f4a",
+      "speck": [
+        0.9,
+        1.15,
+        0.6
+      ],
+      "stone": [
+        30,
+        18,
+        -4
+      ],
+      "stoneBase": 104,
+      "paths": [],
+      "plaza": 0
+    }
+  },
+  "camera": {
+    "limitX": 6,
+    "offset": [
+      0,
+      14,
+      12
+    ]
+  },
+  "playerStart": [
+    0,
+    4
+  ],
+  "spawnPoints": [],
+  "noItems": [
+    "紫藥水"
+  ],
+  "itemEvery": [
+    10,
+    16
+  ],
+  "brawl": {
+    "radius": 10.5,
+    "drop": 5,
+    "perRound": [
+      1,
+      3
+    ],
+    "hpScale": 0.75,
+    "speedScale": 0.55,
+    "cooldown": 2.2,
+    "fallDamage": 2,
+    "healPerRound": 2
+  },
+  "waves": [],
+  "props": []
+}

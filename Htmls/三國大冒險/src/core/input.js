@@ -8,6 +8,7 @@ const MOVE_KEYS = {
 const ATTACK_KEYS = ['Space', 'KeyJ'];
 const SKILL_KEYS = ['KeyK'];
 const POTION_KEYS = ['KeyL'];
+const JUMP_KEYS = ['KeyI', 'ShiftLeft', 'ShiftRight'];   // 跳（關卡有開放才有用，2026-11-11 大亂鬥）
 const ATTACK_BUFFER = 0.22; // 動作結束前稍早按也算數，手感才不會吃按鍵
 
 export class Input {
@@ -25,6 +26,7 @@ export class Input {
       if (ATTACK_KEYS.includes(e.code)) { this.attackBuffer = ATTACK_BUFFER; e.preventDefault(); }
       if (SKILL_KEYS.includes(e.code)) this.skillPressed = true;
       if (POTION_KEYS.includes(e.code)) this.potionPressed = true;
+      if (JUMP_KEYS.includes(e.code)) this.jumpPressed = true;
       if (e.code === 'KeyP' || e.code === 'Escape') this.onPause?.();
       if (e.code.startsWith('Arrow')) e.preventDefault();
     });
@@ -43,6 +45,13 @@ export class Input {
     this.attackHeld = false;
     this.skillPressed = false;
     this.potionPressed = false;
+    this.jumpPressed = false;
+  }
+
+  consumeJump() {
+    const pressed = this.jumpPressed;
+    this.jumpPressed = false;
+    return pressed;
   }
 
   consumeSkill() {

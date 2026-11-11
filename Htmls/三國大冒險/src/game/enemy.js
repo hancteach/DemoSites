@@ -77,7 +77,11 @@ export class Enemy extends Actor {
 
   get ability() { return this.def.ability; }
   // 在空中：近戰（揮砍、震退）、陷阱都打不到，只有箭和火球打得到
-  get airborne() { return this.position.y > AIRBORNE_AT; }
+  get airborne() { return this.position.y - this.floorY > AIRBORNE_AT; }
+  // 腳下的地面高度（攻城關卡的城牆頂是牆高，其他都是 0）
+  get floorY() { return this.game.groundY(this.position.x, this.position.z); }
+  // 和對方在同一層（一個在城牆頂、一個在地面就打不到彼此）
+  sameLevel(other) { return Math.abs(other.position.y - this.position.y) < 1.2; }
 
   // 受傷後才顯示。Sprite 永遠面向鏡頭，錨點調到左端，血量減少時才會往左縮
   makeHealthBar() {
@@ -137,7 +141,7 @@ export class Enemy extends Actor {
 
   warnCircle(x, z, radius, color) {
     const mesh = this.warnMesh(circleGeometry, color);
-    mesh.position.set(x, WARNING_HEIGHT, z);
+    mesh.position.set(x, WARNING_HEIGHT + this.game.groundY(x, z), z);
     mesh.scale.set(radius, 1, radius);
     mesh.userData.danger = { x, z, r: radius };
     return mesh;
@@ -147,7 +151,7 @@ export class Enemy extends Actor {
   warnLine(length, width, dirX = this.chargeX, dirZ = this.chargeZ) {
     const mesh = this.warnMesh(lineGeometry);
     const { x, z } = this.position;
-    mesh.position.set(x + dirX * length / 2, WARNING_HEIGHT, z + dirZ * length / 2);
+    mesh.position.set(x + dirX * length / 2, WARNING_HEIGHT + this.floorY, z + dirZ * length / 2);
     mesh.rotation.y = Math.atan2(dirX, dirZ);
     mesh.scale.set(width, 1, length);
     mesh.userData.danger = { line: { x, z, dx: dirX, dz: dirZ }, width: width / 2 };
@@ -198,13 +202,22 @@ export class Enemy extends Actor {
     const dz = player.position.z - this.position.z;
     const dist = Math.hypot(dx, dz);
     if (this.def.fly) { this.updateAir(dt, player, dx, dz, dist); return; }
+    const same = this.sameLevel(player);
+    // 攻城關卡的守軍：玩家靠近（sleep 公尺內、同一層）才開始行動，之前站崗
+    if (this.sleep) {
+      if (dist > this.sleep || (!same && !this.def.stationary)) { this.play('Idle'); return; }
+      this.sleep = 0;
+    }
     this.faceToward(dx, dz, dt, 8);
-    if (dist <= this.def.attackRange) {
+    if (same && dist <= this.def.attackRange) {
       if (this.cooldown <= 0) { this.startAttack(); return; }
       this.play('Idle');
       return;
     }
+    // 不在同一層（玩家在城牆下、自己在牆頂）：近戰兵不追，站在原地等
+    if (!same && !this.def.stationary) { this.play('Idle'); return; }
     if (this.ability && this.abilityTimer <= 0 && this.tryAbility(player, dx, dz, dist)) return;
+    if (this.def.stationary) { this.play('Idle'); return; }   // 城牆上的弓兵、投石兵：守在原地，只會射擊／投擲
     if (this.ability?.keep) { this.keepDistance(dt, dx, dz, dist); return; }
     let mx = dx / dist, mz = dz / dist;
     const around = this.game.level.steer?.(this.position, player.position);   // 營寨擋在中間就繞過去
@@ -293,7 +306,7 @@ export class Enemy extends Actor {
     this.position.z += this.chargeZ * step;
     this.charged += step;
     const dist = Math.hypot(player.position.x - this.position.x, player.position.z - this.position.z);
-    if (!this.dashHit && dist <= this.radius + player.radius + DASH_HIT_MARGIN) {
+    if (!this.dashHit && dist <= this.radius + player.radius + DASH_HIT_MARGIN && this.sameLevel(player)) {
       this.dashHit = true;
       player.takeDamage(a.damage);
     }
@@ -437,7 +450,7 @@ export class Enemy extends Actor {
       this.attackConnected = true;
       const reach = this.def.attackRange + 0.3;
       const dist = Math.hypot(player.position.x - this.position.x, player.position.z - this.position.z);
-      if (dist <= reach) player.takeDamage(this.def.attackDamage);
+      if (dist <= reach && this.sameLevel(player)) player.takeDamage(this.def.attackDamage);
     }
     if (this.timer >= this.clipLength('Attack')) this.setState('chase');
   }
@@ -458,7 +471,7 @@ export class Enemy extends Actor {
     const dx = this.position.x - fromX;
     const dz = this.position.z - fromZ;
     const len = Math.hypot(dx, dz) || 1;
-    this.position.y = 0;
+    this.position.y = this.floorY;
     this.knockX = (dx / len) * knockback;
     this.knockZ = (dz / len) * knockback;
     this.shoveStun = stun;
@@ -467,7 +480,8 @@ export class Enemy extends Actor {
   }
 
   update_dying(dt) {
-    if (this.position.y > 0) this.position.y = Math.max(0, this.position.y - 6 * dt); // 飛行的掉下來
+    const floor = this.floorY;
+    if (this.position.y > floor) this.position.y = Math.max(floor, this.position.y - 6 * dt); // 飛行的掉下來
     this.position.x += this.knockX * dt;
     this.position.z += this.knockZ * dt;
     this.knockX *= 0.9;

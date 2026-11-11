@@ -91,10 +91,27 @@ export class Projectiles {
     const mesh = this.createObject(spec, visual);
     const { side = 0, height = 0.9, ahead = 0 } = spec.muzzle ?? {};
     const forwardX = Math.sin(yaw), forwardZ = Math.cos(yaw);
-    mesh.position.set(position.x + forwardX * ahead + forwardZ * side, height, position.z + forwardZ * ahead - forwardX * side);
+    mesh.position.set(position.x + forwardX * ahead + forwardZ * side, (position.y ?? 0) + height, position.z + forwardZ * ahead - forwardX * side);
     mesh.rotation.y = yaw;
     this.game.scene.add(mesh);
-    this.list.push({ mesh, visual, spec, swing, dirX: Math.sin(yaw), dirZ: Math.cos(yaw), traveled: 0 });
+    this.list.push({ mesh, visual, spec, swing, dirX: Math.sin(yaw), dirZ: Math.cos(yaw), traveled: 0, vy: this.rise(position, yaw, spec, mesh.position.y) });
+  }
+
+  // 攻城關卡：瞄準方向上有不同高度的敵人（城牆上的弓兵、牆下的小兵）時，飛行道具往上／往下斜著飛過去。
+  // 回傳每秒垂直速度；沒有高台的關卡一律 0（水平飛）
+  rise(position, yaw, spec, startY) {
+    const { game } = this;
+    if (!game.level.platforms.length) return 0;
+    const fx = Math.sin(yaw), fz = Math.cos(yaw);
+    let best = null, bestDist = spec.range ?? 12;
+    for (const e of game.enemies) {
+      if (!e.canBeHit) continue;
+      const dx = e.position.x - position.x, dz = e.position.z - position.z, dist = Math.hypot(dx, dz);
+      if (dist < 0.5 || dist > bestDist || (dx * fx + dz * fz) / dist < 0.97) continue;   // 前方約 14 度內最近的
+      best = e; bestDist = dist;
+    }
+    if (!best || Math.abs(best.position.y - (position.y ?? 0)) < 0.5) return 0;
+    return ((best.position.y + 1 - startY) * spec.speed) / bestDist;
   }
 
   // 地上著火：敵人踩進去就燃燒，玩家不會被自己的火燒到
@@ -103,7 +120,7 @@ export class Projectiles {
     if (this.fires.length >= FIRE_MAX) this.removeFire(this.fires.shift());
     const material = new THREE.MeshBasicMaterial({ color: fire.color ?? '#ff7a1a', transparent: true, opacity: 0.38, depthWrite: false, blending: THREE.AdditiveBlending });
     const mesh = new THREE.Mesh(fireGeometry, material);
-    mesh.position.set(x, 0.04, z);
+    mesh.position.set(x, 0.04 + this.game.groundY(x, z), z);
     mesh.scale.setScalar(fire.radius);
     this.game.scene.add(mesh);
     this.fires.push({ mesh, x, z, fire, burn: spec.burn, life: fire.duration, flame: 0 });
@@ -127,7 +144,7 @@ export class Projectiles {
       }
       if (f.burn) {
         for (const enemy of game.enemies) {
-          if (!enemy.canBeHit || enemy.airborne) continue;
+          if (!enemy.canBeHit || enemy.airborne || Math.abs(enemy.position.y - f.mesh.position.y) > 1) continue;
           if (Math.hypot(enemy.position.x - f.x, enemy.position.z - f.z) <= f.fire.radius + enemy.radius * 0.5) enemy.ignite(f.burn);
         }
       }
@@ -154,11 +171,11 @@ export class Projectiles {
     const { game } = this;
     const { x, z } = shot.mesh.position;
     const { blast, color } = shot.spec;
-    for (const chest of game.chests.targets) {
-      if (Math.hypot(chest.position.x - x, chest.position.z - z) <= blast + chest.radius) game.chests.hit(chest, shot.swing);
+    for (const chest of game.breakables) {
+      if (Math.hypot(chest.position.x - x, chest.position.z - z) <= blast + chest.radius && this.near(shot, chest, 2)) game.hitBreakable(chest, shot.swing);
     }
     for (const enemy of game.enemies) {
-      if (shot.swing.has(enemy) || !enemy.canBeHit) continue;
+      if (shot.swing.has(enemy) || !enemy.canBeHit || !this.near(shot, enemy, 2.4)) continue;
       if (Math.hypot(enemy.position.x - x, enemy.position.z - z) > blast + enemy.radius) continue;
       shot.swing.add(enemy);
       const damage = game.playerDamage(enemy);
@@ -168,9 +185,15 @@ export class Projectiles {
       enemy.ignite(shot.spec.burn);
     }
     game.fx.blastRing(x, z, blast, color);
-    game.fx.burst(x, 0.8, z, 36, color, 5);
+    game.fx.burstRaw(x, shot.mesh.position.y, z, 36, color, 5);
     game.fx.shake(BLAST_SHAKE);
     game.sfx.blast();
+  }
+
+  // 高度差太多就打不到（地面的箭打不到城牆頂的人，除非是斜著飛上去的）。會飛的敵人不看高度，和以前一樣
+  near(shot, target, limit = 1.8) {
+    if (target.def?.fly) return true;
+    return Math.abs(target.position.y + 0.9 - shot.mesh.position.y) <= limit;
   }
 
   // 回傳 true 表示這發打完了
@@ -178,7 +201,7 @@ export class Projectiles {
     const { game } = this;
     const { mesh, spec, swing } = shot;
     for (const enemy of game.enemies) {
-      if (swing.has(enemy) || !enemy.canBeHit) continue;
+      if (swing.has(enemy) || !enemy.canBeHit || !this.near(shot, enemy)) continue;
       const dist = Math.hypot(enemy.position.x - mesh.position.x, enemy.position.z - mesh.position.z);
       if (dist > spec.width + enemy.radius) continue;
       if (spec.blast && !spec.pierce) return true; // 爆炸在 update 統一處理；會穿透的飛到底才炸
@@ -190,14 +213,15 @@ export class Projectiles {
       game.sfx.hit();
       if (!spec.pierce) return true;
     }
-    for (const chest of game.chests.targets) {
-      if (swing.has(chest)) continue;
+    for (const chest of game.breakables) {
+      if (swing.has(chest) || !this.near(shot, chest)) continue;
       if (Math.hypot(chest.position.x - mesh.position.x, chest.position.z - mesh.position.z) > spec.width + chest.radius) continue;
       if (spec.blast && !spec.pierce) return true;
-      game.chests.hit(chest, swing);
-      if (!spec.pierce) return true;
+      game.hitBreakable(chest, swing);
+      if (!spec.pierce || chest.solid) return true;   // 拒馬連穿透的風刃也擋得住
     }
-    return false;
+    // 攻城關卡：撞到城牆（比牆頂低超過一個垛口）就停
+    return game.level.heightAt(mesh.position.x, mesh.position.z) - 1 > mesh.position.y;
   }
 
   update(dt) {
@@ -209,9 +233,10 @@ export class Projectiles {
       if (spec.spin && mesh.children[0]) mesh.children[0].rotation.z += THREE.MathUtils.degToRad(spec.spin) * dt;
       mesh.position.x += shot.dirX * step;
       mesh.position.z += shot.dirZ * step;
+      mesh.position.y += shot.vy * dt;
       shot.traveled += step;
       if (visual.fades) mesh.material.opacity = 0.9 * Math.min(1, (spec.range - shot.traveled) / FADE_DISTANCE);
-      game.fx.burst(mesh.position.x, 0.9, mesh.position.z, visual.trail, spec.color, 0.8);
+      game.fx.burstRaw(mesh.position.x, mesh.position.y, mesh.position.z, visual.trail, spec.color, 0.8);
 
       const hit = this.collide(shot);
       if (!hit && shot.traveled < spec.range) return true;

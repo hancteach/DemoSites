@@ -10,7 +10,7 @@ export function pushAway(game, { radius, knockback, stun }, color) {
   game.fx.shake(0.5);
   game.sfx.blast();
   for (const enemy of game.enemies) {
-    if (!enemy.canBeHit) continue;
+    if (!enemy.canBeHit || (!enemy.def.fly && Math.abs(enemy.position.y - game.player.position.y) > 1.2)) continue;   // 不同層（城牆上下）推不到
     if (Math.hypot(enemy.position.x - x, enemy.position.z - z) > radius + enemy.radius) continue;
     enemy.shove(x, z, { knockback, stun });
   }

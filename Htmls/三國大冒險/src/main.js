@@ -18,9 +18,28 @@ import { Progress } from './game/progress.js';
 import { Projectiles } from './game/projectiles.js';
 import { Shop } from './game/shop.js';
 import { Skills, pushAway } from './game/skills.js';
+import { BrawlDirector } from './game/brawl.js';
+import { Rival } from './game/rival.js';
+import { SiegeDirector } from './game/siege.js';
 import { WaveDirector } from './game/waves.js';
 import { Hud } from './ui/hud.js';
 import { renderPortraits } from './ui/portraits.js';
+
+// 選將卡片的大頭照：assets/portraits/portraits.json（人物大頭照裁切工具輸出的清單）→ { 名稱: 圖片網址 }。沒有這個檔就用模型拍的頭像
+async function loadCardArt() {
+  try {
+    const list = await loadJson('assets/portraits/portraits.json');
+    return Object.fromEntries((list.items ?? []).map((it) => [it.name, `assets/portraits/${it.file.split('/').map(encodeURIComponent).join('/')}`]));
+  } catch {
+    return {};
+  }
+}
+
+// 卡片上的攻擊方式小標籤
+function attackStyle(def) {
+  if (def.shot) return '遠程';
+  return { dash: '突刺衝鋒', spin: '旋風斬', smash: '重砸' }[def.attack?.type] ?? (def.slash === 'cross' ? '十字斬' : '橫掃');
+}
 import { ShopPanel } from './ui/shopPanel.js';
 import { TouchControls } from './ui/touch.js';
 import { Level } from './world/level.js';
@@ -124,7 +143,8 @@ class Game {
 
     const bossIds = [...allWaves.flatMap((w) => w.boss ?? []), ...allWaves.map((w) => w.captain).filter(Boolean)];
     const summoned = bossIds.flatMap((id) => this.characters[id]?.boss?.skills.map((s) => s.enemy) ?? []).filter(Boolean);
-    const enemyIds = [...allWaves.flatMap((w) => (w.spawns ?? []).map((s) => s.enemy)), ...bossIds, ...summoned];
+    const defenders = allLevels.flatMap((l) => (l.siege?.defenders ?? []).map((d) => d.enemy));   // 攻城關卡開場就站好的守軍
+    const enemyIds = [...allWaves.flatMap((w) => (w.spawns ?? []).map((s) => s.enemy)), ...defenders, ...bossIds, ...summoned];
     // 分裂出來的小怪（史萊姆）也要先載入
     for (let i = 0; i < enemyIds.length; i++) {
       const def = this.characters[enemyIds[i]];
@@ -171,6 +191,8 @@ class Game {
     this.players = new Map();
     this.selectCharacter(this.settings.player);
     this.portraits = renderPortraits(this.assets, Object.fromEntries(this.playable.map((id) => [id, this.characters[id].model])));
+    this.cardArt = await loadCardArt();
+    this.selectFilter = '全';
     this.hud.setLegend(Object.values(this.itemConfig.items));
     this.showTitle();
     this.renderer.setAnimationLoop(() => this.frame());
@@ -183,6 +205,8 @@ class Game {
     this.levelId = id;
     this.levelData = this.levels[id];
     this.level = new Level(this, this.levelData);
+    this.fx.lift = (x, z) => this.level.heightAt(x, z);   // 特效畫在那個位置的地面上（城牆頂）
+    this.cameraOffset = this.levelData.camera?.offset ? new THREE.Vector3(...this.levelData.camera.offset) : CAMERA_OFFSET;
     this.hazards.load(this.levelData.hazards);
     const theme = { ...DEFAULT_THEME, ...this.levelData.theme };
     this.scene.background.set(theme.background);
@@ -195,7 +219,23 @@ class Game {
     this.moon.color.set(theme.moon);
     this.moon.intensity = theme.moonIntensity;
     const { halfWidth: W, halfDepth: D } = this.levelData.arena;
-    this.cameraBounds = { x: Math.max(0, W - CAMERA_INSET.x), zMin: Math.min(0, -(D - CAMERA_INSET.zMin)), zMax: Math.max(0, D - CAMERA_INSET.zMax) };
+    this.cameraBounds = { x: this.levelData.camera?.limitX ?? Math.max(0, W - CAMERA_INSET.x), zMin: Math.min(0, -(D - CAMERA_INSET.zMin)), zMax: Math.max(0, D - CAMERA_INSET.zMax) };
+  }
+
+  // 這個位置的地面高度（攻城關卡的城牆頂是牆高，其他都是 0）
+  groundY(x, z) { return this.level?.heightAt(x, z) ?? 0; }
+
+  // 打得壞的東西：寶箱，加上攻城關卡的拒馬、碎石。攻擊判定一律用這兩個，不直接找 chests
+  get breakables() { return this.waves?.targets ? [...this.chests.targets, ...this.waves.targets] : this.chests.targets; }
+  hitBreakable(target, swing) { return target.owner ? this.waves.hit(target, swing) : this.chests.hit(target, swing); }
+  nearestBreakable(position, range) {
+    let best = null, bestDist = range;
+    for (const t of this.breakables) {
+      if (Math.abs((t.position.y ?? 0) - position.y) > 1.2) continue;
+      const d = Math.hypot(t.position.x - position.x, t.position.z - position.z);
+      if (d < bestDist) { best = t; bestDist = d; }
+    }
+    return best;
   }
 
   // 每個角色只建一次，換角色時切換顯示
@@ -287,23 +327,24 @@ class Game {
     this.showPreview();
     this.hud.showHud(false);
     const { order, factions } = this.factions;
+    const playable = order.flatMap((f) => this.playable.filter((id) => this.characters[id].faction === f));
     this.hud.showCharacterList({
-      factions: order.filter((f) => factions[f].selectable !== false).map((f) => ({ id: f, name: factions[f].name, color: factions[f].color, desc: factions[f].desc,
+      factions: order.filter((f) => factions[f].selectable !== false).map((f) => ({ id: f, name: factions[f].name, seal: factions[f].banner ?? factions[f].name, color: factions[f].color,
         count: this.playable.filter((id) => this.characters[id].faction === f).length })),
-      selectedFaction: this.factionId,
-      onPickFaction: (f) => {
-        this.factionId = f;
-        const first = this.playable.find((id) => this.characters[id].faction === f);
-        if (first && this.characters[this.characterId].faction !== f) { this.selectCharacter(first); this.showPreview(); }
-        this.sfx.pickup();
-        this.showCharacterSelect();
-      },
-      characters: this.playable.filter((id) => this.characters[id].faction === this.factionId).map((id) => ({ id, name: this.characters[id].name ?? id, portrait: this.portraits[id], hp: this.characters[id].hp + this.shop.total('maxHp', id), moveSpeed: this.characters[id].moveSpeed, desc: this.characters[id].desc })),
+      filter: this.selectFilter,
+      onFilter: (f) => { this.selectFilter = f; this.sfx.pickup(); },
+      characters: playable.map((id) => {
+        const def = this.characters[id];
+        // 大頭照（assets/portraits，用人物大頭照裁切工具產生）；沒有的用模型拍的頭像
+        return { id, name: def.name ?? id, faction: def.faction, art: this.cardArt[def.model] ?? this.cardArt[id] ?? this.portraits[id],
+          hp: def.hp + this.shop.total('maxHp', id), moveSpeed: def.moveSpeed, desc: def.desc, style: attackStyle(def) };
+      }),
       selected: this.characterId,
-      levels: this.levelOrder.map((id) => ({ id, name: this.levels[id].name, desc: this.levels[id].desc ?? '', locked: !this.progress.isUnlocked(id), cleared: this.progress.isCleared(id) })),
+      levels: this.levelOrder.map((id) => ({ id, name: this.levels[id].name, desc: this.levels[id].desc ?? '', locked: !this.progress.isUnlocked(id) && !this.levels[id].open, cleared: this.progress.isCleared(id) })),
       selectedLevel: this.levelId,
       onPick: (id) => {
         this.selectCharacter(id);
+        this.factionId = this.characters[id].faction ?? this.factionId; // 選了別的陣營的武將＝換到那個陣營
         this.showPreview();
         this.sfx.pickup();
       },
@@ -318,7 +359,10 @@ class Game {
     });
   }
 
+
   clearField() {
+    this.waves?.dispose?.();   // 攻城關卡的拒馬、碎石
+    this.waves = null;
     for (const e of this.enemies) e.destroy();
     this.enemies = [];
     this.hud.hideBoss();
@@ -347,7 +391,9 @@ class Game {
     if (!this.enemyShotsReady) { this.enemyShots.prepare(this.enemyShotSpecs); this.enemyShotsReady = true; }
     this.clones.prepare(Object.values(this.itemConfig.items).find((i) => i.effect === 'clones')?.count ?? 0);
     this.setupFactions();
-    this.waves = new WaveDirector(this, this.levelData);
+    this.waves = this.levelData.brawl ? new BrawlDirector(this, this.levelData)
+      : this.levelData.siege ? new SiegeDirector(this, this.levelData) : new WaveDirector(this, this.levelData);
+    this.touch.setJump(Boolean(this.levelData.jump));
     this.state = 'playing';
     this.hud.hideOverlay();
     this.hud.showHud(true);
@@ -388,6 +434,7 @@ class Game {
     this.enemyFaction = withGenerals.length ? withGenerals[Math.floor(Math.random() * withGenerals.length)] : (prefer[0] ?? '雜');
     const ef = this.factions.factions[this.enemyFaction];
     for (const id of this.level.strongholds.keys()) this.level.setStronghold(id, { color: ef.color, text: ef.banner, attacking: false });
+    this.level.fortress?.setBanner(ef.color, ef.banner);   // 攻城關卡：城門上的帥旗
     this.captured = [];
   }
 
@@ -415,10 +462,38 @@ class Game {
     return key;
   }
 
+  // 大亂鬥：把玩家可選的武將變成對手（rival.js）。攻擊方式、招式照原本的設定，血量、速度依關卡的 brawl 調整
+  rivalDef(id) {
+    const key = `對手·${id}`;
+    const c = this.characters[id], b = this.levelData.brawl ?? {};
+    this.characters[key] = { ...c, id: key, name: c.name ?? id, role: 'enemy', rival: true,
+      hp: Math.max(3, Math.round(c.hp * (b.hpScale ?? 0.5))), moveSpeed: c.moveSpeed * (b.speedScale ?? 0.55),
+      attackCooldown: b.cooldown ?? 2.4, attackDamage: 1, stunTime: 0.38, score: 100, coinDrop: { type: '金幣', count: [3, 5] } };
+    return key;
+  }
+
+  // 落地重擊（跳起來按攻擊）：落地那一下把周圍的敵人震開，各扣 1
+  plungeImpact(player) {
+    const { x, z } = player.position, radius = 2.9, swing = new Set();
+    this.fx.blastRing(x, z, radius, '#7dd3fc');
+    this.fx.dust(x, 0.3, z, 26);
+    this.fx.shake(0.4);
+    this.sfx.blast();
+    for (const t of this.breakables) {
+      if (this.reach(player.position, t) && Math.hypot(t.position.x - x, t.position.z - z) <= radius + t.radius) this.hitBreakable(t, swing);
+    }
+    for (const e of this.enemies) {
+      if (!e.canBeHit || e.airborne || !this.reach(player.position, e)) continue;
+      if (Math.hypot(e.position.x - x, e.position.z - z) > radius + e.radius) continue;
+      if (!this.damageEnemy(e, this.playerDamage(e), x, z)) continue;
+      if (e.alive) e.shove(x, z, { knockback: 16, stun: 0.6 });
+    }
+  }
+
   // instant：不從地底爬出，直接出現（史萊姆分裂）
   spawnEnemy(id, x, z, { instant = false } = {}) {
     const def = this.characters[id];
-    const EnemyClass = def.boss ? Boss : Enemy;
+    const EnemyClass = def.rival ? Rival : def.boss ? Boss : Enemy;
     const enemy = new EnemyClass(this, def, this.assets.instantiate(def.model), x, z);
     // 敵軍陣營色的腳下圈，一眼看出誰是敵人、屬於哪一軍
     const ring = new THREE.Mesh(this.factionRingGeometry ??= new THREE.RingGeometry(0.62, 0.8, 28).rotateX(-Math.PI / 2),
@@ -427,7 +502,7 @@ class Game {
     ring.scale.setScalar(def.radius / 0.45);
     enemy.root.add(ring);
     if ((instant || this.settings.rise === false) && !def.fly) {   // 三國：士兵是衝出來的，不從地底爬出
-      enemy.position.y = 0;
+      enemy.position.y = this.groundY(x, z);
       enemy.setState('chase');
     }
     this.enemies.push(enemy);
@@ -439,7 +514,7 @@ class Game {
     const { into, count } = enemy.def.split;
     for (let i = 0; i < count; i++) {
       const angle = (i / count) * Math.PI * 2 + Math.random();
-      const spot = new THREE.Vector3(enemy.position.x + Math.cos(angle) * 0.9, 0, enemy.position.z + Math.sin(angle) * 0.9);
+      const spot = new THREE.Vector3(enemy.position.x + Math.cos(angle) * 0.9, enemy.position.y, enemy.position.z + Math.sin(angle) * 0.9);
       this.level.constrain(spot, 0.4);
       const child = this.spawnEnemy(into, spot.x, spot.z, { instant: true });
       child.knockX = Math.cos(angle) * 4;
@@ -458,12 +533,28 @@ class Game {
     let best = null, bestDist = range;
     const melee = !this.player.def.shot;
     for (const e of this.enemies) {
-      if (!e.canBeHit || (melee && e.airborne)) continue; // 近戰角色不要轉向打不到的飛龍
+      if (!e.canBeHit || (melee && (e.airborne || !this.reach(position, e)))) continue; // 近戰角色不要轉向打不到的飛龍、城牆另一層的人
+      if (!melee && !this.clearShot(position, e)) continue;   // 遠程角色不要瞄準被城牆擋住的人
       const d = Math.hypot(e.position.x - position.x, e.position.z - position.z);
       if (d < bestDist) { best = e; bestDist = d; }
     }
     return best;
   }
+
+  // 攻城關卡：從 position 射向不同高度的敵人，中間會不會被城牆擋住（沿路取 10 點，比牆頂低超過一個垛口就算擋住）
+  clearShot(position, target) {
+    const y0 = (position.y ?? 0) + 0.95, y1 = target.position.y + 1;
+    if (!this.level.platforms.length || Math.abs(target.position.y - (position.y ?? 0)) < 0.5) return true;
+    for (let i = 1; i < 10; i++) {
+      const t = i / 10, x = position.x + (target.position.x - position.x) * t, z = position.z + (target.position.z - position.z) * t;
+      if (this.level.heightAt(x, z) - 1 > y0 + (y1 - y0) * t) return false;
+    }
+    return true;
+  }
+
+  // 近戰打不打得到：要在同一層（一個在城牆頂、一個在牆下就打不到）
+  reach(position, target) { return Math.abs((target.position.y ?? 0) - (position.y ?? 0)) < 1.2; }
+
 
   // 一次攻擊裡（含分身、刀波）同一隻敵人只算一下，骷髏才維持「打兩下」
   resolvePlayerAttack() {
@@ -506,11 +597,11 @@ class Game {
     let hits = 0;
     for (const attacker of [player, ...this.clones.active]) {
       const { x, z } = attacker.position;
-      for (const chest of this.chests.targets) {
-        if (Math.hypot(chest.position.x - x, chest.position.z - z) <= half + chest.radius && this.chests.hit(chest, dash.swing)) hits += 1;
+      for (const chest of this.breakables) {
+        if (this.reach(attacker.position, chest) && Math.hypot(chest.position.x - x, chest.position.z - z) <= half + chest.radius && this.hitBreakable(chest, dash.swing)) hits += 1;
       }
       for (const e of this.enemies) {
-        if (dash.swing.has(e) || !e.canBeHit || e.airborne) continue;
+        if (dash.swing.has(e) || !e.canBeHit || e.airborne || !this.reach(attacker.position, e)) continue;
         if (Math.hypot(e.position.x - x, e.position.z - z) > half + e.radius) continue;
         dash.swing.add(e);
         const damage = this.playerDamage(e);
@@ -533,6 +624,7 @@ class Game {
     const cross = this.player.def.slash === 'cross';
     if (smash) {
       const center = attacker.position.clone().add(new THREE.Vector3(Math.sin(yaw) * attack.ahead, 0, Math.cos(yaw) * attack.ahead));
+      if (this.level.platforms.length) this.level.constrain(center, 0.1);   // 城牆邊：砸的圓心留在自己這一層
       this.fx.blastRing(center.x, center.z, range, attack.color ?? '#ffcf7a');
       this.fx.dust(center.x, 0.3, center.z, 22);
       this.fx.shake(0.3);
@@ -543,14 +635,15 @@ class Game {
     const fx = Math.sin(yaw), fz = Math.cos(yaw);
     const cosLimit = Math.cos(arc / 2);
     let hits = 0;
-    for (const chest of this.chests.targets) {
+    for (const chest of this.breakables) {
+      if (!this.reach(attacker.position, chest)) continue;
       const dx = chest.position.x - attacker.position.x, dz = chest.position.z - attacker.position.z;
       const dist = Math.hypot(dx, dz);
       if (dist > range + chest.radius || (dist > 0.6 && (dx * fx + dz * fz) / dist < cosLimit)) continue;
-      if (this.chests.hit(chest, swing)) hits += 1;
+      if (this.hitBreakable(chest, swing)) hits += 1;
     }
     for (const e of this.enemies) {
-      if (swing.has(e) || !e.canBeHit || e.airborne) continue; // 飛在空中砍不到
+      if (swing.has(e) || !e.canBeHit || e.airborne || !this.reach(attacker.position, e)) continue; // 飛在空中、在城牆另一層砍不到
       const dx = e.position.x - attacker.position.x;
       const dz = e.position.z - attacker.position.z;
       const dist = Math.hypot(dx, dz);
@@ -568,11 +661,11 @@ class Game {
 
   smashHits(center, radius, attack, swing) {
     let hits = 0;
-    for (const chest of this.chests.targets) {
-      if (Math.hypot(chest.position.x - center.x, chest.position.z - center.z) <= radius + chest.radius && this.chests.hit(chest, swing)) hits += 1;
+    for (const chest of this.breakables) {
+      if (this.reach(center, chest) && Math.hypot(chest.position.x - center.x, chest.position.z - center.z) <= radius + chest.radius && this.hitBreakable(chest, swing)) hits += 1;
     }
     for (const e of this.enemies) {
-      if (swing.has(e) || !e.canBeHit || e.airborne) continue;
+      if (swing.has(e) || !e.canBeHit || e.airborne || !this.reach(center, e)) continue;
       if (Math.hypot(e.position.x - center.x, e.position.z - center.z) > radius + e.radius) continue;
       swing.add(e);
       const damage = this.playerDamage(e);
@@ -770,7 +863,8 @@ class Game {
   onPlayerDead() {
     this.endRun();
     this.sfx.lose();
-    setTimeout(() => this.hud.showOverlay({ title: `${this.player.def.name ?? this.characterId}倒下了…`, text: `分數 ${this.score}，撐到第 ${this.waves.number} 波。${this.coinSummary()}`, ...this.endButtons() }), SHOW_END_DELAY * 1000);
+    const reached = this.levelData.brawl ? `，撐到第 ${this.waves.number} 回合` : this.levelData.siege ? '' : `，撐到第 ${this.waves.number} 波`;
+    setTimeout(() => this.hud.showOverlay({ title: `${this.player.def.name ?? this.characterId}倒下了…`, text: `分數 ${this.score}${reached}。${this.coinSummary()}`, ...this.endButtons() }), SHOW_END_DELAY * 1000);
   }
 
   onLevelCleared() {
@@ -781,7 +875,9 @@ class Game {
     this.progress.markCleared(this.levelId);
     const next = this.progress.next(this.levelId);
     const title = next ? '過關！' : '全部破關！';
-    const opening = next ? `${this.levelData.name}恢復和平了！下一關：${this.levels[next].name}。` : '你闖過了所有關卡，太厲害了！';
+    const done = this.levelData.brawl ? `${this.waves.factionName}軍 ${this.waves.count} 位武將全部擊敗（${this.waves.ringOuts} 位被打下沙場）！`
+      : this.levelData.siege ? `攻下${this.levelData.name}了！` : `${this.levelData.name}恢復和平了！`;
+    const opening = next ? `${done}下一關：${this.levels[next].name}。` : this.levelData.brawl ? done : '你闖過了所有關卡，太厲害了！';
     setTimeout(() => this.hud.showOverlay({ title, text: `${opening}分數 ${this.score}，剩下 ${this.player.hp} 顆心。${this.coinSummary()}`, ...this.endButtons(next) }), SHOW_END_DELAY * 1000);
   }
 
@@ -801,9 +897,11 @@ class Game {
     const { x: limitX, zMin, zMax } = this.cameraBounds;
     const tx = THREE.MathUtils.clamp(p.x, -limitX, limitX);
     const tz = THREE.MathUtils.clamp(p.z, zMin, zMax);
-    this.cameraTarget.lerp(new THREE.Vector3(tx, 0, tz), Math.min(1, dt * 6));
-    this.camera.position.copy(this.cameraTarget).add(CAMERA_OFFSET).add(this.fx.offset);
-    this.camera.lookAt(this.cameraTarget.x, CAMERA_LOOK_HEIGHT, this.cameraTarget.z);
+    // 高度：爬上城牆時鏡頭跟著升高；跳起來、掉下沙場時鏡頭不跟著晃
+    const ty = this.player.climb ? p.y : this.player.fallOut ? 0 : this.groundY(p.x, p.z);
+    this.cameraTarget.lerp(new THREE.Vector3(tx, ty, tz), Math.min(1, dt * 6));
+    this.camera.position.copy(this.cameraTarget).add(this.cameraOffset).add(this.fx.offset);
+    this.camera.lookAt(this.cameraTarget.x, this.cameraTarget.y + CAMERA_LOOK_HEIGHT, this.cameraTarget.z);
   }
 
   simulate(dt) {
@@ -823,15 +921,17 @@ class Game {
       if (this.state === 'playing') this.player.update(dt, this.input);
       for (const e of this.enemies) e.update(dt, this.player);
       this.separateEnemies();
-      for (const e of this.enemies) if (e.state !== 'rising') this.level.constrain(e.position, e.radius);
-      this.level.constrain(this.player.position, this.player.radius);
+      // 第三個參數：被打退、掉落中的人不受沙場邊緣限制（大亂鬥才有邊緣）
+      for (const e of this.enemies) if (e.state !== 'rising') this.level.constrain(e.position, e.radius, e.state === 'stunned' || e.state === 'dying' || e.state === 'fall');
+      if (!this.player.climb) this.level.constrain(this.player.position, this.player.radius, Boolean(this.player.push) || this.player.fallOut);   // 爬梯子時位置由梯子決定
       this.projectiles.update(dt);
       this.enemyShots.update(dt);
       this.clones.update(dt);
       for (const e of this.enemies) if (e.removed) e.destroy();
       this.enemies = this.enemies.filter((e) => !e.removed);
       for (const e of this.enemies) e.updateVisual(dt);
-      if (this.waves) this.hud.setWave(this.waves.number, this.waves.total, this.waves.remaining);
+      if (this.waves?.label) this.hud.setWaveText(this.waves.label);   // 攻城關卡：顯示目前的目標
+      else if (this.waves) this.hud.setWave(this.waves.number, this.waves.total, this.waves.remaining);
     }
     this.player.updateVisual(dt);
     this.level.update(dt);

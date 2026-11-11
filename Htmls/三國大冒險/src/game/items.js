@@ -75,20 +75,23 @@ export class Items {
   }
 
   scheduleTimed() {
-    const [min, max] = this.config.spawn.timedEvery;
+    const [min, max] = this.game.levelData?.itemEvery ?? this.config.spawn.timedEvery;   // 關卡可以自己訂多久出現一瓶
     this.nextTimed = min + Math.random() * (max - min);
   }
 
   buff(effect) { return this.buffs.get(effect)?.item ?? null; }
 
+  // 關卡 JSON 的 "noItems": ["紫藥水"] 可以讓某些藥水不出現（大亂鬥沒有火計清場）
   pickRandomId() {
-    const total = this.ids.reduce((sum, id) => sum + this.defs[id].weight, 0);
+    const banned = this.game.levelData?.noItems ?? [];
+    const ids = this.ids.filter((id) => !banned.includes(id));
+    const total = ids.reduce((sum, id) => sum + this.defs[id].weight, 0);
     let roll = Math.random() * total;
-    for (const id of this.ids) {
+    for (const id of ids) {
       roll -= this.defs[id].weight;
       if (roll <= 0) return id;
     }
-    return this.ids[0];
+    return ids[0];
   }
 
   createVisual(def) {
@@ -118,7 +121,7 @@ export class Items {
     const def = this.defs[id];
     if (!def) throw new Error(`data/items.json 沒有道具「${id}」`);
     const visual = this.createVisual(def);
-    visual.root.position.set(x, 0, z);
+    visual.root.position.set(x, this.game.groundY(x, z), z);
     this.game.scene.add(visual.root);
     const item = { id, def, ...visual, life: this.config.spawn.lifetime, phase: Math.random() * 6 };
     this.onField.push(item);
@@ -130,8 +133,12 @@ export class Items {
     const { level, player } = this.game;
     const { halfWidth, halfDepth } = level.arena;
     for (let i = 0; i < PLACE_TRIES; i++) {
-      const x = (Math.random() * 2 - 1) * (halfWidth - 2.5);
-      const z = (Math.random() * 2 - 1) * (halfDepth - 2.5);
+      let x = (Math.random() * 2 - 1) * (halfWidth - 2.5);
+      let z = (Math.random() * 2 - 1) * (halfDepth - 2.5);
+      if (level.ring) {   // 沙場：只放在台子上（離邊緣 2 公尺以上）
+        const a = Math.random() * Math.PI * 2, r = Math.sqrt(Math.random()) * (level.ring.radius - 2);
+        x = Math.cos(a) * r; z = Math.sin(a) * r;
+      }
       const blocked = level.colliders.some((c) => Math.hypot(x - c.x, z - c.z) < c.r + 0.9);
       if (!blocked && !this.game.hazards.blocks(x, z) && Math.hypot(x - player.position.x, z - player.position.z) > MIN_PLAYER_DISTANCE) return [x, z];
     }
