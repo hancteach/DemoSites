@@ -553,5 +553,29 @@
    ],
    "rot": -90
   }
+ ],
+ "hazards": [
+  {
+   "type": "poison",
+   "at": [
+    -8,
+    6.5
+   ],
+   "radius": 2.2,
+   "interval": 1.2,
+   "damage": 1,
+   "enemyDamage": 1
+  },
+  {
+   "type": "poison",
+   "at": [
+    8.5,
+    6
+   ],
+   "radius": 2.2,
+   "interval": 1.2,
+   "damage": 1,
+   "enemyDamage": 1
+  }
  ]
 }

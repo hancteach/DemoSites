@@ -23,6 +23,7 @@ import { Rival } from './game/rival.js';
 import { SiegeDirector } from './game/siege.js';
 import { WaveDirector } from './game/waves.js';
 import { Horse, mountActor, ensureRideClips } from './game/mount.js';
+import { ModelFx, FX_MODELS } from './game/modelfx.js';
 import { Hud } from './ui/hud.js';
 import { renderPortraits } from './ui/portraits.js';
 
@@ -91,6 +92,7 @@ class Game {
     this.sfx = new Sfx();
     this.hud = new Hud();
     this.fx = new Fx(this.scene);
+    this.modelFx = new ModelFx(this);   // 特效模型（素材庫 09_特效）
     this.enemies = [];
     this.state = 'loading';
     this.score = 0;
@@ -174,11 +176,13 @@ class Game {
     const enemyShotModels = this.enemyShotSpecs.map((s) => s.model).filter((id) => id && this.assets.catalog[id]);
     // 騎馬（2026-11-12）：關卡的 ride 馬、騎馬的敵人與敵將的馬；沒有騎乘動作的武將借「騎兵」的
     this.mounts = await loadJson('data/mounts.json');
+    // 2026-11-12 晚：ride.byGeneral＝依武將換馬（mounts.json 的 owners、factionHorse）；mount／bossMount 可以寫陣列（隨機一匹）
     const rideLevels = allLevels.filter((l) => l.ride);
-    const horseIds = [...rideLevels.map((l) => l.ride.horse), ...allWaves.map((w) => w.bossMount),
-      ...[...new Set(enemyIds)].map((id) => this.characters[id].mount)].filter(Boolean);
+    const byGeneral = rideLevels.some((l) => l.ride.byGeneral) ? [...Object.values(this.mounts.owners ?? {}), ...Object.values(this.mounts.factionHorse ?? {})] : [];
+    const horseIds = [...new Set([...rideLevels.map((l) => l.ride.horse), ...byGeneral, ...allWaves.flatMap((w) => [w.bossMount ?? []].flat()),
+      ...[...new Set(enemyIds)].flatMap((id) => [this.characters[id].mount ?? []].flat())])].filter((id) => id && this.assets.catalog[id]);
     const rideModels = horseIds.length ? [...horseIds, this.mounts.rideSource] : [];
-    const modelIds = [...rideModels, ...this.playable.map((id) => this.characters[id].model), ...shotModels, ...enemyShotModels, ...enemyIds.map((id) => this.characters[id].model), ...allLevels.flatMap((l) => Level.modelIds(l)), ...itemModels];
+    const modelIds = [...rideModels, ...this.playable.map((id) => this.characters[id].model), ...shotModels, ...enemyShotModels, ...enemyIds.map((id) => this.characters[id].model), ...allLevels.flatMap((l) => Level.modelIds(l)), ...itemModels, ...FX_MODELS.filter((id) => this.assets.catalog[id])];
     await this.assets.preload(modelIds, (done, total) => {
       this.hud.showOverlay({ text: `載入模型 ${done} / ${total}…` });
     });
@@ -383,6 +387,7 @@ class Game {
     this.items.reset();
     this.coins.reset();
     this.hazards.reset();
+    this.modelFx.clear();
     this.chests?.reset();
     this.projectiles.clear();
     this.enemyShots.clear();
@@ -399,7 +404,7 @@ class Game {
     this.revived = false;
     const [x, z] = this.levelData.playerStart;
     this.player.reset(x, z);
-    this.player.setupHorse(this.levelData.ride);   // 騎馬關：馬站在馬廄旁邊
+    this.player.setupHorse(this.rideFor(this.levelData.ride));   // 騎馬關：馬站在馬廄旁邊
     this.skills.reset();
     this.projectiles.prepare(this.player.def);
     this.shotCycle = 0; // 忍者每局第一發是苦無
@@ -505,12 +510,21 @@ class Game {
     }
   }
 
+  // 騎馬關的馬：ride.byGeneral 時依武將（owners）→ 陣營（factionHorse）→ ride.horse
+  rideFor(ride) {
+    if (!ride) return ride;
+    const id = this.characterId ?? this.settings.player, faction = this.characters[id]?.faction;
+    const pick = ride.byGeneral ? this.mounts.owners?.[id] ?? this.mounts.factionHorse?.[faction] : null;
+    return { ...ride, horse: pick && this.assets.loaded.has(pick) ? pick : ride.horse };
+  }
+
   // instant：不從地底爬出，直接出現（史萊姆分裂）
   spawnEnemy(id, x, z, { instant = false, mount } = {}) {
     const def = this.characters[id];
     const EnemyClass = def.rival ? Rival : def.boss ? Boss : Enemy;
     const enemy = new EnemyClass(this, def, this.assets.instantiate(def.model), x, z);
-    const horseId = mount ?? def.mount;   // 騎兵、騎馬的敵將：騎上馬（mount.js）
+    let horseId = mount ?? def.mount;   // 騎兵、騎馬的敵將：騎上馬（mount.js）；寫陣列就隨機一匹
+    if (Array.isArray(horseId)) horseId = horseId[Math.floor(Math.random() * horseId.length)];
     if (horseId && this.assets.loaded.has(horseId) && ensureRideClips(this, enemy)) {
       mountActor(enemy, new Horse(this, horseId, this.mounts[horseId]));
       enemy.radius = Math.max(enemy.radius, 0.9 * (def.scale ?? 1));
@@ -592,7 +606,7 @@ class Game {
       }
       hits += this.sweep(attacker, swing);
       // boosted 的 model 是藥水瓶，刀波不能用
-      if (boosted) this.projectiles.fire(attacker.position, yaw, { ...boosted, visual: 'wave', pierce: true, model: null, ...def.boost?.wave }, swing);
+      if (boosted) this.projectiles.fire(attacker.position, yaw, { ...boosted, visual: 'wave', pierce: true, ...this.waveLook(def), ...def.boost?.wave }, swing);
     }
     this.shotCycle = (this.shotCycle ?? 0) + 1;
     if (hits > 0) {
@@ -647,12 +661,14 @@ class Game {
       const center = attacker.position.clone().add(new THREE.Vector3(Math.sin(yaw) * attack.ahead, 0, Math.cos(yaw) * attack.ahead));
       if (this.level.platforms.length) this.level.constrain(center, 0.1);   // 城牆邊：砸的圓心留在自己這一層
       this.fx.blastRing(center.x, center.z, range, attack.color ?? '#ffcf7a');
+      this.modelFx.spawn('地裂岩石', center.x, center.z, { size: range * 1.9, life: 0.9, grow: [0.45, 1], fadeOut: 0.45 });
       this.fx.dust(center.x, 0.3, center.z, 22);
       this.fx.shake(0.3);
       return this.smashHits(center, range, attack, swing);
     }
     if (cross) this.crossSlash(attacker.position.clone(), yaw, range);
     else this.fx.slashAt(attacker.position, yaw, arc, range);
+    if (spin) this.modelFx.spawn('旋風暴風', 0, 0, { follow: attacker, size: range * 1.7, life: 0.6, spin: 2.2, grow: [0.6, 1.05], fadeOut: 0.3 });
     const fx = Math.sin(yaw), fz = Math.cos(yaw);
     const cosLimit = Math.cos(arc / 2);
     let hits = 0;
@@ -820,8 +836,19 @@ class Game {
   }
 
   // 紫藥水：場上敵人倒下；還沒出場的不算。Boss 只扣一部分血。清掉的不再掉道具，避免連鎖
+  // 劍氣斬（藍藥水）的刀波外觀：用刀、重兵器、旋風斬的武將是「刀氣」（立起來的紅色月牙），其他是「劍氣」（藍色長條）
+  waveLook(def) {
+    const blade = /刀|斧|錘|鎚|戟|耙|石柱/.test(def.desc ?? '') || ['smash', 'spin'].includes(def.attack?.type);
+    const id = blade ? '刀氣' : '劍氣';
+    if (!this.modelFx.has(id)) return { model: null };
+    return blade ? { model: id, modelScale: 3, modelGlow: 0.55, modelCenter: true } : { model: id, modelScale: 3.4, modelGlow: 0.5, modelCenter: true };
+  }
+
   clearAllEnemies(bossDamage = 0) {
     const { x, z } = this.player.position;
+    // 火計清場：每個敵人腳下、玩家四周燒起來
+    for (const enemy of this.enemies) if (enemy.alive) this.modelFx.spawn('烈焰燃燒', enemy.position.x, enemy.position.z, { size: 2.2, life: 1.3, grow: [0.3, 1.1], fadeOut: 0.5 });
+    for (let i = 0; i < 6; i++) { const a = (i / 6) * Math.PI * 2; this.modelFx.spawn('烈焰燃燒', x + Math.sin(a) * 3, z + Math.cos(a) * 3, { size: 2.6, life: 1.2, grow: [0.3, 1.1], fadeOut: 0.5 }); }
     for (const enemy of this.enemies) {
       const amount = enemy.def.boss ? bossDamage : enemy.hp;
       if (amount) this.damageEnemy(enemy, amount, x, z, { force: true, drops: false });
@@ -970,6 +997,7 @@ class Game {
       else if (this.waves) this.hud.setWave(this.waves.number, this.waves.total, this.waves.remaining);
     }
     this.player.updateVisual(dt);
+    this.modelFx.update(dt);
     this.level.update(dt);
   }
 

@@ -1,5 +1,7 @@
 // 環境陷阱：關卡 JSON 的 hazards 清單。玩家和敵人都會受傷，可以把怪物引過去。
 // 類型：spikes 地刺、fire 火柱（定時）、mine 地雷（踩到才引爆）、arrows 牆上的箭（定時直線）。
+// 2026-11-12 晚（用素材庫 09_特效 的模型）：lightning 落雷、arrowRain 箭雨（定時；roam 寫幾公尺＝每次落在玩家附近隨機一點）、
+//   poison 毒霧（一直在，站在裡面每 interval 秒扣血）、ice 寒冰（定時冒出冰晶，打到的人變慢 slow 秒）。
 // 每種都有預警，新類型在 TYPES 加一項：build 建外觀、update 每格更新、area 不放道具的範圍。
 import * as THREE from 'three';
 
@@ -33,17 +35,128 @@ function advance(h, dt) {
 }
 
 // 作用中踩在範圍內的算一下；同一次作用同一隻敵人只算一次（玩家有受傷無敵時間）。飛在空中的不算
-function strike(game, h, inside) {
+function strike(game, h, inside, withPlayer = true) {
   const { player } = game;
-  if (inside(player.position, player.radius * 0.5)) player.takeDamage(h.def.damage);
+  if (withPlayer && !player.air && inside(player.position, player.radius * 0.5)) player.takeDamage(h.def.damage);
   for (const enemy of game.enemies) {
     if (h.hit.has(enemy) || !enemy.canBeHit || enemy.airborne || !inside(enemy.position, enemy.radius * 0.5)) continue;
     h.hit.add(enemy);
-    game.hazardHit(enemy, h.def.enemyDamage ?? h.def.damage, h.def.at[0], h.def.at[1]);
+    const amount = h.def.enemyDamage ?? h.def.damage;
+    if (amount) game.hazardHit(enemy, amount, h.x ?? h.def.at[0], h.z ?? h.def.at[1]);
   }
 }
 
+// 地面的預警圓（落雷、箭雨、寒冰）
+function warnDisc(group, radius, color = WARN_COLOR) {
+  const mesh = new THREE.Mesh(new THREE.CircleGeometry(radius, 36).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0, depthWrite: false }));
+  mesh.position.y = LINE_HEIGHT;
+  mesh.visible = false;
+  group.add(mesh);
+  return mesh;
+}
+
+// 落雷、箭雨：每次預警前決定落點。roam：落在玩家附近（半徑 roam 內）隨機一點，不會出場外
+function pickSpot(h, game) {
+  if (!h.def.roam) { [h.x, h.z] = h.def.at; return; }
+  const p = game.player.position, a = Math.random() * Math.PI * 2, d = Math.random() * h.def.roam;
+  const { halfWidth: W, halfDepth: D } = game.level.arena;
+  h.x = THREE.MathUtils.clamp(p.x + Math.sin(a) * d, -W + 1.5, W - 1.5);
+  h.z = THREE.MathUtils.clamp(p.z + Math.cos(a) * d, -D + 1.5, D - 1.5);
+}
+
+// 從天而降（落雷、箭雨）：預警圓閃 → 模型掉下來 → 範圍內算一下
+function skyStrike(model, decal) {
+  return {
+    area: (h) => (h.def.roam ? 0 : h.def.radius),
+    danger: (h) => (h.phase === 'idle' ? null : { x: h.x, z: h.z, r: h.def.radius }),
+    build(h, group) {
+      h.disc = warnDisc(group, h.def.radius);
+      [h.x, h.z] = h.def.at ?? [0, 0];
+    },
+    update(h, dt, game, time) {
+      const before = h.phase;
+      advance(h, dt);
+      if (h.phase === 'warn' && before === 'idle') pickSpot(h, game);
+      const y = game.fx.lift(h.x, h.z);
+      h.disc.position.set(h.x, y + LINE_HEIGHT, h.z);
+      h.disc.visible = h.phase === 'warn';
+      if (h.disc.visible) h.disc.material.opacity = 0.18 + 0.3 * ((h.clock % 0.3) / 0.3);
+      if (h.started && h.phase === 'up') {
+        const r = h.def.radius;
+        game.modelFx.spawn(model, h.x, h.z, { size: r * 2.3, life: 0.9, fall: 5, grow: [0.9, 1], fadeOut: 0.35 });
+        if (decal) game.modelFx.spawn(decal, h.x, h.z, { size: r * 2.2, y: 0.06, life: 0.8, grow: [0.6, 1.05], fadeOut: 0.4 });
+        game.fx.shake(0.25);
+        if (model === '落雷') { game.sfx.blast(); game.hud.flashScreen?.('#fde68a'); } else game.sfx.swing();
+      }
+      if (h.phase === 'up') strike(game, h, (p, r) => Math.hypot(p.x - h.x, p.z - h.z) <= h.def.radius + r);
+    },
+  };
+}
+
 const TYPES = {
+  lightning: skyStrike('落雷', '閃電雷擊'),
+  arrowRain: skyStrike('戰場箭雨', null),
+
+  // 毒霧：一直在場上，站在裡面每 interval 秒扣一下（敵人也會）
+  poison: {
+    area: (h) => h.def.radius,
+    danger: (h) => ({ x: h.def.at[0], z: h.def.at[1], r: h.def.radius }),
+    build(h, group) {
+      const { radius, at: [x, z] } = h.def;
+      const pool = new THREE.Mesh(new THREE.CircleGeometry(radius, 36).rotateX(-Math.PI / 2), new THREE.MeshBasicMaterial({ color: 0x7c3aed, transparent: true, opacity: 0.22, depthWrite: false }));
+      pool.position.set(x, LINE_HEIGHT, z);
+      group.add(pool);
+      h.ticks = new Map();
+    },
+    reset(h) { h.ticks?.clear(); h.fog = null; },
+    update(h, dt, game) {
+      const { radius, at: [x, z], interval = 1.2, damage = 1 } = h.def;
+      if (!h.fog?.alive) h.fog = game.modelFx.spawn('毒霧瘴氣', x, z, { size: radius * 2.3, life: Infinity, fadeIn: 0.6, pulse: 0.35, spin: 0.03, yaw: 0 });
+      if (Math.random() < dt * 4) game.fx.burst(x + (Math.random() - 0.5) * radius * 1.4, 0.3, z + (Math.random() - 0.5) * radius * 1.4, 1, 0xa78bfa, 0.8);
+      const actors = [game.player, ...game.enemies.filter((e) => e.canBeHit && !e.airborne)];
+      for (const a of actors) {
+        const inside = Math.hypot(a.position.x - x, a.position.z - z) <= radius + (a.radius ?? 0.4) * 0.5 && !a.air;
+        if (!inside) { h.ticks.delete(a); continue; }
+        const left = (h.ticks.get(a) ?? interval * 0.5) - dt;   // 走進去 0.6 秒後第一下
+        if (left > 0) { h.ticks.set(a, left); continue; }
+        h.ticks.set(a, interval);
+        if (a === game.player) { a.takeDamage(damage); game.fx.floatText(a.position.x, 2.2, a.position.z, '中毒', '#c084fc'); }
+        else game.hazardHit(a, h.def.enemyDamage ?? damage, x, z);
+      }
+    },
+  },
+
+  // 寒冰：預警（淡藍圓）→ 地上冒出冰晶，打到的玩家變慢 slow 秒，敵人凍住（扣 enemyDamage）
+  ice: {
+    area: (h) => h.def.radius,
+    danger: (h) => (h.phase === 'idle' ? null : { x: h.def.at[0], z: h.def.at[1], r: h.def.radius }),
+    build(h, group) {
+      h.disc = warnDisc(group, h.def.radius, 0x7dd3fc);
+      h.disc.position.set(h.def.at[0], LINE_HEIGHT, h.def.at[1]);
+      [h.x, h.z] = h.def.at;
+    },
+    update(h, dt, game) {
+      advance(h, dt);
+      const { radius, at: [x, z], slow = 2.5, damage = 0 } = h.def;
+      h.disc.visible = h.phase !== 'idle';
+      h.disc.material.opacity = h.phase === 'warn' ? 0.2 + 0.3 * ((h.clock % 0.3) / 0.3) : 0.35;
+      if (h.started && h.phase === 'up') {
+        game.modelFx.spawn('寒冰', x, z, { size: radius * 2.3, life: h.def.up + 0.6, grow: [0.3, 1], fadeIn: 0.05, fadeOut: 0.5 });
+        game.fx.burst(x, 0.5, z, 24, 0xbae6fd, 4);
+        game.sfx.tone(1600, 700, 0.25, 'triangle', 0.08);
+      }
+      if (h.phase !== 'up') return;
+      const p = game.player;
+      if (!h.hit.has(p) && !p.air && Math.hypot(p.position.x - x, p.position.z - z) <= radius + p.radius * 0.5) {
+        h.hit.add(p);
+        p.chill(slow);
+        if (damage) p.takeDamage(damage);
+        game.fx.floatText(p.position.x, 2.2, p.position.z, '凍住了', '#7dd3fc');
+      }
+      strike(game, h, (q, r) => Math.hypot(q.x - x, q.z - z) <= radius + r, false);   // 玩家上面處理過了
+    },
+  },
+
   spikes: {
     area: (h) => h.def.size * 1.45,
     danger: (h) => (h.phase === 'idle' ? null : { x: h.def.at[0], z: h.def.at[1], r: h.def.size * 1.45 }),
@@ -278,6 +391,7 @@ export class Hazards {
   blocks(x, z) {
     return this.list.some((h) => {
       const r = h.type.area(h);
+      if (!h.def.at) return false;
       return r > 0 && Math.hypot(x - h.def.at[0], z - h.def.at[1]) < r + 0.9;
     });
   }

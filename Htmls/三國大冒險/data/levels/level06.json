@@ -489,5 +489,48 @@
     -9
    ]
   }
+ ],
+ "hazards": [
+  {
+   "type": "ice",
+   "at": [
+    -6.5,
+    3
+   ],
+   "radius": 1.9,
+   "period": 5.5,
+   "warn": 1.1,
+   "up": 0.4,
+   "slow": 2.5,
+   "damage": 0,
+   "enemyDamage": 1,
+   "offset": 0
+  },
+  {
+   "type": "ice",
+   "at": [
+    6.5,
+    3
+   ],
+   "radius": 1.9,
+   "period": 5.5,
+   "warn": 1.1,
+   "up": 0.4,
+   "slow": 2.5,
+   "damage": 0,
+   "enemyDamage": 1,
+   "offset": 2.7
+  },
+  {
+   "type": "lightning",
+   "roam": 4,
+   "radius": 1.8,
+   "period": 9,
+   "warn": 1.4,
+   "up": 0.25,
+   "damage": 1,
+   "enemyDamage": 2,
+   "offset": 2
+  }
  ]
 }

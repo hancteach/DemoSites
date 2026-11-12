@@ -9,6 +9,7 @@
 // 每種任務提供：update(dt)、done、failed（失敗原因）、label（畫面上方的目標文字）、targets／hit（打得壞的東西）、
 //               targetFor(enemy)（敵人要追誰）、onSpawn(enemy)、dispose()（重新開始時把場景還原）
 import * as THREE from 'three';
+import { Horse } from './mount.js';
 
 const std = (color) => new THREE.MeshBasicMaterial({ color, transparent: true, depthWrite: false, side: THREE.DoubleSide });
 
@@ -284,11 +285,15 @@ class EscortObjective {
     const cart = fit(def.model, 3.2);
     this.body.add(cart);
     if (def.horse && game.assets.loaded.has(def.horse)) {
-      const horse = fit(def.horse, 2.5);
-      horse.position.z = -2.6;
-      horse.rotation.y = Math.PI;   // 馬頭朝前進方向
-      this.body.add(horse);
-      this.horse = horse;
+      // 綁骨的馬（mounts.json 有設定）：會走路、停下來待機（2026-11-12 晚，輕型馱馬）；靜態模型就照大小擺上去
+      const cfg = game.mounts?.[def.horse];
+      if (cfg && game.assets.loaded.get(def.horse).animations?.length) {
+        this.horseAnim = new Horse(game, def.horse, cfg);
+        this.horse = this.horseAnim.root;
+      } else this.horse = fit(def.horse, 2.5);
+      this.horse.position.z = -2.6;
+      this.horse.rotation.y = Math.PI;   // 馬頭朝前進方向
+      this.body.add(this.horse);
     }
     this.materials = [];
     this.body.traverse((o) => { if (o.isMesh) this.materials.push(o.material); });
@@ -397,6 +402,7 @@ class EscortObjective {
       if (Math.random() < 0.2) game.fx.dust(c.x, 0.2, c.z, 1);
     }
     this.place();
+    this.horseAnim?.animate(dt, this.front);
     while (this.ambush.length && this.progress >= this.ambush[0].at) this.director.ambush(this.ambush.shift());
     if (this.s >= this.total) {
       this.done = true;
@@ -427,7 +433,7 @@ class MountObjective {
   }
   get done() { return Boolean(this.game.player.mount); }
   get targets() { return []; }
-  get label() { return `走到${this.game.levelData.ride?.horse ?? '馬'}旁邊騎上去`; }
+  get label() { return `走到${this.game.player.horse?.id ?? this.game.levelData.ride?.horse ?? '馬'}旁邊騎上去`; }
   get doneLabel() { return '上馬了！打倒剩下的敵兵'; }
   update() {}
   dispose() {}

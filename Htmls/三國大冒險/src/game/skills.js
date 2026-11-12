@@ -29,6 +29,7 @@ const EFFECTS = {
     skills.hidden = skill.duration;
     game.player.setOpacity(skill.opacity);
     game.fx.dust(game.player.position.x, 0.5, game.player.position.z, REVEAL_DUST);
+    game.modelFx.spawn('戰場煙霧', game.player.position.x, game.player.position.z, { size: 3.2, life: 1.3, grow: [0.5, 1.2], rise: 0.3, fadeOut: 0.6 });   // 隱身：冒一團煙
     game.sfx.wave();
   },
 };
@@ -62,6 +63,7 @@ export class Skills {
     this.cooldown = skill.cooldown;
     game.player.setOpacity(1);
     game.fx.dust(game.player.position.x, 0.5, game.player.position.z, REVEAL_DUST);
+    game.modelFx.spawn('戰場煙霧', game.player.position.x, game.player.position.z, { size: 2.2, life: 0.8, grow: [0.6, 1.1], rise: 0.4, fadeOut: 0.5 });
   }
 
   // 按攻擊立刻現身；這一刀的傷害倍率

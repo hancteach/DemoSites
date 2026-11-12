@@ -1,348 +1,361 @@
 {
-  "name": "攻城戰",
-  "desc": "衝過兩側城牆的箭雨和落石，打破拒馬，爬梯子登上城門打倒敵將",
-  "scene": "城池",
-  "open": true,
-  "enemyFactions": [
-    "魏",
-    "吳",
-    "晉",
-    "他",
-    "蜀"
-  ],
-  "arena": {
-    "halfWidth": 10,
-    "halfDepth": 30
+ "name": "攻城戰",
+ "desc": "衝過兩側城牆的箭雨和落石，打破拒馬，爬梯子登上城門打倒敵將",
+ "scene": "城池",
+ "open": true,
+ "enemyFactions": [
+  "魏",
+  "吳",
+  "晉",
+  "他",
+  "蜀"
+ ],
+ "arena": {
+  "halfWidth": 10,
+  "halfDepth": 30
+ },
+ "theme": {
+  "background": "#a9c9dc",
+  "fog": "#a9c9dc",
+  "fogNear": 34,
+  "fogFar": 70,
+  "hemiSky": "#e8f2ff",
+  "hemiGround": "#5a6b3a",
+  "hemiIntensity": 1.15,
+  "moon": "#fff1d6",
+  "moonIntensity": 2.2,
+  "outside": "#4c6a2c",
+  "wall": {
+   "a": "#7a6248",
+   "b": "#66513b",
+   "gate": "#8a6d4c"
   },
-  "theme": {
-    "background": "#a9c9dc",
-    "fog": "#a9c9dc",
-    "fogNear": 34,
-    "fogFar": 70,
-    "hemiSky": "#e8f2ff",
-    "hemiGround": "#5a6b3a",
-    "hemiIntensity": 1.15,
-    "moon": "#fff1d6",
-    "moonIntensity": 2.2,
-    "outside": "#4c6a2c",
-    "wall": {
-      "a": "#7a6248",
-      "b": "#66513b",
-      "gate": "#8a6d4c"
-    },
-    "ground": {
-      "base": "#6f7f3c",
-      "speck": [
-        0.9,
-        1.15,
-        0.6
-      ],
-      "stone": [
-        30,
-        18,
-        -4
-      ],
-      "stoneBase": 104,
-      "paths": [
-        [
-          0,
-          30,
-          0,
-          -20,
-          6.4
-        ],
-        [
-          -10,
-          24,
-          10,
-          24,
-          3.2
-        ]
-      ],
-      "plaza": 0
-    }
-  },
-  "camera": {
-    "limitX": 2,
-    "offset": [
-      0,
-      14.5,
-      12
+  "ground": {
+   "base": "#6f7f3c",
+   "speck": [
+    0.9,
+    1.15,
+    0.6
+   ],
+   "stone": [
+    30,
+    18,
+    -4
+   ],
+   "stoneBase": 104,
+   "paths": [
+    [
+     0,
+     30,
+     0,
+     -20,
+     6.4
+    ],
+    [
+     -10,
+     24,
+     10,
+     24,
+     3.2
     ]
-  },
-  "playerStart": [
-    0,
-    26
-  ],
-  "spawnPoints": [],
-  "siege": {
-    "height": 5,
-    "half": 4,
-    "south": 20,
-    "gate": -20,
-    "banner": "攻城開始！打破拒馬往前衝",
-    "barricades": [
-      {
-        "z": 13,
-        "hp": 3
-      },
-      {
-        "z": 2,
-        "hp": 3
-      },
-      {
-        "z": -10,
-        "hp": 4
-      }
-    ],
-    "ladders": [
-      {
-        "side": "west",
-        "z": -4.5
-      },
-      {
-        "side": "east",
-        "z": -15
-      },
-      {
-        "side": "gate",
-        "x": 2.6
-      }
-    ],
-    "bossAt": [
-      0,
-      -26
-    ],
-    "rubbleMax": 6,
-    "defenders": [
-      {
-        "enemy": "城牆弓兵",
-        "at": [
-          -5.0,
-          16
-        ]
-      },
-      {
-        "enemy": "城牆弓兵",
-        "at": [
-          -5.0,
-          4
-        ]
-      },
-      {
-        "enemy": "城牆弓兵",
-        "at": [
-          -5.0,
-          -9
-        ]
-      },
-      {
-        "enemy": "城牆弓兵",
-        "at": [
-          -5.0,
-          -17
-        ]
-      },
-      {
-        "enemy": "投石兵",
-        "at": [
-          5.0,
-          10
-        ]
-      },
-      {
-        "enemy": "投石兵",
-        "at": [
-          5.0,
-          -1
-        ]
-      },
-      {
-        "enemy": "投石兵",
-        "at": [
-          5.0,
-          -10.5
-        ]
-      },
-      {
-        "enemy": "槍兵",
-        "at": [
-          -7.2,
-          -2
-        ],
-        "wake": 7
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          -7.2,
-          -14
-        ],
-        "wake": 7
-      },
-      {
-        "enemy": "槍兵",
-        "at": [
-          7.2,
-          -12.5
-        ],
-        "wake": 7
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          7.2,
-          -4
-        ],
-        "wake": 7
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          -1.6,
-          8.5
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          1.6,
-          7
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "槍兵",
-        "at": [
-          0,
-          -3
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          -2,
-          -6
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          2,
-          -5
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "槍兵",
-        "at": [
-          -1.6,
-          -14
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "槍兵",
-        "at": [
-          1.6,
-          -15
-        ],
-        "wake": 9
-      },
-      {
-        "enemy": "刀兵",
-        "at": [
-          0,
-          -17.5
-        ],
-        "wake": 9
-      }
-    ]
-  },
-  "waves": [
-    {
-      "boss": [
-        "敵將"
-      ],
-      "bossChest": "大寶箱",
-      "healPlayer": true
-    }
-  ],
-  "props": [
-    {
-      "type": "roundTree",
-      "at": [
-        -8,
-        27.5
-      ],
-      "scale": 1.1
-    },
-    {
-      "type": "roundTree",
-      "at": [
-        8.2,
-        27.8
-      ]
-    },
-    {
-      "type": "bush",
-      "at": [
-        -6.5,
-        22.5
-      ]
-    },
-    {
-      "type": "bush",
-      "at": [
-        6.8,
-        22.2
-      ]
-    },
-    {
-      "type": "rock",
-      "at": [
-        -8.6,
-        23.6
-      ]
-    },
-    {
-      "type": "crate",
-      "at": [
-        5.2,
-        24.6
-      ]
-    },
-    {
-      "type": "crate",
-      "at": [
-        6.1,
-        25.5
-      ],
-      "rot": 30
-    },
-    {
-      "type": "weaponRack",
-      "at": [
-        -7.5,
-        -28.2
-      ]
-    },
-    {
-      "type": "warDrum",
-      "at": [
-        7.5,
-        -28
-      ]
-    },
-    {
-      "type": "warDrum",
-      "at": [
-        -4.5,
-        -28.4
-      ]
-    }
+   ],
+   "plaza": 0
+  }
+ },
+ "camera": {
+  "limitX": 2,
+  "offset": [
+   0,
+   14.5,
+   12
   ]
+ },
+ "playerStart": [
+  0,
+  26
+ ],
+ "spawnPoints": [],
+ "siege": {
+  "height": 5,
+  "half": 4,
+  "south": 20,
+  "gate": -20,
+  "banner": "攻城開始！打破拒馬往前衝",
+  "barricades": [
+   {
+    "z": 13,
+    "hp": 3
+   },
+   {
+    "z": 2,
+    "hp": 3
+   },
+   {
+    "z": -10,
+    "hp": 4
+   }
+  ],
+  "ladders": [
+   {
+    "side": "west",
+    "z": -4.5
+   },
+   {
+    "side": "east",
+    "z": -15
+   },
+   {
+    "side": "gate",
+    "x": 2.6
+   }
+  ],
+  "bossAt": [
+   0,
+   -26
+  ],
+  "rubbleMax": 6,
+  "defenders": [
+   {
+    "enemy": "城牆弓兵",
+    "at": [
+     -5.0,
+     16
+    ]
+   },
+   {
+    "enemy": "城牆弓兵",
+    "at": [
+     -5.0,
+     4
+    ]
+   },
+   {
+    "enemy": "城牆弓兵",
+    "at": [
+     -5.0,
+     -9
+    ]
+   },
+   {
+    "enemy": "城牆弓兵",
+    "at": [
+     -5.0,
+     -17
+    ]
+   },
+   {
+    "enemy": "投石兵",
+    "at": [
+     5.0,
+     10
+    ]
+   },
+   {
+    "enemy": "投石兵",
+    "at": [
+     5.0,
+     -1
+    ]
+   },
+   {
+    "enemy": "投石兵",
+    "at": [
+     5.0,
+     -10.5
+    ]
+   },
+   {
+    "enemy": "槍兵",
+    "at": [
+     -7.2,
+     -2
+    ],
+    "wake": 7
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     -7.2,
+     -14
+    ],
+    "wake": 7
+   },
+   {
+    "enemy": "槍兵",
+    "at": [
+     7.2,
+     -12.5
+    ],
+    "wake": 7
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     7.2,
+     -4
+    ],
+    "wake": 7
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     -1.6,
+     8.5
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     1.6,
+     7
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "槍兵",
+    "at": [
+     0,
+     -3
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     -2,
+     -6
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     2,
+     -5
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "槍兵",
+    "at": [
+     -1.6,
+     -14
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "槍兵",
+    "at": [
+     1.6,
+     -15
+    ],
+    "wake": 9
+   },
+   {
+    "enemy": "刀兵",
+    "at": [
+     0,
+     -17.5
+    ],
+    "wake": 9
+   }
+  ]
+ },
+ "waves": [
+  {
+   "boss": [
+    "敵將"
+   ],
+   "bossChest": "大寶箱",
+   "healPlayer": true
+  }
+ ],
+ "props": [
+  {
+   "type": "roundTree",
+   "at": [
+    -8,
+    27.5
+   ],
+   "scale": 1.1
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    8.2,
+    27.8
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -6.5,
+    22.5
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    6.8,
+    22.2
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    -8.6,
+    23.6
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    5.2,
+    24.6
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    6.1,
+    25.5
+   ],
+   "rot": 30
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    -7.5,
+    -28.2
+   ]
+  },
+  {
+   "type": "warDrum",
+   "at": [
+    7.5,
+    -28
+   ]
+  },
+  {
+   "type": "warDrum",
+   "at": [
+    -4.5,
+    -28.4
+   ]
+  }
+ ],
+ "hazards": [
+  {
+   "type": "arrowRain",
+   "roam": 3,
+   "radius": 1.8,
+   "period": 7,
+   "warn": 1.3,
+   "up": 0.25,
+   "damage": 1,
+   "enemyDamage": 0,
+   "offset": 0
+  }
+ ]
 }

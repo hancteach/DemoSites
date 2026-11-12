@@ -187,10 +187,12 @@ export class Rival extends Enemy {
       if (dist <= def.attackRange + player.radius && inArc) this.hitPlayer(player, x, z, 1, 9);
     } else if (style === 'spin') {
       fx.slashAt(this.position, this.root.rotation.y, Math.PI * 2, def.attack.radius);
+      game.modelFx.spawn('旋風暴風', 0, 0, { follow: this, size: def.attack.radius * 1.7, life: 0.6, spin: 2.2, grow: [0.6, 1.05], fadeOut: 0.3 });
       if (dist <= def.attack.radius + player.radius) this.hitPlayer(player, x, z, 1, 11);
     } else if (style === 'smash') {
       const cx = x + this.aimX * def.attack.ahead, cz = z + this.aimZ * def.attack.ahead;
       fx.blastRing(cx, cz, def.attack.radius, def.attack.color ?? '#ffcf7a');
+      game.modelFx.spawn('地裂岩石', cx, cz, { size: def.attack.radius * 1.9, life: 0.9, grow: [0.45, 1], fadeOut: 0.45 });
       fx.dust(cx, 0.3, cz, 22);
       fx.shake(0.3);
       game.sfx.blast();
@@ -231,6 +233,7 @@ export class Rival extends Enemy {
   // ---------- 招式（商店賣給玩家的那個技能，對手直接會用）----------
   trySkill(dist) {
     const { skill } = this.def;
+    if (!skill) { this.skillTimer = Infinity; return false; }   // 沒有技能的武將（祝融、王元姬、賈充）
     if (skill.type === 'shockwave') {
       if (dist > skill.radius * 0.8) return false;
       this.skillTimer = skill.cooldown;
@@ -245,6 +248,7 @@ export class Rival extends Enemy {
       this.ambush = 1;
       this.setOpacity(0.3);
       this.game.fx.dust(this.position.x, 0.5, this.position.z, 12);
+      this.game.modelFx.spawn('戰場煙霧', this.position.x, this.position.z, { size: 3, life: 1.2, grow: [0.5, 1.2], rise: 0.3, fadeOut: 0.6 });
       this.game.sfx.wave();
       return false;   // 隱身後照常行動
     }

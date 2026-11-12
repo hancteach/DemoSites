@@ -53,6 +53,7 @@ export class Player extends Actor {
     this.hp = this.maxHp;
     this.state = 'idle';
     this.invulnerable = 0;
+    this.slowTime = 0;
     this.dash = null;   // 上一局在衝刺中結束時，不能帶到下一局（會一直不受傷）
     this.climb = null;
     this.air = false;
@@ -73,6 +74,8 @@ export class Player extends Actor {
     this.invulnerable = Math.max(0, this.invulnerable - dt);
     if (this.invulnerable > 0) this.model.visible = Math.floor(this.invulnerable * 14) % 2 === 0;
     else this.model.visible = true;
+    this.updateShield();
+    if (this.slowTime > 0) this.slowTime -= dt;
 
     if (this.state === 'dead') return;
     if (this.fallOut) return;                         // 掉出沙場：由 brawl.js 處理
@@ -90,7 +93,7 @@ export class Player extends Actor {
     if (move.moving) {
       const found = this.game.level.ladderAt(this.position, move);   // 攻城關卡：在梯子前往牆走就爬
       if (found) { this.startClimb(found); return; }
-      const boost = this.game.items.buff('speed')?.speedMultiplier ?? 1;
+      const boost = (this.game.items.buff('speed')?.speedMultiplier ?? 1) * (this.slowTime > 0 ? this.slowFactor : 1);   // 寒冰：變慢
       const speed = this.mount ? this.mount.cfg.speed ?? 8.5 : this.def.moveSpeed;
       this.position.x += move.x * speed * boost * dt;
       this.position.z += move.z * speed * boost * dt;
@@ -416,3 +419,24 @@ function makeMarker() {
   m.position.y = 2.6;
   return m;
 }
+
+// ---------- 特效模型（2026-11-12 晚）----------
+Object.assign(Player.prototype, {
+  // 受傷後的無敵時間：防禦護盾包住身體（無敵結束就淡出）
+  updateShield() {
+    const on = this.invulnerable > 0.05 && this.state !== 'dead' && !this.fallOut && this.root.visible;
+    if (on && !this.shieldFx?.alive) {
+      this.shieldFx = this.game.modelFx.spawn('防禦護盾', 0, 0, { follow: this, size: this.mount ? 3.4 : 1.9, y: -0.15, life: Infinity, fadeIn: 0.12, fadeOut: 0.25, grow: [1, 1] });
+    } else if (!on && this.shieldFx?.alive) {
+      this.shieldFx.stop();
+      this.shieldFx = null;
+    }
+  },
+
+  // 寒冰陷阱打到：一段時間變慢，腳下結冰
+  chill(seconds, factor = 0.5) {
+    this.slowTime = Math.max(this.slowTime ?? 0, seconds);
+    this.slowFactor = factor;
+    this.game.modelFx.spawn('寒冰', 0, 0, { follow: this, size: 1.6, life: seconds, grow: [0.6, 1], fadeOut: 0.4 });
+  },
+});

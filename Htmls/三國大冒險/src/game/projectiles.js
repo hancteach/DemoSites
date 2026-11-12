@@ -64,6 +64,11 @@ export class Projectiles {
   makePrefab(spec) {
     const { scene, materials } = this.game.assets.instantiate(spec.model);
     if (spec.modelRotation) scene.rotation.set(...spec.modelRotation.map(THREE.MathUtils.degToRad));
+    if (spec.modelCenter) {   // 特效模型（劍氣、刀氣）的原點在底部角落：移到正中間，才會從手上飛出去
+      const c = new THREE.Box3().setFromObject(scene).getCenter(new THREE.Vector3());
+      scene.position.sub(c);
+      for (const m of materials) { m.transparent = true; m.depthWrite = false; m.side = THREE.DoubleSide; }
+    }
     if (spec.modelGlow) {
       for (const m of materials) { m.emissive.setHex(0xffffff); m.emissiveMap = m.map; m.emissiveIntensity = spec.modelGlow; }
     }
@@ -185,6 +190,10 @@ export class Projectiles {
       enemy.ignite(shot.spec.burn);
     }
     game.fx.blastRing(x, z, blast, color);
+    // 爆炸處的特效模型：impactFx 指定（張角＝閃電雷擊），火球預設「烈焰燃燒」
+    const impact = shot.spec.impactFx ?? (shot.spec.visual === 'fireball' ? '烈焰燃燒' : null);
+    if (impact === '閃電雷擊') game.modelFx.spawn(impact, x, z, { size: blast * 2.4, y: 0.06, life: 0.6, grow: [0.7, 1.05], fadeOut: 0.35 });
+    else if (impact) game.modelFx.spawn(impact, x, z, { size: blast * 2, life: 0.8, grow: [0.4, 1], fadeOut: 0.4 });
     game.fx.burstRaw(x, shot.mesh.position.y, z, 36, color, 5);
     game.fx.shake(BLAST_SHAKE);
     game.sfx.blast();
@@ -235,7 +244,7 @@ export class Projectiles {
       mesh.position.z += shot.dirZ * step;
       mesh.position.y += shot.vy * dt;
       shot.traveled += step;
-      if (visual.fades) mesh.material.opacity = 0.9 * Math.min(1, (spec.range - shot.traveled) / FADE_DISTANCE);
+      if (visual.fades && mesh.material) mesh.material.opacity = 0.9 * Math.min(1, (spec.range - shot.traveled) / FADE_DISTANCE);
       game.fx.burstRaw(mesh.position.x, mesh.position.y, mesh.position.z, visual.trail, spec.color, 0.8);
 
       const hit = this.collide(shot);

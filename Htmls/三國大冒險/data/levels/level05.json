@@ -152,7 +152,7 @@
    "objective": {
     "type": "escort",
     "model": "四輪車",
-    "horse": "普通軍馬",
+    "horse": "輕型馱馬",
     "path": [
      [
       0,

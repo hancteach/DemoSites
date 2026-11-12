@@ -10,6 +10,7 @@ const MIN_PLAYER_DISTANCE = 3;
 const EFFECTS = {
   heal(game, item) {
     game.player.heal(item.amount);
+    game.modelFx.spawn('治療光環', 0, 0, { follow: game.player, size: 2.2, y: 0.05, life: 1.4, rise: 0.9, grow: [0.6, 1.15], spin: 0.4, fadeOut: 0.5 });
   },
   clearEnemies(game, item) {
     game.clearAllEnemies(item.bossDamage);
