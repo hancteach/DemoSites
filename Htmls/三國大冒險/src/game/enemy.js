@@ -557,6 +557,7 @@ export class Enemy extends Actor {
     if (this.hp <= 0) {
       this.setState('dying');
       this.play('Death', { once: true, fade: 0.08 });
+      this.mount?.oneShot('Death');   // 騎兵：馬一起倒下（騎士跟著馬鞍往下）
     } else {
       this.setState('stunned');
       this.play('Hit', { once: true, fade: 0.05 });

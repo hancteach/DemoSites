@@ -22,6 +22,7 @@ import { BrawlDirector } from './game/brawl.js';
 import { Rival } from './game/rival.js';
 import { SiegeDirector } from './game/siege.js';
 import { WaveDirector } from './game/waves.js';
+import { Horse, mountActor, ensureRideClips } from './game/mount.js';
 import { Hud } from './ui/hud.js';
 import { renderPortraits } from './ui/portraits.js';
 
@@ -140,11 +141,14 @@ class Game {
     this.levels = Object.fromEntries(await Promise.all(this.levelOrder.map(async (id) => [id, await loadJson(`data/levels/${encodeURIComponent(id)}.json`)])));
     const allLevels = Object.values(this.levels);
     const allWaves = allLevels.flatMap((l) => l.waves);
+    // 任務波的埋伏（護送關）也算這一波會出的兵
+    const waveSpawns = (w) => [...(w.spawns ?? []), ...(w.objective?.ambush ?? []).flatMap((a) => a.spawns ?? [])].map((s) => s.enemy);
 
-    const bossIds = [...allWaves.flatMap((w) => w.boss ?? []), ...allWaves.map((w) => w.captain).filter(Boolean)];
+    const bossIds = [...allWaves.flatMap((w) => w.boss ?? []), ...allWaves.map((w) => w.captain).filter(Boolean),
+      ...allWaves.flatMap(waveSpawns).filter((id) => this.characters[id]?.boss)];
     const summoned = bossIds.flatMap((id) => this.characters[id]?.boss?.skills.map((s) => s.enemy) ?? []).filter(Boolean);
     const defenders = allLevels.flatMap((l) => (l.siege?.defenders ?? []).map((d) => d.enemy));   // 攻城關卡開場就站好的守軍
-    const enemyIds = [...allWaves.flatMap((w) => (w.spawns ?? []).map((s) => s.enemy)), ...defenders, ...bossIds, ...summoned];
+    const enemyIds = [...allWaves.flatMap(waveSpawns), ...defenders, ...bossIds, ...summoned];
     // 分裂出來的小怪（史萊姆）也要先載入
     for (let i = 0; i < enemyIds.length; i++) {
       const def = this.characters[enemyIds[i]];
@@ -168,11 +172,21 @@ class Game {
     this.factionId = this.characters[this.settings.player].faction ?? this.settings.faction;
     const shotModels = this.playable.flatMap((id) => Projectiles.specsOf(this.characters[id]).map((s) => s.model)).filter((id) => this.assets.catalog[id]);
     const enemyShotModels = this.enemyShotSpecs.map((s) => s.model).filter((id) => id && this.assets.catalog[id]);
-    const modelIds = [...this.playable.map((id) => this.characters[id].model), ...shotModels, ...enemyShotModels, ...enemyIds.map((id) => this.characters[id].model), ...allLevels.flatMap((l) => Level.modelIds(l)), ...itemModels];
+    // 騎馬（2026-11-12）：關卡的 ride 馬、騎馬的敵人與敵將的馬；沒有騎乘動作的武將借「騎兵」的
+    this.mounts = await loadJson('data/mounts.json');
+    const rideLevels = allLevels.filter((l) => l.ride);
+    const horseIds = [...rideLevels.map((l) => l.ride.horse), ...allWaves.map((w) => w.bossMount),
+      ...[...new Set(enemyIds)].map((id) => this.characters[id].mount)].filter(Boolean);
+    const rideModels = horseIds.length ? [...horseIds, this.mounts.rideSource] : [];
+    const modelIds = [...rideModels, ...this.playable.map((id) => this.characters[id].model), ...shotModels, ...enemyShotModels, ...enemyIds.map((id) => this.characters[id].model), ...allLevels.flatMap((l) => Level.modelIds(l)), ...itemModels];
     await this.assets.preload(modelIds, (done, total) => {
       this.hud.showOverlay({ text: `載入模型 ${done} / ${total}…` });
     });
 
+    if (rideModels.length) {
+      const src = this.assets.loaded.get(this.mounts.rideSource);
+      this.rideSource = { clips: src.animations.filter((c) => c.name === 'RideIdle' || c.name === 'RideAttack'), rest: src.scene.getObjectByName('Hips').position.clone() };
+    }
     this.progress = new Progress(this.levelOrder);
     this.hazards = new Hazards(this);
     this.setLevel(this.levelOrder[0]);
@@ -241,7 +255,7 @@ class Game {
   // 每個角色只建一次，換角色時切換顯示
   selectCharacter(id) {
     if (id === this.characterId) return;
-    if (this.player) this.player.root.visible = false;
+    if (this.player) { this.player.removeHorse(); this.player.root.visible = false; }
     if (!this.players.has(id)) {
       const def = this.characters[id];
       this.players.set(id, new Player(this, def, this.assets.instantiate(def.model)));
@@ -385,6 +399,7 @@ class Game {
     this.revived = false;
     const [x, z] = this.levelData.playerStart;
     this.player.reset(x, z);
+    this.player.setupHorse(this.levelData.ride);   // 騎馬關：馬站在馬廄旁邊
     this.skills.reset();
     this.projectiles.prepare(this.player.def);
     this.shotCycle = 0; // 忍者每局第一發是苦無
@@ -491,10 +506,15 @@ class Game {
   }
 
   // instant：不從地底爬出，直接出現（史萊姆分裂）
-  spawnEnemy(id, x, z, { instant = false } = {}) {
+  spawnEnemy(id, x, z, { instant = false, mount } = {}) {
     const def = this.characters[id];
     const EnemyClass = def.rival ? Rival : def.boss ? Boss : Enemy;
     const enemy = new EnemyClass(this, def, this.assets.instantiate(def.model), x, z);
+    const horseId = mount ?? def.mount;   // 騎兵、騎馬的敵將：騎上馬（mount.js）
+    if (horseId && this.assets.loaded.has(horseId) && ensureRideClips(this, enemy)) {
+      mountActor(enemy, new Horse(this, horseId, this.mounts[horseId]));
+      enemy.radius = Math.max(enemy.radius, 0.9 * (def.scale ?? 1));
+    }
     // 敵軍陣營色的腳下圈，一眼看出誰是敵人、屬於哪一軍
     const ring = new THREE.Mesh(this.factionRingGeometry ??= new THREE.RingGeometry(0.62, 0.8, 28).rotateX(-Math.PI / 2),
       new THREE.MeshBasicMaterial({ color: this.factionColor(this.enemyFaction), transparent: true, opacity: 0.75, depthWrite: false }));
@@ -615,6 +635,7 @@ class Game {
   }
 
   sweep(attacker, swing) {
+    if (attacker.mount) return this.rideSweep(attacker, swing);
     const { attackRange, attackArcDegrees, attack } = this.player.def;
     const yaw = attacker.root.rotation.y;
     // 旋風斬：一整圈；重砸：前方一個圓（中心往前 ahead）
@@ -657,6 +678,13 @@ class Game {
       if (cross) this.fx.after(CROSS_GAP, () => this.secondStrike(e));
     }
     return hits;
+  }
+
+  // 騎馬揮砍：馬上左右兩邊都砍得到，打一整圈（每個武將一樣，騎馬時的攻擊方式見 mount.js）
+  rideSweep(attacker, swing) {
+    const radius = this.mounts.rideAttackRadius ?? 3;
+    this.fx.slashAt(attacker.position, attacker.root.rotation.y, Math.PI * 2, radius);
+    return this.smashHits(attacker.position.clone(), radius, {}, swing);
   }
 
   smashHits(center, radius, attack, swing) {
@@ -867,6 +895,14 @@ class Game {
     setTimeout(() => this.hud.showOverlay({ title: `${this.player.def.name ?? this.characterId}倒下了…`, text: `分數 ${this.score}${reached}。${this.coinSummary()}`, ...this.endButtons() }), SHOW_END_DELAY * 1000);
   }
 
+  // 任務失敗（護送的糧車被搶走）
+  onMissionFailed(reason) {
+    this.endRun();
+    this.sfx.lose();
+    this.hud.banner(reason, 2.2, '#ff5a3c');
+    setTimeout(() => this.hud.showOverlay({ title: '任務失敗', text: `${reason}分數 ${this.score}。${this.coinSummary()}`, ...this.endButtons() }), SHOW_END_DELAY * 1000);
+  }
+
   onLevelCleared() {
     this.endRun();
     this.sfx.win();
@@ -876,7 +912,7 @@ class Game {
     const next = this.progress.next(this.levelId);
     const title = next ? '過關！' : '全部破關！';
     const done = this.levelData.brawl ? `${this.waves.factionName}軍 ${this.waves.count} 位武將全部擊敗（${this.waves.ringOuts} 位被打下沙場）！`
-      : this.levelData.siege ? `攻下${this.levelData.name}了！` : `${this.levelData.name}恢復和平了！`;
+      : this.levelData.siege ? `攻下${this.levelData.name}了！` : this.levelData.clearText ?? `${this.levelData.name}恢復和平了！`;
     const opening = next ? `${done}下一關：${this.levels[next].name}。` : this.levelData.brawl ? done : '你闖過了所有關卡，太厲害了！';
     setTimeout(() => this.hud.showOverlay({ title, text: `${opening}分數 ${this.score}，剩下 ${this.player.hp} 顆心。${this.coinSummary()}`, ...this.endButtons(next) }), SHOW_END_DELAY * 1000);
   }
@@ -919,7 +955,7 @@ class Game {
     }
     if (active) {
       if (this.state === 'playing') this.player.update(dt, this.input);
-      for (const e of this.enemies) e.update(dt, this.player);
+      for (const e of this.enemies) e.update(dt, this.waves?.targetFor?.(e) ?? this.player);   // 護送關：搶糧的小兵追糧車
       this.separateEnemies();
       // 第三個參數：被打退、掉落中的人不受沙場邊緣限制（大亂鬥才有邊緣）
       for (const e of this.enemies) if (e.state !== 'rising') this.level.constrain(e.position, e.radius, e.state === 'stunned' || e.state === 'dying' || e.state === 'fall');

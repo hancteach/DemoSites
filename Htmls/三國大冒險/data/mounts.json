@@ -1,0 +1,7 @@
+{
+  "說明": "騎馬（2026-11-12）。每匹馬：name 名字、scale 大小（模型是 1.8 公尺高）、speed 騎乘時的速度（走路的武將約 5～6.5）、hp 被打幾下會被打下馬。rideSource：沒有騎乘動作的武將向誰借 RideIdle／RideAttack；rideAttackRadius：騎馬揮砍的半徑（一整圈）",
+  "rideSource": "騎兵",
+  "rideAttackRadius": 3,
+  "赤兔馬": { "name": "赤兔馬", "scale": 1.12, "speed": 8.6, "hp": 6 },
+  "的盧馬": { "name": "的盧馬", "scale": 1.08, "speed": 8.2, "hp": 6 }
+}

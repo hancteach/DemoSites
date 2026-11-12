@@ -276,6 +276,110 @@
       "size": 1.1
     }
   },
+  "姜維": {
+    "model": "姜維",
+    "role": "player",
+    "faction": "蜀",
+    "base": "_武將",
+    "desc": "麒麟牙突刺，往前衝穿一排",
+    "hp": 9,
+    "moveSpeed": 6.2,
+    "attackSpeed": 1.15,
+    "attackHitTime": 0.27,
+    "attack": {
+      "type": "dash",
+      "clip": "Thrust",
+      "distance": 5.0,
+      "width": 1.6,
+      "speed": 22
+    },
+    "skill": {
+      "type": "stealth",
+      "name": "奇謀",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#4ade80"
+    }
+  },
+  "星彩": {
+    "model": "星彩",
+    "role": "player",
+    "faction": "蜀",
+    "base": "_武將",
+    "desc": "長劍加重盾，最耐打",
+    "hp": 12,
+    "moveSpeed": 5.0,
+    "attackSpeed": 1.4,
+    "attackRange": 2.6,
+    "attackArcDegrees": 150,
+    "skill": {
+      "type": "shockwave",
+      "name": "盾擊",
+      "cooldown": 15,
+      "radius": 5,
+      "stun": 1.4,
+      "knockback": 26,
+      "color": "#86efac"
+    }
+  },
+  "魏延": {
+    "model": "魏延",
+    "role": "player",
+    "faction": "蜀",
+    "base": "_武將",
+    "desc": "大夏兩刃刀旋風斬，打一整圈",
+    "hp": 11,
+    "moveSpeed": 5.2,
+    "attackSpeed": 1.25,
+    "attackHitTime": 0.45,
+    "attack": {
+      "type": "spin",
+      "clip": "Attack3",
+      "radius": 3.2
+    },
+    "skill": {
+      "type": "shockwave",
+      "name": "怒吼",
+      "cooldown": 15,
+      "radius": 5.5,
+      "stun": 1.3,
+      "knockback": 28,
+      "color": "#4ade80"
+    }
+  },
+  "龐統": {
+    "model": "龐統",
+    "role": "player",
+    "faction": "蜀",
+    "base": "_武將",
+    "desc": "風雷杖放出火球，碰到就爆炸",
+    "hp": 6,
+    "moveSpeed": 5.2,
+    "attackSpeed": 0.85,
+    "shot": {
+      "visual": "fireball",
+      "speed": 13,
+      "range": 10,
+      "width": 0.45,
+      "spread": 15,
+      "color": "#fb923c",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "blast": 1.9
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "cast": {
+      "color": "#fb923c",
+      "size": 1.3
+    }
+  },
   "典韋": {
     "model": "典韋",
     "role": "player",
@@ -876,6 +980,88 @@
       "color": "#c4b5fd"
     }
   },
+  "張春華": {
+    "model": "張春華",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "鞭刀甩打，打得很遠",
+    "hp": 7,
+    "moveSpeed": 6.0,
+    "attackSpeed": 1.4,
+    "attackRange": 3.7,
+    "attackArcDegrees": 100,
+    "skill": {
+      "type": "stealth",
+      "name": "冷笑",
+      "cooldown": 15,
+      "duration": 5,
+      "opacity": 0.3,
+      "ambush": 2,
+      "color": "#c4b5fd"
+    }
+  },
+  "王元姬": {
+    "model": "王元姬",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "丟出旋轉的三菱鏢，穿過整排",
+    "hp": 6,
+    "moveSpeed": 6.4,
+    "attackSpeed": 1.4,
+    "shot": {
+      "visual": "arrow",
+      "speed": 22,
+      "range": 10,
+      "width": 0.4,
+      "spread": 15,
+      "color": "#e9d5ff",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "model": "王元姬_三菱鏢",
+      "modelScale": 0.7,
+      "spin": 900,
+      "pierce": true
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "attackHitTime": 0.3
+  },
+  "賈充": {
+    "model": "賈充",
+    "role": "player",
+    "faction": "晉",
+    "base": "_武將",
+    "desc": "甩出舞投刃，打中第一隻",
+    "hp": 7,
+    "moveSpeed": 6.0,
+    "attackSpeed": 1.6,
+    "shot": {
+      "visual": "arrow",
+      "speed": 24,
+      "range": 10,
+      "width": 0.4,
+      "spread": 15,
+      "color": "#ddd6fe",
+      "muzzle": {
+        "side": -0.2,
+        "height": 1,
+        "ahead": 0.6
+      },
+      "model": "賈充_舞投刃",
+      "modelScale": 0.75,
+      "spin": 720
+    },
+    "lunge": false,
+    "bossDamage": 2,
+    "invulnerableTime": 1.1,
+    "attackHitTime": 0.28
+  },
   "呂布": {
     "model": "呂布",
     "role": "player",
@@ -1366,11 +1552,11 @@
     "ability": {
       "type": "lob",
       "range": 12,
-      "windup": 1.0,
+      "windup": 1,
       "cooldown": 4.8,
       "shot": {
         "flight": 1.25,
-        "peak": 3.0,
+        "peak": 3,
         "radius": 1.7,
         "damage": 1,
         "color": "#b3aca0",
@@ -1378,6 +1564,40 @@
         "height": 1.9,
         "rubble": true
       }
+    }
+  },
+  "騎兵": {
+    "model": "騎兵",
+    "role": "enemy",
+    "faction": "雜",
+    "scale": 0.95,
+    "mount": "的盧馬",
+    "hp": 4,
+    "moveSpeed": 4.6,
+    "attackDamage": 1,
+    "attackRange": 2.4,
+    "attackCooldown": 1.8,
+    "attackHitTime": 0.3,
+    "radius": 0.9,
+    "score": 30,
+    "coinDrop": {
+      "type": "金幣",
+      "count": [
+        2,
+        4
+      ]
+    },
+    "ability": {
+      "type": "charge",
+      "range": 10,
+      "min": 3,
+      "windup": 0.9,
+      "cooldown": 4.5,
+      "distance": 11,
+      "width": 1.8,
+      "speed": 14,
+      "damage": 1,
+      "recover": 1.1
     }
   }
 }

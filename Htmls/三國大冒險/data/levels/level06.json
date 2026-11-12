@@ -1,0 +1,493 @@
+{
+ "name": "市集奪旗",
+ "desc": "在城裡的街道作戰：依序佔領西市、東市、官邸前的旗台（站在圈裡、圈裡沒有敵兵才會前進），最後打倒太守",
+ "scene": "城鎮",
+ "open": true,
+ "clearText": "城裡插滿了我軍的旗子！",
+ "enemyFactions": [
+  "魏",
+  "吳",
+  "晉",
+  "他",
+  "蜀"
+ ],
+ "arena": {
+  "halfWidth": 22,
+  "halfDepth": 18,
+  "gates": [
+   {
+    "side": "west",
+    "at": 4,
+    "width": 5
+   },
+   {
+    "side": "east",
+    "at": 4,
+    "width": 5
+   },
+   {
+    "side": "north",
+    "at": -16,
+    "width": 4
+   },
+   {
+    "side": "north",
+    "at": 16,
+    "width": 4
+   }
+  ],
+  "lowSides": [
+   "south"
+  ]
+ },
+ "theme": {
+  "background": "#a9c9dc",
+  "fog": "#a9c9dc",
+  "fogNear": 34,
+  "fogFar": 70,
+  "hemiSky": "#e8f2ff",
+  "hemiGround": "#5a6b3a",
+  "hemiIntensity": 1.15,
+  "moon": "#fff1d6",
+  "moonIntensity": 2.2,
+  "outside": "#5b5a48",
+  "wall": {
+   "a": "#8a8274",
+   "b": "#77705f",
+   "gate": "#9b8f78"
+  },
+  "ground": {
+   "base": "#8a7a5c",
+   "speck": [
+    1.1,
+    1.0,
+    0.8
+   ],
+   "stone": [
+    10,
+    6,
+    0
+   ],
+   "stoneBase": 120,
+   "paths": [
+    [
+     0,
+     18,
+     0,
+     -9,
+     4.4
+    ],
+    [
+     -22,
+     4,
+     22,
+     4,
+     5.5
+    ],
+    [
+     -3,
+     -8.5,
+     3,
+     -8.5,
+     6
+    ]
+   ],
+   "plaza": 0
+  }
+ },
+ "playerStart": [
+  0,
+  14
+ ],
+ "spawnPoints": [
+  {
+   "at": [
+    -20.5,
+    4
+   ]
+  },
+  {
+   "at": [
+    20.5,
+    4
+   ]
+  },
+  {
+   "at": [
+    -16,
+    -16.5
+   ]
+  },
+  {
+   "at": [
+    16,
+    -16.5
+   ]
+  }
+ ],
+ "waves": [
+  {
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 5
+    },
+    {
+     "enemy": "槍兵",
+     "count": 2
+    }
+   ],
+   "interval": 1.1,
+   "maxAlive": 4,
+   "banner": "城裡的守軍發現你了！"
+  },
+  {
+   "banner": "佔領西市的旗台！",
+   "objective": {
+    "type": "capture",
+    "name": "西市",
+    "at": [
+     -13,
+     4
+    ],
+    "radius": 3,
+    "time": 7
+   },
+   "reinforce": true,
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 2
+    },
+    {
+     "enemy": "槍兵",
+     "count": 1
+    },
+    {
+     "enemy": "弓兵",
+     "count": 1
+    }
+   ],
+   "interval": 2.6,
+   "maxAlive": 4,
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 12
+    }
+   ]
+  },
+  {
+   "banner": "佔領東市的旗台！",
+   "objective": {
+    "type": "capture",
+    "name": "東市",
+    "at": [
+     13,
+     4
+    ],
+    "radius": 3,
+    "time": 8
+   },
+   "reinforce": true,
+   "captain": "副將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 2
+    },
+    {
+     "enemy": "弓兵",
+     "count": 1
+    },
+    {
+     "enemy": "策士",
+     "count": 1
+    }
+   ],
+   "interval": 2.4,
+   "maxAlive": 5,
+   "chest": {
+    "type": "寶箱",
+    "at": [
+     0,
+     8
+    ]
+   },
+   "items": [
+    {
+     "item": "藍藥水",
+     "at": 10
+    }
+   ]
+  },
+  {
+   "banner": "佔領官邸前的旗台！",
+   "objective": {
+    "type": "capture",
+    "name": "官邸前",
+    "at": [
+     0,
+     -7
+    ],
+    "radius": 2.8,
+    "time": 9
+   },
+   "reinforce": true,
+   "captain": "武將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 2
+    },
+    {
+     "enemy": "槍兵",
+     "count": 2
+    },
+    {
+     "enemy": "策士",
+     "count": 1
+    }
+   ],
+   "interval": 2.2,
+   "maxAlive": 5,
+   "items": [
+    {
+     "item": "黃藥水",
+     "at": 8
+    },
+    {
+     "item": "紅藥水",
+     "at": 24
+    }
+   ]
+  },
+  {
+   "boss": [
+    "敵將"
+   ],
+   "bossChest": "大寶箱",
+   "healPlayer": true,
+   "interval": 1,
+   "maxAlive": 6,
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 15
+    },
+    {
+     "item": "藍藥水",
+     "at": 30
+    },
+    {
+     "item": "紅藥水",
+     "at": 45
+    }
+   ],
+   "bossFrom": [
+    0,
+    -8.5
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "model:官邸",
+   "at": [
+    0,
+    -13.5
+   ],
+   "size": 10
+  },
+  {
+   "type": "model:客棧",
+   "at": [
+    -14.5,
+    -3.5
+   ],
+   "size": 6.5
+  },
+  {
+   "type": "model:酒肆茶館",
+   "at": [
+    -7,
+    -3.5
+   ],
+   "size": 5.5
+  },
+  {
+   "type": "model:當鋪",
+   "at": [
+    7,
+    -3.5
+   ],
+   "size": 5.5
+  },
+  {
+   "type": "model:商店",
+   "at": [
+    14.5,
+    -3.5
+   ],
+   "size": 6
+  },
+  {
+   "type": "model:寺廟牌坊",
+   "at": [
+    -15,
+    -13.5
+   ],
+   "size": 6
+  },
+  {
+   "type": "model:城牆",
+   "at": [
+    15,
+    -13.5
+   ],
+   "size": 6
+  },
+  {
+   "type": "model:民宅1",
+   "at": [
+    -15,
+    12.5
+   ],
+   "size": 6,
+   "rot": 180
+  },
+  {
+   "type": "model:民宅2",
+   "at": [
+    -7,
+    12.5
+   ],
+   "size": 5.5,
+   "rot": 180
+  },
+  {
+   "type": "model:茅草屋",
+   "at": [
+    7,
+    12.5
+   ],
+   "size": 5,
+   "rot": 180
+  },
+  {
+   "type": "model:草屋農舍",
+   "at": [
+    15,
+    12.5
+   ],
+   "size": 5.5,
+   "rot": 180
+  },
+  {
+   "type": "model:市集攤販",
+   "at": [
+    -6,
+    8.5
+   ],
+   "size": 3.6,
+   "rot": 180
+  },
+  {
+   "type": "model:市集攤販",
+   "at": [
+    6,
+    8.5
+   ],
+   "size": 3.6,
+   "rot": 180
+  },
+  {
+   "type": "model:市集攤販",
+   "at": [
+    -20,
+    -2
+   ],
+   "size": 3.2,
+   "rot": 90
+  },
+  {
+   "type": "model:市集攤販",
+   "at": [
+    20,
+    -2
+   ],
+   "size": 3.2,
+   "rot": -90
+  },
+  {
+   "type": "crate",
+   "at": [
+    -3,
+    9
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    3,
+    9.4
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    -19.5,
+    9
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    19.5,
+    9
+   ]
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    -4.5,
+    -9.5
+   ]
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    4.5,
+    -9.5
+   ]
+  },
+  {
+   "type": "torch",
+   "at": [
+    -3.5,
+    -6
+   ]
+  },
+  {
+   "type": "torch",
+   "at": [
+    3.5,
+    -6
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -20.5,
+    -10
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    20.5,
+    -9
+   ]
+  }
+ ]
+}

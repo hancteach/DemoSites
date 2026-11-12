@@ -118,7 +118,7 @@ export class EnemyShots {
       if (spec.trail) fx.burstRaw(object.position.x, object.position.y, object.position.z, 1, spec.color, 0.6);
       const { x, z } = object.position;
       const top = shot.base > 0.5;
-      let done = shot.traveled >= spec.range || level.colliders.some((c) => !!c.top === top && Math.hypot(x - c.x, z - c.z) <= c.r)
+      let done = shot.traveled >= spec.range || level.colliders.some((c) => !!c.top === top && !c.low && Math.hypot(x - c.x, z - c.z) <= c.r)   // 矮的拒馬擋不住箭
         || level.heightAt(x, z) > shot.base + 0.5;   // 地面的箭射到城牆就停
       if (!done && this.hitsPlayer(x, z, spec.width, shot.base)) {
         const before = player.hp;

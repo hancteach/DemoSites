@@ -124,6 +124,17 @@ function buildRing(R, drop, colors = {}) {
   return group;
 }
 
+// 長方形底面（寬 w、深 d，繞 y 轉 rot 弧度）用一排圓蓋住：圓的半徑＝短邊一半，沿長邊每半個半徑一個
+export function boxCircles(x, z, w, d, rot) {
+  const long = Math.max(w, d), r = Math.min(w, d) / 2;
+  const [ax, az] = w >= d ? [Math.cos(rot), -Math.sin(rot)] : [Math.sin(rot), Math.cos(rot)];   // 長邊方向（模型的 x 軸或 z 軸轉到世界）
+  const span = long / 2 - r, n = Math.max(1, Math.ceil(span * 2 / Math.max(r * 0.75, 0.3)) + 1);
+  return Array.from({ length: n }, (_, i) => {
+    const t = n === 1 ? 0 : -span + (2 * span * i) / (n - 1);
+    return { x: x + ax * t, z: z + az * t, r };
+  });
+}
+
 export class Level {
   constructor(game, data) {
     this.data = data;
@@ -151,6 +162,8 @@ export class Level {
       this.ladders = this.fortress.ladders;
       this.group.add(this.fortress.object);
     } else this.group.add(buildWalls(data.arena, data.theme?.wall));
+    this.buildings = [];   // 建築模型（擋住主角時變半透明、敵人會繞過去）
+    this.named = new Map();
     for (const prop of data.props) this.addProp(game, prop);
     // 據點（營寨）：柵欄、帳篷、軍旗。旗子顏色在開戰時依敵軍陣營換，攻下後換成玩家陣營
     this.strongholds = new Map();
@@ -178,12 +191,42 @@ export class Level {
   }
 
   static modelIds(data) {
-    return data.props.filter((p) => p.type.startsWith('model:')).map((p) => p.type.slice(6));
+    const objectives = (data.waves ?? []).map((w) => w.objective ?? {});
+    return [...data.props.filter((p) => p.type.startsWith('model:')).map((p) => p.type.slice(6)),
+      ...objectives.flatMap((o) => [o.model, o.horse, o.type === 'burn' ? o.fire ?? '火計大火' : null])].filter(Boolean);
+  }
+
+  // 建築模型（2026-11-12）：prop 寫 size＝長邊幾公尺，模型自動縮放、置中、放在地上；
+  // 碰撞用一排圓蓋住房子的底面（solid＝底面的幾成，0＝可以走過去，例如農田）。
+  // 有 id 的建築記在 named，任務（燒糧倉）用得到
+  addBuilding(game, prop) {
+    const [x, z] = prop.at;
+    const inner = game.assets.instantiate(prop.type.slice(6)).scene;
+    const box = new THREE.Box3().setFromObject(inner), size = box.getSize(new THREE.Vector3()), center = box.getCenter(new THREE.Vector3());
+    const s = prop.size / Math.max(size.x, size.z);
+    inner.scale.setScalar(s);
+    inner.position.set(-center.x * s, -box.min.y * s, -center.z * s);
+    const object = new THREE.Group();
+    object.add(inner);
+    const rot = THREE.MathUtils.degToRad(prop.rot ?? 0);
+    object.position.set(x, 0, z);
+    object.rotation.y = rot;
+    this.group.add(object);
+    const w = size.x * s, d = size.z * s, height = size.y * s, solid = prop.solid ?? 0.8;
+    const circles = solid > 0 ? boxCircles(x, z, w * solid, d * solid, rot) : [];
+    this.colliders.push(...circles);
+    const materials = [];
+    inner.traverse((o) => { if (o.isMesh) materials.push(o.material); });
+    const building = { id: prop.id, object, x, z, w, d, rot, height, circles, materials, fade: 1,
+      center: [x, z], radius: Math.hypot(w, d) / 2 * Math.max(solid, 0.5), solid: solid > 0 };
+    this.buildings.push(building);
+    if (prop.id) this.named.set(prop.id, building);
   }
 
   addProp(game, prop) {
     const [x, z] = prop.at;
     let built;
+    if (prop.type.startsWith('model:') && prop.size) { this.addBuilding(game, prop); return; }
     if (prop.type.startsWith('model:')) {
       built = { object: game.assets.instantiate(prop.type.slice(6)).scene, collider: prop.collider ?? 0.8 };
     } else {
@@ -197,7 +240,15 @@ export class Level {
     built.object.rotation.y = THREE.MathUtils.degToRad(prop.rot ?? 0);
     built.object.scale.setScalar(scale);
     this.group.add(built.object);
-    if (built.collider > 0) this.colliders.push({ x, z, r: built.collider * scale, top: floor > 0 });
+    if (built.collider > 0) this.colliders.push({ x, z, r: built.collider * scale, top: floor > 0, low: built.low });
+    if (built.circles) {   // 長條的物件（拒馬列）：一排碰撞圓，轉到物件的方向
+      const rot = THREE.MathUtils.degToRad(prop.rot ?? 0), c = Math.cos(rot), s = Math.sin(rot);
+      const circles = built.circles.map(([lx, lz, r]) => ({ x: x + (lx * c + lz * s) * scale, z: z + (-lx * s + lz * c) * scale, r: r * scale, low: built.low }));
+      this.colliders.push(...circles);
+      // 敵人繞路用（和房子一樣）：中心＋半徑
+      const len = built.length * scale;
+      this.buildings.push({ object: built.object, x, z, w: len, d: 1, rot, height: 0, circles, materials: [], fade: 1, center: [x, z], radius: len / 2, solid: true });
+    }
     if (built.flame) this.flickers.push({ light: built.light, flame: built.flame, base: built.light.intensity, phase: Math.random() * 10 });
     if (built.orb) this.orbs.push(built.orb);
   }
@@ -259,6 +310,7 @@ export class Level {
     if (this.platforms.length) this.constrainPlatforms(position, radius, top);
     for (const c of this.colliders) {
       if (!!c.top !== top) continue;   // 牆頂的東西不擋地面的人，反過來也是
+      if (c.low && position.y > 0.5) continue;   // 低的障礙（拒馬）：跳起來就過得去
       const dx = position.x - c.x;
       const dz = position.z - c.z;
       const min = c.r + radius;
@@ -285,6 +337,7 @@ export class Level {
       orb.rotation.y += dt * 0.7;
     }
     if (this.fortress) this.fortress.flag.rotation.y = Math.sin(this.time * 1.7) * 0.22;   // 帥旗飄動
+    if (this.buildings.length && this.game.player && (this.game.state === 'playing' || this.game.state === 'ending')) this.fadeBuildings(dt, this.game.player.position);
     for (const sh of this.strongholds.values()) {
       sh.flag.rotation.z = Math.sin(this.time * 2.3 + sh.center[0]) * 0.05;   // 旗子微微飄
       sh.flag.scale.x = 1 + Math.sin(this.time * 3.1 + sh.center[1]) * 0.04;
@@ -314,14 +367,55 @@ export class Level {
         if (inFrom) { const d = Math.hypot(doorX - from.x, doorZ - from.z); return [(doorX - from.x) / d, (doorZ - from.z) / d]; }
       }
       if (!this.blocked(from, to, sh)) continue;
-      const ux = to.x - from.x, uz = to.z - from.z, len = Math.hypot(ux, uz) || 1;
-      const nx = -uz / len, nz = ux / len;                       // 前進方向的左手邊
-      const side = (cx - from.x) * nx + (cz - from.z) * nz > 0 ? -1 : 1;   // 營寨在左邊就從右邊繞
-      const wx = cx + nx * side * around, wz = cz + nz * side * around;
-      const d = Math.hypot(wx - from.x, wz - from.z) || 1;
-      return [(wx - from.x) / d, (wz - from.z) / d];
+      return this.detour(from, to, cx, cz, around);
     }
-    return null;
+    // 建築（2026-11-12）：直線穿過房子就從比較近的一側繞
+    let best = null, bestT = Infinity;
+    for (const b of this.buildings) {
+      if (!b.solid) continue;
+      const t = this.blockedAt(from, to, b);
+      if (t !== null && t < bestT) { bestT = t; best = b; }
+    }
+    return best ? this.detour(from, to, best.center[0], best.center[1], best.radius + 1.4) : null;
+  }
+
+  detour(from, to, cx, cz, around) {
+    const ux = to.x - from.x, uz = to.z - from.z, len = Math.hypot(ux, uz) || 1;
+    const nx = -uz / len, nz = ux / len;                       // 前進方向的左手邊
+    let side = (cx - from.x) * nx + (cz - from.z) * nz > 0 ? -1 : 1;   // 障礙物在左邊就從右邊繞
+    // 那一側的繞行點在場地外（拒馬列靠牆那頭）就改走另一側，否則會卡在牆角
+    const outside = (s) => Math.abs(cx + nx * s * around) > this.arena.halfWidth - 1 || Math.abs(cz + nz * s * around) > this.arena.halfDepth - 1;
+    if (outside(side) && !outside(-side)) side = -side;
+    const wx = cx + nx * side * around, wz = cz + nz * side * around;
+    const d = Math.hypot(wx - from.x, wz - from.z) || 1;
+    return [(wx - from.x) / d, (wz - from.z) / d];
+  }
+
+  // 同 blocked，回傳碰到的位置（0～1，越小越近），沒擋到回傳 null
+  blockedAt(from, to, b) {
+    const [cx, cz] = b.center, r = b.radius + 0.6;
+    const ux = to.x - from.x, uz = to.z - from.z, len2 = ux * ux + uz * uz || 1;
+    const t = ((cx - from.x) * ux + (cz - from.z) * uz) / len2;
+    if (t <= 0 || t >= 1) return null;
+    return Math.hypot(from.x + ux * t - cx, from.z + uz * t - cz) < r ? t : null;
+  }
+
+  // 鏡頭在南邊（+Z）往北看：主角後面（北邊）的房子不擋；主角前面（南邊）擋住的房子變半透明
+  fadeBuildings(dt, p) {
+    for (const b of this.buildings) {
+      if (!b.materials.length) continue;
+      const ahead = b.z - p.z, half = Math.max(b.w, b.d) / 2;
+      const hide = ahead > -half * 0.3 && ahead < half + b.height * 1.3 && Math.abs(b.x - p.x) < half + 0.8;
+      const target = hide ? 0.3 : 1;
+      if (Math.abs(b.fade - target) < 0.01) continue;
+      b.fade += (target - b.fade) * Math.min(1, dt * 8);
+      if (Math.abs(b.fade - target) < 0.01) b.fade = target;
+      for (const m of b.materials) {
+        const see = b.fade < 0.99;
+        if (m.transparent !== see) { m.transparent = see; m.depthWrite = !see; m.needsUpdate = true; }
+        m.opacity = b.fade;
+      }
+    }
   }
 
   // 直線 from→to 會不會穿過營寨（柵欄外再留 0.9 公尺）

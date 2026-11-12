@@ -1,0 +1,532 @@
+{
+ "name": "火燒糧倉",
+ "desc": "夜襲敵軍大營：燒毀東、西兩座糧倉，再燒掉中央的大糧倉，最後打倒敵將",
+ "scene": "軍營",
+ "open": true,
+ "clearText": "敵軍的糧草全部燒光了！",
+ "enemyFactions": [
+  "魏",
+  "吳",
+  "晉",
+  "他",
+  "蜀"
+ ],
+ "arena": {
+  "halfWidth": 24,
+  "halfDepth": 18,
+  "gates": [
+   {
+    "side": "north",
+    "at": -6,
+    "width": 5
+   },
+   {
+    "side": "north",
+    "at": 6,
+    "width": 5
+   },
+   {
+    "side": "west",
+    "at": -4,
+    "width": 5
+   },
+   {
+    "side": "east",
+    "at": -4,
+    "width": 5
+   }
+  ],
+  "lowSides": [
+   "south"
+  ]
+ },
+ "theme": {
+  "background": "#3b3a5c",
+  "fog": "#3b3a5c",
+  "fogNear": 30,
+  "fogFar": 62,
+  "hemiSky": "#b9b6e8",
+  "hemiGround": "#3a3226",
+  "hemiIntensity": 0.95,
+  "moon": "#ffc58a",
+  "moonIntensity": 1.8,
+  "outside": "#3d4a2a",
+  "wall": {
+   "a": "#7a6248",
+   "b": "#66513b",
+   "gate": "#8a6d4c"
+  },
+  "ground": {
+   "base": "#56683a",
+   "speck": [
+    0.85,
+    1.15,
+    0.6
+   ],
+   "stone": [
+    30,
+    16,
+    -8
+   ],
+   "stoneBase": 84,
+   "paths": [
+    [
+     0,
+     18,
+     0,
+     -9,
+     3.6
+    ],
+    [
+     -24,
+     2,
+     24,
+     2,
+     3.2
+    ],
+    [
+     -16,
+     2,
+     -16,
+     -4,
+     3
+    ],
+    [
+     16,
+     2,
+     16,
+     -4,
+     3
+    ]
+   ],
+   "plaza": 0
+  }
+ },
+ "playerStart": [
+  0,
+  13
+ ],
+ "spawnPoints": [
+  {
+   "at": [
+    -6,
+    -16
+   ]
+  },
+  {
+   "at": [
+    6,
+    -16
+   ]
+  },
+  {
+   "at": [
+    -22,
+    -4
+   ]
+  },
+  {
+   "at": [
+    22,
+    -4
+   ]
+  }
+ ],
+ "waves": [
+  {
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 5
+    },
+    {
+     "enemy": "槍兵",
+     "count": 2
+    }
+   ],
+   "interval": 1.1,
+   "maxAlive": 4,
+   "banner": "夜襲敵營！先解決巡邏兵"
+  },
+  {
+   "banner": "燒毀東、西兩座糧倉！",
+   "objective": {
+    "type": "burn",
+    "targets": [
+     {
+      "id": "西糧倉",
+      "name": "西糧倉",
+      "hp": 7
+     },
+     {
+      "id": "東糧倉",
+      "name": "東糧倉",
+      "hp": 7
+     }
+    ]
+   },
+   "reinforce": true,
+   "captain": "副將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 2
+    },
+    {
+     "enemy": "槍兵",
+     "count": 1
+    },
+    {
+     "enemy": "弓兵",
+     "count": 1
+    }
+   ],
+   "interval": 2.4,
+   "maxAlive": 4,
+   "chest": {
+    "type": "寶箱",
+    "at": [
+     -8,
+     6
+    ]
+   },
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 14
+    }
+   ]
+  },
+  {
+   "banner": "燒掉中央的大糧倉！",
+   "objective": {
+    "type": "burn",
+    "targets": [
+     {
+      "id": "大糧倉",
+      "name": "大糧倉",
+      "hp": 10
+     }
+    ]
+   },
+   "reinforce": true,
+   "captain": "武將",
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 2
+    },
+    {
+     "enemy": "槍兵",
+     "count": 1
+    },
+    {
+     "enemy": "策士",
+     "count": 1
+    }
+   ],
+   "interval": 2.2,
+   "maxAlive": 5,
+   "chest": {
+    "type": "寶箱",
+    "at": [
+     8,
+     6
+    ]
+   },
+   "items": [
+    {
+     "item": "黃藥水",
+     "at": 8
+    },
+    {
+     "item": "紅藥水",
+     "at": 22
+    }
+   ]
+  },
+  {
+   "boss": [
+    "敵將"
+   ],
+   "bossChest": "大寶箱",
+   "healPlayer": true,
+   "interval": 1,
+   "maxAlive": 6,
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 15
+    },
+    {
+     "item": "藍藥水",
+     "at": 30
+    },
+    {
+     "item": "紅藥水",
+     "at": 45
+    }
+   ],
+   "bossFrom": [
+    0,
+    -7
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "model:糧倉",
+   "at": [
+    -16,
+    -7
+   ],
+   "size": 5.5,
+   "id": "西糧倉"
+  },
+  {
+   "type": "model:糧倉",
+   "at": [
+    16,
+    -7
+   ],
+   "size": 5.5,
+   "id": "東糧倉"
+  },
+  {
+   "type": "model:糧倉",
+   "at": [
+    0,
+    -12.5
+   ],
+   "size": 7,
+   "id": "大糧倉"
+  },
+  {
+   "type": "model:軍營",
+   "at": [
+    -9.5,
+    -14
+   ],
+   "size": 6.5,
+   "solid": 0.7
+  },
+  {
+   "type": "model:軍械庫",
+   "at": [
+    10,
+    -14
+   ],
+   "size": 5.5
+  },
+  {
+   "type": "model:鐵匠鋪",
+   "at": [
+    -20.5,
+    8
+   ],
+   "size": 4.5,
+   "rot": 90
+  },
+  {
+   "type": "model:馬廄1",
+   "at": [
+    20,
+    9
+   ],
+   "size": 6,
+   "rot": -90
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    -21.5,
+    -15.5
+   ],
+   "size": 2.6
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    21.5,
+    -15.5
+   ],
+   "size": 2.6
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    -5,
+    -3
+   ],
+   "size": 2.2
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    5,
+    -3
+   ],
+   "size": 2.2
+  },
+  {
+   "type": "model:軍營",
+   "at": [
+    -12,
+    12.5
+   ],
+   "size": 5.5,
+   "solid": 0.7
+  },
+  {
+   "type": "model:軍營",
+   "at": [
+    12,
+    12.5
+   ],
+   "size": 5.5,
+   "solid": 0.7
+  },
+  {
+   "type": "warDrum",
+   "at": [
+    -3,
+    -8
+   ]
+  },
+  {
+   "type": "warDrum",
+   "at": [
+    3,
+    -8
+   ]
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    -9,
+    4.5
+   ]
+  },
+  {
+   "type": "weaponRack",
+   "at": [
+    9,
+    4.5
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    -11,
+    -1
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    11,
+    -1
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    -21,
+    0.5
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    21,
+    0.5
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    -21,
+    15
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    21,
+    15.5
+   ],
+   "scale": 1.1
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    -15,
+    -16.3
+   ]
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    15,
+    -16.3
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -5,
+    15
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    5,
+    15.5
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    -6,
+    7
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7,
+    8
+   ],
+   "rot": 60
+  },
+  {
+   "type": "torch",
+   "at": [
+    -2.5,
+    9
+   ]
+  },
+  {
+   "type": "torch",
+   "at": [
+    2.5,
+    9
+   ]
+  },
+  {
+   "type": "torch",
+   "at": [
+    -13,
+    -3
+   ]
+  },
+  {
+   "type": "torch",
+   "at": [
+    13,
+    -3
+   ]
+  }
+ ]
+}

@@ -374,8 +374,11 @@ body.touch .ability[data-key="K"], body.touch .ability[data-key="L"] { display: 
   #gsLevels { grid-column: auto; grid-row: auto; }
   #gsInfo b { font-size: 18px; }
   #gsInfo p { display: none; }
-  .gsLevel { padding: 4px 8px; }
+  #gsLevels { gap: 5px; }
+  .gsLevel { padding: 4px 6px; }
+  .gsLevel b { font-size: 13px; white-space: nowrap; }   /* 2026-11-12 七關：按鈕縮小，左邊的生命／速度才不會換行 */
   .gsLevel small { display: none; }
+  #gsInfo .gsStats { font-size: 12px; white-space: nowrap; }
   #gsShop { font-size: 15px; padding: 6px 14px; }
   #gsGo { font-size: 18px; padding: 6px 26px; }
 }

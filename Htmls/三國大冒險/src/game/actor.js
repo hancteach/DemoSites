@@ -1,5 +1,6 @@
 // 角色共用：模型、動作切換、受傷閃光、淡出。玩家和敵人都繼承這個類別。
 import * as THREE from 'three';
+import { rideName, updateRider } from './mount.js';
 
 export class Actor {
   constructor(game, def, instance) {
@@ -25,6 +26,7 @@ export class Actor {
   clipLength(name) { return this.clips.get(name)?.duration ?? 0; }
 
   play(name, { once = false, fade = 0.14, speed = 1 } = {}) {
+    if (this.mount) name = rideName(name);   // 騎在馬上：換成騎乘動作（mount.js）
     if (!once && name === this.currentName) { if (this.current) this.current.timeScale = speed; return; }
     const clip = this.clips.get(name);
     if (!clip) return; // 模型缺這段動作就維持原樣，不讓遊戲當掉
@@ -49,11 +51,12 @@ export class Actor {
   flash(color = 0xff5533) {
     this.flashTime = 0.13;
     for (const m of this.materials) { m.emissive.setHex(color); m.emissiveIntensity = 1.2; }
+    this.mount?.flash(color);
   }
 
   setOpacity(value) {
     const transparent = value < 1;
-    for (const m of this.materials) {
+    for (const m of [...this.materials, ...(this.mount?.materials ?? [])]) {
       if (m.transparent !== transparent) m.needsUpdate = true; // 不重新編譯的話，不透明材質的 opacity 不會生效
       m.transparent = transparent;
       m.opacity = value;
@@ -62,6 +65,7 @@ export class Actor {
 
   updateVisual(dt) {
     this.mixer.update(dt);
+    if (this.mount) updateRider(this, dt, { air: this.air });
     if (this.flashTime > 0) {
       this.flashTime -= dt;
       if (this.flashTime <= 0) for (const m of this.materials) m.emissiveIntensity = 0;
@@ -69,6 +73,8 @@ export class Actor {
   }
 
   destroy() {
+    this.mount?.dispose();
+    this.mount = null;
     this.mixer.stopAllAction();
     this.mixer.uncacheRoot(this.model);
     this.game.scene.remove(this.root);

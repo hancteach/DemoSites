@@ -1,0 +1,743 @@
+{
+ "name": "長坂坡突圍",
+ "desc": "騎上赤兔馬一路往北衝：撞破三道關門、跳過拒馬，甩開追來的騎兵，最後在長坂橋前打倒騎馬的敵將",
+ "scene": "長坂坡",
+ "open": true,
+ "clearText": "衝過長坂橋，突圍成功！",
+ "enemyFactions": [
+  "魏",
+  "吳",
+  "晉",
+  "他",
+  "蜀"
+ ],
+ "jump": true,
+ "ride": {
+  "horse": "赤兔馬",
+  "at": [
+   4,
+   60
+  ],
+  "rot": 180
+ },
+ "arena": {
+  "halfWidth": 11,
+  "halfDepth": 70,
+  "gates": [
+   {
+    "side": "west",
+    "at": 46,
+    "width": 4
+   },
+   {
+    "side": "east",
+    "at": 30,
+    "width": 4
+   },
+   {
+    "side": "west",
+    "at": 16,
+    "width": 4
+   },
+   {
+    "side": "east",
+    "at": 0,
+    "width": 4
+   },
+   {
+    "side": "west",
+    "at": -18,
+    "width": 4
+   },
+   {
+    "side": "east",
+    "at": -34,
+    "width": 4
+   },
+   {
+    "side": "west",
+    "at": -48,
+    "width": 4
+   }
+  ],
+  "lowSides": [
+   "south"
+  ],
+  "openSides": [
+   "north"
+  ]
+ },
+ "theme": {
+  "background": "#c9d6c0",
+  "fog": "#c9d6c0",
+  "fogNear": 30,
+  "fogFar": 64,
+  "hemiSky": "#e8f2ff",
+  "hemiGround": "#5a6b3a",
+  "hemiIntensity": 1.15,
+  "moon": "#fff1d6",
+  "moonIntensity": 2.2,
+  "outside": "#6f7d43",
+  "wall": {
+   "a": "#7a6248",
+   "b": "#66513b",
+   "gate": "#8a6d4c"
+  },
+  "ground": {
+   "base": "#7d8f45",
+   "speck": [
+    1.0,
+    1.1,
+    0.6
+   ],
+   "stone": [
+    44,
+    28,
+    4
+   ],
+   "stoneBase": 96,
+   "paths": [
+    [
+     0,
+     70,
+     0,
+     44,
+     4
+    ],
+    [
+     0,
+     44,
+     -2,
+     20,
+     4
+    ],
+    [
+     -2,
+     20,
+     2,
+     -10,
+     4
+    ],
+    [
+     2,
+     -10,
+     0,
+     -70,
+     4
+    ]
+   ],
+   "plaza": 0
+  }
+ },
+ "playerStart": [
+  0,
+  66
+ ],
+ "spawnPoints": [
+  {
+   "at": [
+    -10.4,
+    46
+   ]
+  },
+  {
+   "at": [
+    10.4,
+    30
+   ]
+  },
+  {
+   "at": [
+    -10.4,
+    16
+   ]
+  },
+  {
+   "at": [
+    10.4,
+    0
+   ]
+  },
+  {
+   "at": [
+    -10.4,
+    -18
+   ]
+  },
+  {
+   "at": [
+    10.4,
+    -34
+   ]
+  },
+  {
+   "at": [
+    -10.4,
+    -48
+   ]
+  }
+ ],
+ "waves": [
+  {
+   "banner": "長坂坡突圍！先騎上赤兔馬",
+   "objective": {
+    "type": "mount",
+    "rout": false
+   },
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 3
+    }
+   ],
+   "interval": 1.6,
+   "maxAlive": 3,
+   "near": 26
+  },
+  {
+   "banner": "衝破第一道關門！",
+   "objective": {
+    "type": "breach",
+    "name": "第一道關門",
+    "z": 40,
+    "hp": 7
+   },
+   "reinforce": true,
+   "spawns": [
+    {
+     "enemy": "刀兵",
+     "count": 2
+    },
+    {
+     "enemy": "槍兵",
+     "count": 1
+    }
+   ],
+   "interval": 2.6,
+   "maxAlive": 4,
+   "near": 22,
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 12
+    }
+   ]
+  },
+  {
+   "banner": "敵軍騎兵追來了！衝破第二道關門",
+   "objective": {
+    "type": "breach",
+    "name": "第二道關門",
+    "z": 8,
+    "hp": 9
+   },
+   "reinforce": true,
+   "behind": true,
+   "spawns": [
+    {
+     "enemy": "騎兵",
+     "count": 2
+    },
+    {
+     "enemy": "刀兵",
+     "count": 1
+    }
+   ],
+   "interval": 2.8,
+   "maxAlive": 4,
+   "chest": {
+    "type": "寶箱",
+    "at": [
+     -6,
+     20
+    ]
+   },
+   "items": [
+    {
+     "item": "藍藥水",
+     "at": 10
+    }
+   ]
+  },
+  {
+   "banner": "衝破第三道關門！",
+   "objective": {
+    "type": "breach",
+    "name": "第三道關門",
+    "z": -26,
+    "hp": 12
+   },
+   "reinforce": true,
+   "captain": "副將",
+   "spawns": [
+    {
+     "enemy": "槍兵",
+     "count": 2
+    },
+    {
+     "enemy": "騎兵",
+     "count": 1
+    },
+    {
+     "enemy": "弓兵",
+     "count": 1
+    }
+   ],
+   "interval": 2.6,
+   "maxAlive": 5,
+   "near": 22,
+   "items": [
+    {
+     "item": "黃藥水",
+     "at": 8
+    },
+    {
+     "item": "紅藥水",
+     "at": 24
+    }
+   ]
+  },
+  {
+   "boss": [
+    "敵將"
+   ],
+   "bossMount": "的盧馬",
+   "bossFrom": [
+    0,
+    -56
+   ],
+   "bossChest": "大寶箱",
+   "healPlayer": true,
+   "interval": 1,
+   "maxAlive": 6,
+   "items": [
+    {
+     "item": "紅藥水",
+     "at": 15
+    },
+    {
+     "item": "藍藥水",
+     "at": 30
+    },
+    {
+     "item": "紅藥水",
+     "at": 45
+    }
+   ]
+  }
+ ],
+ "props": [
+  {
+   "type": "river",
+   "at": [
+    0,
+    -77
+   ],
+   "w": 50,
+   "d": 14
+  },
+  {
+   "type": "bridge",
+   "at": [
+    0,
+    -71
+   ],
+   "length": 14,
+   "width": 5
+  },
+  {
+   "type": "model:馬廄",
+   "at": [
+    7.5,
+    62
+   ],
+   "size": 6,
+   "rot": -90
+  },
+  {
+   "type": "model:茅草屋",
+   "at": [
+    -7.5,
+    64
+   ],
+   "size": 5,
+   "rot": 90
+  },
+  {
+   "type": "model:草屋農舍",
+   "at": [
+    -7.5,
+    55
+   ],
+   "size": 5,
+   "rot": 90
+  },
+  {
+   "type": "crate",
+   "at": [
+    4.5,
+    66
+   ]
+  },
+  {
+   "type": "crate",
+   "at": [
+    9,
+    56
+   ]
+  },
+  {
+   "type": "lowFence",
+   "at": [
+    -4,
+    52
+   ],
+   "length": 12
+  },
+  {
+   "type": "lowFence",
+   "at": [
+    4,
+    24
+   ],
+   "length": 12
+  },
+  {
+   "type": "lowFence",
+   "at": [
+    -4,
+    -8
+   ],
+   "length": 12
+  },
+  {
+   "type": "lowFence",
+   "at": [
+    4,
+    -42
+   ],
+   "length": 12
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    -9.8,
+    38.4
+   ],
+   "size": 2.4
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    9.8,
+    38.4
+   ],
+   "size": 2.4
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    -9.8,
+    6.4
+   ],
+   "size": 2.4
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    9.8,
+    6.4
+   ],
+   "size": 2.4
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    -9.8,
+    -27.6
+   ],
+   "size": 2.4
+  },
+  {
+   "type": "model:箭塔瞭望台",
+   "at": [
+    9.8,
+    -27.6
+   ],
+   "size": 2.4
+  },
+  {
+   "type": "model:竹林",
+   "at": [
+    -9.3,
+    60
+   ],
+   "size": 3
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    55
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    62
+   ],
+   "rot": 0
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    9.3,
+    49
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    46
+   ]
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    -9.3,
+    40
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    37
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    44
+   ],
+   "rot": 80
+  },
+  {
+   "type": "model:竹林",
+   "at": [
+    9.3,
+    33
+   ],
+   "size": 3
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    28
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    -9.3,
+    22
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    19
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    26
+   ],
+   "rot": 160
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    9.3,
+    13
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    10
+   ]
+  },
+  {
+   "type": "model:竹林",
+   "at": [
+    -9.3,
+    6
+   ],
+   "size": 3
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    1
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    8
+   ],
+   "rot": 240
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    9.3,
+    -5
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    -8
+   ]
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    -9.3,
+    -14
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    -17
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    -10
+   ],
+   "rot": 320
+  },
+  {
+   "type": "model:竹林",
+   "at": [
+    9.3,
+    -21
+   ],
+   "size": 3
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    -26
+   ]
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    -9.3,
+    -32
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    -35
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    -28
+   ],
+   "rot": 400
+  },
+  {
+   "type": "pineTree",
+   "at": [
+    9.3,
+    -41
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    -44
+   ]
+  },
+  {
+   "type": "model:竹林",
+   "at": [
+    -9.3,
+    -48
+   ],
+   "size": 3
+  },
+  {
+   "type": "bush",
+   "at": [
+    8.835,
+    -53
+   ]
+  },
+  {
+   "type": "rock",
+   "at": [
+    7.440000000000001,
+    -46
+   ],
+   "rot": 480
+  },
+  {
+   "type": "roundTree",
+   "at": [
+    9.3,
+    -59
+   ]
+  },
+  {
+   "type": "bush",
+   "at": [
+    -8.835,
+    -62
+   ]
+  },
+  {
+   "type": "model:古樹",
+   "at": [
+    -8.5,
+    -58
+   ],
+   "size": 5
+  },
+  {
+   "type": "model:古樹",
+   "at": [
+    8.5,
+    -60
+   ],
+   "size": 5
+  }
+ ]
+}

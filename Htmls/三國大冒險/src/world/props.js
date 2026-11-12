@@ -218,7 +218,50 @@ function weaponRack() {
   return { object: group(bar, post(-0.85), post(0.85), spear(-0.5, 0.06), spear(-0.1, -0.04), spear(0.3, 0.05), spear(0.65, -0.03)), collider: 0.8 };
 }
 
-export const PROP_BUILDERS = { tombstone, deadTree, rock, torch, glowMushroom, statue, crypt, pineTree, bush, crate, minecart, crystal, woodPost, pillar, lavaPool, roundTree, warDrum, weaponRack };
+// 河（2026-11-12，護送關的渡口）：一大片水面，放在場地外面（可以走的範圍外），碰撞 0
+function river({ w = 60, d = 12 }) {
+  const water = mesh(new THREE.PlaneGeometry(w, d), RIVER, 0, 0.03, 0, false);
+  water.rotation.x = -Math.PI / 2;
+  const bank = mesh(new THREE.BoxGeometry(w, 0.25, 0.6), mat(0x6b5a40), 0, 0.05, d / 2, false);
+  return { object: group(water, bank), collider: 0 };
+}
+const RIVER = new THREE.MeshStandardMaterial({ color: 0x3d7fb8, emissive: 0x123a66, emissiveIntensity: 0.6, roughness: 0.2, metalness: 0.1 });
+
+// 拒馬列（2026-11-12，第 7 關）：一排矮的拒馬，騎馬或走路都要跳過去（low＝跳起來不擋）。length 公尺長，沿 x 擺
+function lowFence({ length = 10 }) {
+  const g = new THREE.Group();
+  const beam = mesh(new THREE.CylinderGeometry(0.14, 0.14, length, 8).rotateZ(Math.PI / 2), FENCE.wood, 0, 0.55, 0);
+  g.add(beam);
+  const spike = new THREE.CylinderGeometry(0.03, 0.09, 1.4, 6);
+  const n = Math.max(3, Math.round(length / 0.9));
+  for (let i = 0; i < n; i++) {
+    const x = -length / 2 + 0.3 + (i * (length - 0.6)) / (n - 1);
+    for (const a of [0.75, -0.75]) {
+      const s = mesh(spike, FENCE.tip, x, 0.55, 0);
+      s.rotation.x = a;
+      g.add(s);
+    }
+  }
+  const circles = [];
+  for (let x = -length / 2 + 0.5; x <= length / 2 - 0.45; x += 0.9) circles.push([x, 0, 0.55]);
+  return { object: g, collider: 0, circles, length, low: true };
+}
+const FENCE = { wood: mat(0x7a5230), tip: mat(0x4a3220) };
+
+// 木橋（第 7 關的長坂橋）：橋面＋兩邊欄杆，可以走（碰撞 0），放在河上
+function bridge({ length = 12, width = 5 }) {
+  const g = new THREE.Group();
+  const deck = mesh(new THREE.BoxGeometry(width, 0.3, length), mat(0x8a6a44), 0, 0.12, 0);
+  g.add(deck);
+  for (let z = -length / 2 + 0.3; z < length / 2; z += 0.9) g.add(mesh(new THREE.BoxGeometry(width + 0.2, 0.06, 0.12), mat(0x5e4630), 0, 0.29, z));
+  for (const x of [-width / 2, width / 2]) {
+    g.add(mesh(new THREE.BoxGeometry(0.14, 0.14, length), mat(0x5e4630), x, 1.0, 0));
+    for (let z = -length / 2 + 0.2; z <= length / 2; z += 2) g.add(mesh(new THREE.BoxGeometry(0.2, 1, 0.2), mat(0x5e4630), x, 0.5, z));
+  }
+  return { object: g, collider: 0 };
+}
+
+export const PROP_BUILDERS = { lowFence, bridge, river, tombstone, deadTree, rock, torch, glowMushroom, statue, crypt, pineTree, bush, crate, minecart, crystal, woodPost, pillar, lavaPool, roundTree, warDrum, weaponRack };
 
 // 據點（營寨）：木柵欄圍一圈（open 那一側留門）、中間帳篷、旁邊一支軍旗。
 // open：門朝哪裡（度，0＝朝 +Z 也就是鏡頭那一側，90＝朝 +X）。軍旗的顏色與字由 setBanner 換。
@@ -302,6 +345,7 @@ export function buildWalls(arena, wall) {
     { name: 'east', from: [W, -D], dir: [0, 1], len: D * 2 },
   ];
   for (const side of sides) {
+    if (arena.openSides?.includes(side.name)) continue;   // 沒有牆的一邊（渡口那側是河）
     const low = lowSides.includes(side.name); // 靠鏡頭那一邊要矮，才不會擋到角色
     const height = low ? 0.7 : 3.2;
     const count = Math.round(side.len / unit);
